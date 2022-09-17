@@ -1,6 +1,7 @@
 package com.dwarfeng.ftp.handler;
 
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
+import com.dwarfeng.subgrade.stack.handler.Handler;
 
 /**
  * FTP 处理器。
@@ -8,7 +9,7 @@ import com.dwarfeng.subgrade.stack.exception.HandlerException;
  * @author DwArFeng
  * @since 1.0.0
  */
-public interface FtpHandler {
+public interface FtpHandler extends Handler {
 
     /**
      * 检查文件是否存在。

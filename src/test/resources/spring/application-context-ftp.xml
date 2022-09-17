@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+
+    <bean class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
+        <constructor-arg name="scheduler" ref="scheduler"/>
+        <constructor-arg name="ftpHost" value="${ftp.host}"/>
+        <constructor-arg name="ftpPort" value="${ftp.port}"/>
+        <constructor-arg name="ftpUserName" value="${ftp.username}"/>
+        <constructor-arg name="ftpPassword" value="${ftp.password}"/>
+        <constructor-arg name="serverCharset" value="${ftp.server_charset}"/>
+        <constructor-arg name="connectTimeout" value="${ftp.connect_timeout}"/>
+        <constructor-arg name="noopInterval" value="${ftp.noop_interval}"/>
+    </bean>
+</beans>

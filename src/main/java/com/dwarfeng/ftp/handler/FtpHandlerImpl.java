@@ -7,10 +7,7 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -24,7 +21,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-@Component
 public class FtpHandlerImpl implements FtpHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FtpHandlerImpl.class);
@@ -38,30 +34,33 @@ public class FtpHandlerImpl implements FtpHandler {
      */
     private static final int MIN_CONNECT_TIMEOUT = 1000;
 
-    @Autowired
-    private ThreadPoolTaskScheduler scheduler;
+    private final ThreadPoolTaskScheduler scheduler;
 
-    @Value("${ftp.host}")
-    private String ftpHost;
-    @Value("${ftp.port}")
-    private int ftpPort;
-    @Value("${ftp.username}")
-    private String ftpUserName;
-    @Value("${ftp.password}")
-    private String ftpPassword;
-    @Value("${ftp.server_charset}")
-    private String serverCharset;
-    @Value("${ftp.connect_timeout}")
-    private int connectTimeout;
-    @Value("${ftp.noop_interval}")
-    private long noopInterval;
+    private final String ftpHost;
+    private final int ftpPort;
+    private final String ftpUserName;
+    private final String ftpPassword;
+    private final String serverCharset;
+    private final int connectTimeout;
+    private final long noopInterval;
 
     private final Lock lock = new ReentrantLock();
     private final FTPClient ftpClient = new FTPClient();
 
     private ScheduledFuture<?> noopSendTaskFuture;
 
-    public FtpHandlerImpl() {
+    public FtpHandlerImpl(
+            ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
+            String serverCharset, int connectTimeout, long noopInterval
+    ) {
+        this.scheduler = scheduler;
+        this.ftpHost = ftpHost;
+        this.ftpPort = ftpPort;
+        this.ftpUserName = ftpUserName;
+        this.ftpPassword = ftpPassword;
+        this.serverCharset = serverCharset;
+        this.connectTimeout = connectTimeout;
+        this.noopInterval = noopInterval;
     }
 
     @PostConstruct
@@ -211,6 +210,7 @@ public class FtpHandlerImpl implements FtpHandler {
             lock.unlock();
         }
     }
+
 
     /**
      * 确保 FTP 的状态正常。
