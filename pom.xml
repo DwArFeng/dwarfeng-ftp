@@ -6,7 +6,7 @@
 
     <groupId>com.dwarfeng</groupId>
     <artifactId>dwarfeng-ftp</artifactId>
-    <version>1.1.0.a-SNAPSHOT</version>
+    <version>1.1.0.a</version>
 
     <name>dwarfeng-ftp</name>
     <url>http://maven.apache.org</url>
