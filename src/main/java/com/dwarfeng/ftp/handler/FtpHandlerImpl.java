@@ -1,6 +1,8 @@
 package com.dwarfeng.ftp.handler;
 
 import com.dwarfeng.ftp.exception.*;
+import com.dwarfeng.subgrade.sdk.interceptor.analyse.BehaviorAnalyse;
+import com.dwarfeng.subgrade.sdk.interceptor.analyse.SkipRecord;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -115,6 +117,7 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @BehaviorAnalyse
     @Override
     public boolean existsFile(String[] filePaths, String fileName) throws FtpException {
         lock.lock();
@@ -130,8 +133,9 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @BehaviorAnalyse
     @Override
-    public void storeFile(String[] filePaths, String fileName, byte[] content) throws FtpException {
+    public void storeFile(String[] filePaths, String fileName, @SkipRecord byte[] content) throws FtpException {
         lock.lock();
         try (ByteArrayInputStream bin = new ByteArrayInputStream(content)) {
             ensureStatus();
@@ -150,6 +154,8 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @BehaviorAnalyse
+    @SkipRecord
     @Override
     public byte[] getFileContent(String[] filePaths, String fileName) throws FtpException {
         lock.lock();
@@ -172,6 +178,7 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @BehaviorAnalyse
     @Override
     public void deleteFile(String[] filePaths, String fileName) throws FtpException {
         lock.lock();
@@ -192,6 +199,7 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @BehaviorAnalyse
     @Override
     public void removeDirectory(String[] filePaths, String directoryName) throws FtpException {
         lock.lock();
