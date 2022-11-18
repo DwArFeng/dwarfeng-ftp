@@ -16,8 +16,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 
 ## 安装说明
 
-1. 下载源码
-
+1. 下载源码。  
    使用 git 进行源码下载。
    ```
    git clone git@github.com:DwArFeng/dwarfeng-ftp.git
@@ -27,8 +26,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
    git clone git@gitee.com:dwarfeng/dwarfeng-ftp.git
    ```
 
-2. 项目安装
-
+2. 项目安装。  
    进入项目根目录，执行 maven 命令
    ```
    mvn clean source:jar install
@@ -45,8 +43,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 
 ### 单例模式
 
-加载 `com.dwarfeng.ftp.configuration.SingletonConfiguration`，即可获得单例模式的 `FtpHandler`。
-
+加载 `com.dwarfeng.ftp.configuration.SingletonConfiguration`，即可获得单例模式的 `FtpHandler`。  
 在项目的 `application-context-scan.xml` 中追加包扫描，示例如下:
 
 ```xml
@@ -68,8 +65,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 
 ### 多实例模式
 
-不使用包扫描，使用 xml 或者配置类生成 `FtpHandlerImpl` 实例。
-
+不使用包扫描，使用 xml 或者配置类生成 `FtpHandlerImpl` 实例。  
 在项目的 `bean-definition.xml` 中追加配置，示例如下:
 
 ```xml
