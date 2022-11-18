@@ -22,12 +22,11 @@
         <!-- 集中定义依赖版本号 -->
         <junit.version>4.13.2</junit.version>
         <spring.version>5.3.20</spring.version>
-        <commons-lang3.version>3.3.2</commons-lang3.version>
-        <commons-io.version>2.7</commons-io.version>
-        <commons-net.version>3.3</commons-net.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-net.version>3.8.0</commons-net.version>
         <log4j2.version>2.17.2</log4j2.version>
         <slf4j.version>1.7.5</slf4j.version>
-        <subgrade.version>1.2.10.a</subgrade.version>
+        <subgrade.version>1.2.14.a</subgrade.version>
         <!-- Maven插件版本声明 -->
         <maven-clean-plugin.version>2.5</maven-clean-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
