@@ -73,7 +73,9 @@ public class FtpHandlerImpl implements FtpHandler {
                 case CONNECTED:
                     throw new IllegalStateException("FtpHandler 已经连接, 无法重复连接");
                 case DISCONNECTED:
-                    throw new IllegalStateException("FtpHandler 已经断开连接, 其最多连接一次, 请使用新的实例连接");
+                    throw new IllegalStateException(
+                            "FtpHandler 已经断开连接, 一个 FtpHandler 实例只能连接一次, 请使用新的实例连接"
+                    );
             }
 
             // 日志记录。
@@ -119,7 +121,9 @@ public class FtpHandlerImpl implements FtpHandler {
             // 检查生命周期是否合法。
             switch (status) {
                 case NOT_CONNECTED_YET:
-                    throw new IllegalStateException("FtpHandler 还未连接, 无法断开连接");
+                    throw new IllegalStateException(
+                            "FtpHandler 还未连接, 无法断开连接, 请在调用连接方法之后再调用断开连接方法"
+                    );
                 case CONNECTED:
                     break;
                 case DISCONNECTED:
