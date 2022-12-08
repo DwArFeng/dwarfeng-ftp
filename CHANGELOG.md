@@ -4,7 +4,9 @@
 
 #### 功能构建
 
-- (无)
+- 为了实现短生命周期（多例）使用，暴露生命周期方法。
+  - com.dwarfeng.ftp.handler.FtpHandler.connect。
+  - com.dwarfeng.ftp.handler.FtpHandler.disconnect。
 
 #### Bug修复
 

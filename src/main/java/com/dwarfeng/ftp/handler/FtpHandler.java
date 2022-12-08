@@ -12,6 +12,20 @@ import com.dwarfeng.subgrade.stack.handler.Handler;
 public interface FtpHandler extends Handler {
 
     /**
+     * 执行连接动作。
+     *
+     * @throws HandlerException 处理器异常。
+     */
+    void connect() throws HandlerException;
+
+    /**
+     * 执行断开连接动作。
+     *
+     * @throws HandlerException 处理器异常。
+     */
+    void disconnect() throws HandlerException;
+
+    /**
      * 检查文件是否存在。
      *
      * @param filePaths 文件夹路径。<br>

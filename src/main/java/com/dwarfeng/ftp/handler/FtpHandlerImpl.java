@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,6 +48,7 @@ public class FtpHandlerImpl implements FtpHandler {
     private final FTPClient ftpClient = new FTPClient();
 
     private ScheduledFuture<?> noopSendTaskFuture;
+    private Status status = Status.NOT_CONNECTED_YET;
 
     public FtpHandlerImpl(
             ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
@@ -65,10 +64,24 @@ public class FtpHandlerImpl implements FtpHandler {
         this.noopInterval = noopInterval;
     }
 
-    @PostConstruct
-    public void init() {
+    @BehaviorAnalyse
+    @Override
+    public void connect() throws HandlerException {
         lock.lock();
         try {
+            // 检查生命周期是否合法。
+            switch (status) {
+                case NOT_CONNECTED_YET:
+                    break;
+                case CONNECTED:
+                    throw new IllegalStateException("FtpHandler 已经连接, 无法重复连接");
+                case DISCONNECTED:
+                    throw new IllegalStateException("FtpHandler 已经断开连接, 其最多连接一次, 请使用新的实例连接");
+            }
+
+            // 日志记录。
+            LOGGER.info("FtpHandler 连接...");
+
             //检查参数是否合法。
             if (connectTimeout <= MIN_CONNECT_TIMEOUT) {
                 throw new IllegalArgumentException("配置ftp.connect_timeout的值太小，应该大于1000");
@@ -91,27 +104,53 @@ public class FtpHandlerImpl implements FtpHandler {
             this.noopSendTaskFuture = scheduler.scheduleWithFixedDelay(
                     new NoopSendTask(), new Date(System.currentTimeMillis() + noopInterval), noopInterval
             );
+
+            // 设置状态。
+            status = Status.CONNECTED;
+        } catch (Exception e) {
+            throw new HandlerException(e);
         } finally {
             lock.unlock();
         }
     }
 
-    @PreDestroy
-    public void dispose() throws Exception {
+    @BehaviorAnalyse
+    @Override
+    public void disconnect() throws HandlerException {
         lock.lock();
         try {
-            // 停止 noop 发送计划。
+            // 检查生命周期是否合法。
+            switch (status) {
+                case NOT_CONNECTED_YET:
+                    throw new IllegalStateException("FtpHandler 还未连接, 无法断开连接");
+                case CONNECTED:
+                    break;
+                case DISCONNECTED:
+                    throw new IllegalStateException("FtpHandler 已经断开连接, 无法重复断开连接");
+            }
+
+            // 日志记录。
+            LOGGER.info("FtpHandler 断开连接...");
+
+            // 断开连接 noop 发送计划。
             noopSendTaskFuture.cancel(true);
+
             // FTP服务器登出，如果遇到异常，则打印异常。
             try {
                 ftpClient.logout();
             } catch (Exception e) {
                 LOGGER.error("FTP 登出失败", e);
             }
+
             // 关闭连接。
             if (ftpClient.isConnected()) {
                 ftpClient.disconnect();
             }
+
+            // 设置状态。
+            status = Status.DISCONNECTED;
+        } catch (Exception e) {
+            throw new HandlerException(e);
         } finally {
             lock.unlock();
         }
@@ -219,7 +258,6 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
-
     /**
      * 确保 FTP 的状态正常。
      * <p>
@@ -318,5 +356,9 @@ public class FtpHandlerImpl implements FtpHandler {
                 lock.unlock();
             }
         }
+    }
+
+    private enum Status {
+        NOT_CONNECTED_YET, CONNECTED, DISCONNECTED
     }
 }
