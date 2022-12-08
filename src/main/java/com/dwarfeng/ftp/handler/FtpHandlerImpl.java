@@ -11,10 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.ScheduledFuture;
@@ -208,6 +205,50 @@ public class FtpHandlerImpl implements FtpHandler {
             }
             bout.flush();
             return bout.toByteArray();
+        } catch (HandlerException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @BehaviorAnalyse
+    @Override
+    public void storeFileByStream(String[] filePaths, String fileName, @SkipRecord InputStream in)
+            throws HandlerException {
+        lock.lock();
+        try {
+            ensureStatus();
+            enterDirection(filePaths);
+            if (!ftpClient.storeFile(serverFileNameEncoding(fileName), in)) {
+                throw new FtpFileStoreException(
+                        humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
+                );
+            }
+        } catch (HandlerException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @BehaviorAnalyse
+    @Override
+    public void getFileContentByStream(String[] filePaths, String fileName, @SkipRecord OutputStream out)
+            throws HandlerException {
+        lock.lock();
+        try {
+            ensureStatus();
+            enterDirection(filePaths);
+            if (!ftpClient.retrieveFile(serverFileNameEncoding(fileName), out)) {
+                throw new FtpFileRetrieveException(
+                        humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
+                );
+            }
         } catch (HandlerException e) {
             throw e;
         } catch (Exception e) {

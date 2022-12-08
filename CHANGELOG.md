@@ -8,6 +8,10 @@
   - com.dwarfeng.ftp.handler.FtpHandler.connect。
   - com.dwarfeng.ftp.handler.FtpHandler.disconnect。
 
+- 增加了以流的形式操作文件的方法。
+  - com.dwarfeng.ftp.handler.FtpHandler.storeFileByStream。
+  - com.dwarfeng.ftp.handler.FtpHandler.getFileContentByStream。
+
 #### Bug修复
 
 - (无)
