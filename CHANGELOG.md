@@ -29,13 +29,17 @@
   - com.dwarfeng.ftp.handler.FtpHandler.storeFileByStream。
   - com.dwarfeng.ftp.handler.FtpHandler.getFileContentByStream。
 
+- 依赖升级。
+  - 升级 `subgrade` 依赖版本为 `1.3.0.a`。
+
 #### Bug修复
 
 - (无)
 
 #### 功能移除
 
-- (无)
+- 删除不需要的依赖。
+  - 删除 `dutil` 依赖。
 
 ---
 
