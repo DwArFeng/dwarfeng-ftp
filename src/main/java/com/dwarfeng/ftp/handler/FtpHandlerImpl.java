@@ -1,6 +1,8 @@
 package com.dwarfeng.ftp.handler;
 
+import com.dwarfeng.ftp.bean.dto.FtpFile;
 import com.dwarfeng.ftp.exception.*;
+import com.dwarfeng.ftp.util.Constants;
 import com.dwarfeng.subgrade.sdk.interceptor.analyse.BehaviorAnalyse;
 import com.dwarfeng.subgrade.sdk.interceptor.analyse.SkipRecord;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
@@ -294,6 +296,82 @@ public class FtpHandlerImpl implements FtpHandler {
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + directoryName
                 );
             }
+        } catch (HandlerException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public FtpFile[] listFiles(String[] filePaths) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认状态并列出文件。
+            ensureStatus();
+            enterDirection(filePaths);
+            FTPFile[] ftpFiles = ftpClient.listFiles();
+
+            // 映射文件并返回结果。
+            FtpFile[] result = new FtpFile[ftpFiles.length];
+            for (int i = 0; i < ftpFiles.length; i++) {
+                FTPFile ftpFile = ftpFiles[i];
+                // 定义变量。
+                String name;
+                int type;
+                long size;
+                // 映射变量。
+                name = humanReadableFileNameEncoding(ftpFile.getName());
+                switch (ftpFile.getType()) {
+                    case FTPFile.FILE_TYPE:
+                        type = Constants.FTP_FILE_TYPE_FILE;
+                        break;
+                    case FTPFile.DIRECTORY_TYPE:
+                        type = Constants.FTP_FILE_TYPE_DIRECTORY;
+                        break;
+                    case FTPFile.SYMBOLIC_LINK_TYPE:
+                        type = Constants.FTP_FILE_TYPE_SYMBOLIC_LINK;
+                        break;
+                    default:
+                        type = Constants.FTP_FILE_TYPE_UNKNOWN;
+                        break;
+                }
+                size = ftpFile.getSize();
+                // 设置结果。
+                result[i] = new FtpFile(name, type, size);
+            }
+            return result;
+        } catch (HandlerException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public String[] listFileNames(String[] filePaths) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认状态并列出文件。
+            ensureStatus();
+            enterDirection(filePaths);
+            FTPFile[] ftpFiles = ftpClient.listFiles();
+
+            // 映射文件并返回结果。
+            String[] result = new String[ftpFiles.length];
+            for (int i = 0; i < ftpFiles.length; i++) {
+                FTPFile ftpFile = ftpFiles[i];
+                result[i] = humanReadableFileNameEncoding(ftpFile.getName());
+            }
+            return result;
         } catch (HandlerException e) {
             throw e;
         } catch (Exception e) {
