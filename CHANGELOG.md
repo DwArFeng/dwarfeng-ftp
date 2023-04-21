@@ -4,6 +4,9 @@
 
 #### 功能构建
 
+- 代码优化。
+  - 为部分代码增加 @SuppressWarnings 注解，以消除不合理的警报。
+
 - FtpHandler 继承了 StartableHandler 接口。
 
 - 依赖升级。

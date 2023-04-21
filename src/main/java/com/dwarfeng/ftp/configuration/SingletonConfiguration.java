@@ -33,6 +33,7 @@ public class SingletonConfiguration {
     @Value("${ftp.noop_interval}")
     private long noopInterval;
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public SingletonConfiguration(ThreadPoolTaskScheduler scheduler) {
         this.scheduler = scheduler;
     }
