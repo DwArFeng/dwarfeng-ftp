@@ -4,6 +4,8 @@
 
 #### 功能构建
 
+- FtpHandler 继承了 StartableHandler 接口。
+
 - 依赖升级。
   - 升级 `spring` 依赖版本为 `5.3.27` 以规避漏洞。
   - 升级 `subgrade` 依赖版本为 `1.3.3.a` 以规避漏洞。

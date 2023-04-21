@@ -37,7 +37,7 @@ public class SingletonConfiguration {
         this.scheduler = scheduler;
     }
 
-    @Bean(initMethod = "connect", destroyMethod = "disconnect")
+    @Bean(initMethod = "start", destroyMethod = "stop")
     public FtpHandler ftpHandler() {
         return new FtpHandlerImpl(
                 scheduler, ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval

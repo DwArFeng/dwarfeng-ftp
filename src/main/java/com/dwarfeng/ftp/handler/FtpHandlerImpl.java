@@ -44,10 +44,10 @@ public class FtpHandlerImpl implements FtpHandler {
     private final long noopInterval;
 
     private final Lock lock = new ReentrantLock();
-    private final FTPClient ftpClient = new FTPClient();
 
+    private FTPClient ftpClient = null;
     private ScheduledFuture<?> noopSendTaskFuture;
-    private Status status = Status.NOT_CONNECTED_YET;
+    private boolean startedFlag = false;
 
     public FtpHandlerImpl(
             ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
@@ -63,21 +63,23 @@ public class FtpHandlerImpl implements FtpHandler {
         this.noopInterval = noopInterval;
     }
 
-    @BehaviorAnalyse
     @Override
-    public void connect() throws HandlerException {
+    public boolean isStarted() {
         lock.lock();
         try {
-            // 检查生命周期是否合法。
-            switch (status) {
-                case NOT_CONNECTED_YET:
-                    break;
-                case CONNECTED:
-                    throw new IllegalStateException("FtpHandler 已经连接, 无法重复连接");
-                case DISCONNECTED:
-                    throw new IllegalStateException(
-                            "FtpHandler 已经断开连接, 一个 FtpHandler 实例只能连接一次, 请使用新的实例连接"
-                    );
+            return startedFlag;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @BehaviorAnalyse
+    @Override
+    public void start() throws HandlerException {
+        lock.lock();
+        try {
+            if (startedFlag) {
+                return;
             }
 
             // 日志记录。
@@ -90,6 +92,9 @@ public class FtpHandlerImpl implements FtpHandler {
             if (noopInterval >= connectTimeout) {
                 throw new IllegalArgumentException("配置ftp.noop_interval的值太大，应该小于ftp.connect_timeout");
             }
+
+            // 初始化 FTP 客户端。
+            ftpClient = new FTPClient();
 
             // 设置 FTP 服务器为本地被动模式。
             ftpClient.enterLocalPassiveMode();
@@ -107,7 +112,7 @@ public class FtpHandlerImpl implements FtpHandler {
             );
 
             // 设置状态。
-            status = Status.CONNECTED;
+            startedFlag = true;
         } catch (Exception e) {
             throw new HandlerException(e);
         } finally {
@@ -117,19 +122,11 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void disconnect() throws HandlerException {
+    public void stop() throws HandlerException {
         lock.lock();
         try {
-            // 检查生命周期是否合法。
-            switch (status) {
-                case NOT_CONNECTED_YET:
-                    throw new IllegalStateException(
-                            "FtpHandler 还未连接, 无法断开连接, 请在调用连接方法之后再调用断开连接方法"
-                    );
-                case CONNECTED:
-                    break;
-                case DISCONNECTED:
-                    throw new IllegalStateException("FtpHandler 已经断开连接, 无法重复断开连接");
+            if (!startedFlag) {
+                return;
             }
 
             // 日志记录。
@@ -150,13 +147,30 @@ public class FtpHandlerImpl implements FtpHandler {
                 ftpClient.disconnect();
             }
 
+            // 释放 FTP 客户端。
+            ftpClient = null;
+
             // 设置状态。
-            status = Status.DISCONNECTED;
+            startedFlag = false;
         } catch (Exception e) {
             throw new HandlerException(e);
         } finally {
             lock.unlock();
         }
+    }
+
+    @Deprecated
+    @BehaviorAnalyse
+    @Override
+    public void connect() throws HandlerException {
+        start();
+    }
+
+    @Deprecated
+    @BehaviorAnalyse
+    @Override
+    public void disconnect() throws HandlerException {
+        stop();
     }
 
     @BehaviorAnalyse
@@ -479,9 +493,5 @@ public class FtpHandlerImpl implements FtpHandler {
                 lock.unlock();
             }
         }
-    }
-
-    private enum Status {
-        NOT_CONNECTED_YET, CONNECTED, DISCONNECTED
     }
 }

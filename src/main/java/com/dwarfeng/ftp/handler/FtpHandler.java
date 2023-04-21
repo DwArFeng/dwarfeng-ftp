@@ -2,7 +2,7 @@ package com.dwarfeng.ftp.handler;
 
 import com.dwarfeng.ftp.bean.dto.FtpFile;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
-import com.dwarfeng.subgrade.stack.handler.Handler;
+import com.dwarfeng.subgrade.stack.handler.StartableHandler;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,7 +13,7 @@ import java.io.OutputStream;
  * @author DwArFeng
  * @since 1.0.0
  */
-public interface FtpHandler extends Handler {
+public interface FtpHandler extends StartableHandler {
 
     /**
      * 执行连接动作。
