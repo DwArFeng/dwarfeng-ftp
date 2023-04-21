@@ -6,6 +6,7 @@
 
 - 代码优化。
   - 为部分代码增加 @SuppressWarnings 注解，以消除不合理的警报。
+  - 去除部方法定义中不会抛出的异常声明。
 
 - FtpHandler 继承了 StartableHandler 接口。
 

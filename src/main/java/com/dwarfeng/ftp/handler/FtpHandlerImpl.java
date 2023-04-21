@@ -201,8 +201,6 @@ public class FtpHandlerImpl implements FtpHandler {
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -225,8 +223,6 @@ public class FtpHandlerImpl implements FtpHandler {
             }
             bout.flush();
             return bout.toByteArray();
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -247,8 +243,6 @@ public class FtpHandlerImpl implements FtpHandler {
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -269,8 +263,6 @@ public class FtpHandlerImpl implements FtpHandler {
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -290,8 +282,6 @@ public class FtpHandlerImpl implements FtpHandler {
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -359,8 +349,6 @@ public class FtpHandlerImpl implements FtpHandler {
                 result[i] = new FtpFile(name, type, size);
             }
             return result;
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -386,8 +374,6 @@ public class FtpHandlerImpl implements FtpHandler {
                 result[i] = humanReadableFileNameEncoding(ftpFile.getName());
             }
             return result;
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -399,10 +385,8 @@ public class FtpHandlerImpl implements FtpHandler {
      * 确保 FTP 的状态正常。
      * <p>
      * 如果未连接成功，则尝试立即连接。连接失败后抛出异常。
-     *
-     * @throws FtpConnectException FTP 客户端无法正常连接。
      */
-    private void ensureStatus() throws FtpConnectException {
+    private void ensureStatus() {
         try {
             ftpClient.sendNoOp();
         } catch (IOException e) {
