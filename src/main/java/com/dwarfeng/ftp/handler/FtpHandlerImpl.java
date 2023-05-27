@@ -386,7 +386,7 @@ public class FtpHandlerImpl implements FtpHandler {
      * <p>
      * 如果未连接成功，则尝试立即连接。连接失败后抛出异常。
      */
-    private void ensureStatus() {
+    private void ensureStatus() throws Exception {
         try {
             ftpClient.sendNoOp();
         } catch (IOException e) {
@@ -396,6 +396,7 @@ public class FtpHandlerImpl implements FtpHandler {
                 connectAndLogin();
             } catch (Exception ex) {
                 LOGGER.warn("重连失败，异常信息如下: ", ex);
+                throw ex;
             }
         }
     }
