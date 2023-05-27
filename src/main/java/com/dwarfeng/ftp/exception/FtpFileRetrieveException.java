@@ -1,7 +1,7 @@
 package com.dwarfeng.ftp.exception;
 
 /**
- * FTP 文件取回异常。
+ * FTP 文件获取异常。
  *
  * @author DwArFeng
  * @since 1.0.0
