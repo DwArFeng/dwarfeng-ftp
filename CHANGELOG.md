@@ -9,6 +9,10 @@
 - 优化 `FtpHandlerImpl` 中的方法，使其更加合理。
   - Ftp 服务器状态异常时，调用 `FtpHandler` 中的方法可以更快的抛出异常。
 
+- `FtpHandler` 增加新方法。
+  - FtpHandler.openInputStream。
+  - FtpHandler.openOutputStream。
+
 #### Bug修复
 
 - (无)

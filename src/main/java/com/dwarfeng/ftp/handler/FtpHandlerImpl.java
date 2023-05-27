@@ -180,7 +180,9 @@ public class FtpHandlerImpl implements FtpHandler {
         try {
             ensureStatus();
             enterDirection(filePaths);
+            checkPositiveCompletion();
             FTPFile[] ftpFiles = ftpClient.listFiles(fileName);
+            checkPositiveCompletion();
             return Objects.nonNull(ftpFiles) && ftpFiles.length > 0;
         } catch (Exception e) {
             throw new FtpException(e);
@@ -196,11 +198,13 @@ public class FtpHandlerImpl implements FtpHandler {
         try (ByteArrayInputStream bin = new ByteArrayInputStream(content)) {
             ensureStatus();
             enterDirection(filePaths);
+            checkPositiveCompletion();
             if (!ftpClient.storeFile(serverFileNameEncoding(fileName), bin)) {
                 throw new FtpFileStoreException(
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
+            checkPositiveCompletion();
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -216,11 +220,13 @@ public class FtpHandlerImpl implements FtpHandler {
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
             ensureStatus();
             enterDirection(filePaths);
+            checkPositiveCompletion();
             if (!ftpClient.retrieveFile(serverFileNameEncoding(fileName), bout)) {
                 throw new FtpFileRetrieveException(
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
+            checkPositiveCompletion();
             bout.flush();
             return bout.toByteArray();
         } catch (Exception e) {
@@ -238,11 +244,13 @@ public class FtpHandlerImpl implements FtpHandler {
         try {
             ensureStatus();
             enterDirection(filePaths);
+            checkPositiveCompletion();
             if (!ftpClient.storeFile(serverFileNameEncoding(fileName), in)) {
                 throw new FtpFileStoreException(
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
+            checkPositiveCompletion();
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -258,11 +266,13 @@ public class FtpHandlerImpl implements FtpHandler {
         try {
             ensureStatus();
             enterDirection(filePaths);
+            checkPositiveCompletion();
             if (!ftpClient.retrieveFile(serverFileNameEncoding(fileName), out)) {
                 throw new FtpFileRetrieveException(
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
+            checkPositiveCompletion();
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -277,11 +287,13 @@ public class FtpHandlerImpl implements FtpHandler {
         try {
             ensureStatus();
             enterDirection(filePaths);
+            checkPositiveCompletion();
             if (!ftpClient.deleteFile(serverFileNameEncoding(fileName))) {
                 throw new FtpFileDeleteException(
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
                 );
             }
+            checkPositiveCompletion();
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -295,11 +307,13 @@ public class FtpHandlerImpl implements FtpHandler {
         lock.lock();
         try {
             enterDirection(filePaths);
+            checkPositiveCompletion();
             if (!ftpClient.removeDirectory(serverFileNameEncoding(directoryName))) {
                 throw new FtpFileDeleteException(
                         humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + directoryName
                 );
             }
+            checkPositiveCompletion();
         } catch (HandlerException e) {
             throw e;
         } catch (Exception e) {
@@ -318,7 +332,9 @@ public class FtpHandlerImpl implements FtpHandler {
             // 确认状态并列出文件。
             ensureStatus();
             enterDirection(filePaths);
+            checkPositiveCompletion();
             FTPFile[] ftpFiles = ftpClient.listFiles();
+            checkPositiveCompletion();
 
             // 映射文件并返回结果。
             FtpFile[] result = new FtpFile[ftpFiles.length];
@@ -365,7 +381,9 @@ public class FtpHandlerImpl implements FtpHandler {
             // 确认状态并列出文件。
             ensureStatus();
             enterDirection(filePaths);
+            checkPositiveCompletion();
             FTPFile[] ftpFiles = ftpClient.listFiles();
+            checkPositiveCompletion();
 
             // 映射文件并返回结果。
             String[] result = new String[ftpFiles.length];
@@ -381,8 +399,57 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public InputStream openInputStream(String[] filePaths, String fileName) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认状态并打开文件目录。
+            ensureStatus();
+            enterDirection(filePaths);
+            checkPositiveCompletion();
+
+            // 打开文件的输入流。
+            InputStream in = ftpClient.retrieveFileStream(serverFileNameEncoding(fileName));
+            checkPositivePreliminary();
+
+            // 包装输入流并返回。
+            return new CompletePendingInputStream(in);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public OutputStream openOutputStream(String[] filePaths, String fileName) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认状态并打开文件目录。
+            ensureStatus();
+            enterDirection(filePaths);
+            checkPositiveCompletion();
+
+            // 打开文件的输出流。
+            OutputStream out = ftpClient.storeFileStream(serverFileNameEncoding(fileName));
+            checkPositivePreliminary();
+
+            // 包装输出流并返回。
+            return new CompletePendingOutputStream(out);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
     /**
-     * 确保 FTP 的状态正常。
+     * 执行 FtpClient 具体操作之前确保 FTP 的状态正常。
+     *
      * <p>
      * 如果未连接成功，则尝试立即连接。连接失败后抛出异常。
      */
@@ -399,6 +466,32 @@ public class FtpHandlerImpl implements FtpHandler {
                 throw ex;
             }
         }
+    }
+
+    /**
+     * 执行 FtpClient 具体操作之后检查 FTP 的状态。
+     *
+     * @throws IOException 如果 FTP 服务器返回错误的状态码，则抛出此异常。
+     */
+    private void checkPositiveCompletion() throws IOException {
+        if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
+            return;
+        }
+
+        throw new IOException("FTP 服务器返回错误的状态码: " + ftpClient.getReplyCode());
+    }
+
+    /**
+     * 执行 FtpClient 具体操作之后检查 FTP 的状态。
+     *
+     * @throws IOException 如果 FTP 服务器返回错误的状态码，则抛出此异常。
+     */
+    private void checkPositivePreliminary() throws IOException {
+        if (FTPReply.isPositivePreliminary(ftpClient.getReplyCode())) {
+            return;
+        }
+
+        throw new IOException("FTP 服务器返回错误的状态码: " + ftpClient.getReplyCode());
     }
 
     /**
@@ -477,6 +570,56 @@ public class FtpHandlerImpl implements FtpHandler {
             } finally {
                 lock.unlock();
             }
+        }
+    }
+
+    private class CompletePendingInputStream extends FilterInputStream {
+
+        public CompletePendingInputStream(InputStream in) {
+            super(in);
+        }
+
+        @Override
+        public void close() throws IOException {
+            // 调用父类的 close 方法，关闭输入流。
+            super.close();
+
+            // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
+            if (ftpClient.completePendingCommand()) {
+                return;
+            }
+
+            // 如果文件传输失败，则主动断开连接。
+            // 主动断开连接后，调用其它方法，会自动触发重连机制，所以这里不需要再次重连。
+            ftpClient.logout();
+            ftpClient.disconnect();
+            // 抛出 IOException，以通知上层调用者。
+            throw new IOException("completePendingCommand 失败，主动断开连接");
+        }
+    }
+
+    private class CompletePendingOutputStream extends FilterOutputStream {
+
+        public CompletePendingOutputStream(OutputStream out) {
+            super(out);
+        }
+
+        @Override
+        public void close() throws IOException {
+            // 调用父类的 close 方法，关闭输出流。
+            super.close();
+
+            // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
+            if (ftpClient.completePendingCommand()) {
+                return;
+            }
+
+            // 如果文件传输失败，则主动断开连接。
+            // 主动断开连接后，调用其它方法，会自动触发重连机制，所以这里不需要再次重连。
+            ftpClient.logout();
+            ftpClient.disconnect();
+            // 抛出 IOException，以通知上层调用者。
+            throw new IOException("completePendingCommand 失败，主动断开连接");
         }
     }
 }

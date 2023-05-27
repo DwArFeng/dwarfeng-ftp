@@ -167,4 +167,44 @@ public interface FtpHandler extends StartableHandler {
      * @throws HandlerException 处理器异常。
      */
     String[] listFileNames(String[] filePaths) throws HandlerException;
+
+    /**
+     * 打开指定文件的输入流。
+     *
+     * <p>
+     * 该方法会在调用前检查 FTP 服务器的状态，如果 FTP 服务器不可用，会抛出异常。
+     *
+     * <p>
+     * 文件在读取过程中，如果 FTP 服务器不可用，会抛出 {@link java.io.IOException} 异常。
+     *
+     * <p>
+     * 该方法不会关闭流，需要调用者自行关闭，请 <b>务必</b> 在调用该方法结束后关闭流，否则会造成 FTP 服务器行为异常。
+     *
+     * @param filePaths 文件夹路径。<br>
+     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param fileName  文件的名称。
+     * @return 文件的输入流。
+     * @throws HandlerException 处理器异常。
+     */
+    InputStream openInputStream(String[] filePaths, String fileName) throws HandlerException;
+
+    /**
+     * 打开指定文件的输出流。
+     *
+     * <p>
+     * 该方法会在调用前检查 FTP 服务器的状态，如果 FTP 服务器不可用，会抛出异常。
+     *
+     * <p>
+     * 文件在写入过程中，如果 FTP 服务器不可用，会抛出 {@link java.io.IOException} 异常。
+     *
+     * <p>
+     * 该方法不会关闭流，需要调用者自行关闭，请 <b>务必</b> 在调用该方法结束后关闭流，否则会造成 FTP 服务器行为异常。
+     *
+     * @param filePaths 文件夹路径。<br>
+     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param fileName  文件的名称。
+     * @return 文件的输出流。
+     * @throws HandlerException 处理器异常。
+     */
+    OutputStream openOutputStream(String[] filePaths, String fileName) throws HandlerException;
 }

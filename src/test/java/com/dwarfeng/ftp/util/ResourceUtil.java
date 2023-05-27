@@ -43,6 +43,7 @@ public final class ResourceUtil {
         return alterContent;
     }
 
+
     private static byte[] stream2Bytes(InputStream in, ByteArrayOutputStream out) throws IOException {
         byte[] buffer = new byte[4096];
         int i;

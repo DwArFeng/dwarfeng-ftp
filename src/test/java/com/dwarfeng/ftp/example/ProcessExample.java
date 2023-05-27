@@ -13,14 +13,14 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * 示例代码。
+ * 流程示例。
  *
  * @author DwArFeng
  * @since 1.0.0
  */
-public class Example {
+public class ProcessExample {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Example.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessExample.class);
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
