@@ -69,15 +69,15 @@ public class Example {
         System.out.println();
         System.out.println("3. 文件读取...");
         byte[] ftpContent;
-        ftpContent = ftpHandler.getFileContent(new String[]{rootPath}, "comic-girl.jpg");
+        ftpContent = ftpHandler.retrieveFile(new String[]{rootPath}, "comic-girl.jpg");
         if (Arrays.equals(ftpContent, ResourceUtil.getAlterContent())) {
             System.out.println("文件内容相等!");
         }
-        ftpContent = ftpHandler.getFileContent(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg");
+        ftpContent = ftpHandler.retrieveFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg");
         if (Arrays.equals(ftpContent, ResourceUtil.getAlterContent())) {
             System.out.println("文件内容相等!");
         }
-        ftpContent = ftpHandler.getFileContent(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
+        ftpContent = ftpHandler.retrieveFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
         if (Arrays.equals(ftpContent, ResourceUtil.getAlterContent())) {
             System.out.println("文件内容相等!");
         }

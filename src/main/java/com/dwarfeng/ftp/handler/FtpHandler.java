@@ -60,7 +60,23 @@ public interface FtpHandler extends StartableHandler {
      * @return 文件的内容。
      * @throws HandlerException 处理器异常。
      */
-    byte[] getFileContent(String[] filePaths, String fileName) throws HandlerException;
+    byte[] retrieveFile(String[] filePaths, String fileName) throws HandlerException;
+
+    /**
+     * 获取文件。
+     *
+     * @param filePaths 文件夹路径。<br>
+     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param fileName  文件的名称。
+     * @return 文件的内容。
+     * @throws HandlerException 处理器异常。
+     * @deprecated 该方法命名不规范，get 一般用于直接获取对象，不应该用于需要消耗时间的过程方法。<br>
+     * 请使用 {@link #retrieveFile(String[], String)}。
+     */
+    @Deprecated
+    default byte[] getFileContent(String[] filePaths, String fileName) throws HandlerException {
+        return retrieveFile(filePaths, fileName);
+    }
 
     /**
      * 通过流的形式存储文件。
@@ -88,8 +104,27 @@ public interface FtpHandler extends StartableHandler {
      * @param out       待写入文件内容的输出流。
      * @throws HandlerException 处理器异常。
      */
-    void getFileContentByStream(String[] filePaths, String fileName, OutputStream out)
-            throws HandlerException;
+    void retrieveFileByStream(String[] filePaths, String fileName, OutputStream out) throws HandlerException;
+
+    /**
+     * 通过流的形式获取文件。
+     *
+     * <p>
+     * FtpHandler 本身不维护流的生命周期，请在调用该方法前妥善启动流，并在调用该方法结束后妥善关闭流。
+     *
+     * @param filePaths 文件夹路径。<br>
+     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param fileName  文件的名称
+     * @param out       待写入文件内容的输出流。
+     * @throws HandlerException 处理器异常。
+     * @deprecated 该方法命名不规范，get 一般用于直接获取对象，不应该用于需要消耗时间的过程方法。<br>
+     * 请使用 {@link #retrieveFileByStream(String[], String, OutputStream)}。
+     */
+    @Deprecated
+    default void getFileContentByStream(String[] filePaths, String fileName, OutputStream out)
+            throws HandlerException {
+        retrieveFileByStream(filePaths, fileName, out);
+    }
 
     /**
      * 删除文件。

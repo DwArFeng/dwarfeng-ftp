@@ -211,7 +211,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @SkipRecord
     @Override
-    public byte[] getFileContent(String[] filePaths, String fileName) throws FtpException {
+    public byte[] retrieveFile(String[] filePaths, String fileName) throws FtpException {
         lock.lock();
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
             ensureStatus();
@@ -252,7 +252,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void getFileContentByStream(String[] filePaths, String fileName, @SkipRecord OutputStream out)
+    public void retrieveFileByStream(String[] filePaths, String fileName, @SkipRecord OutputStream out)
             throws HandlerException {
         lock.lock();
         try {
