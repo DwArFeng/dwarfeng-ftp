@@ -15,10 +15,11 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 
 运行 `src/test` 下的示例以观察全部特性。
 
-| 示例类名           | 说明     |
-|----------------|--------|
-| ProcessExample | 流程示例   |
-| StreamExample  | 流的使用示例 |
+| 示例类名            | 说明     |
+|-----------------|--------|
+| ProcessExample  | 流程示例   |
+| StreamExample   | 流的使用示例 |
+| ListFileExample | 列出文件示例 |
 
 ## 安装说明
 

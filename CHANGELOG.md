@@ -6,6 +6,8 @@
 
 - 优化 `StreamExample` 中的代码，使其更加合理。
 
+- 增加 `ListFileExample`，用于演示列出文件的功能。
+
 #### Bug修复
 
 - (无)
