@@ -11,8 +11,14 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 3. 中文编码支持。
 4. 自动保持连接。
 5. 自动保持连接与断线重连。
+6. 打开文件的输入流/输出流。
 
-运行 `src/test` 下的 `Example` 以观察全部特性。
+运行 `src/test` 下的示例以观察全部特性。
+
+| 示例类名           | 说明     |
+|----------------|--------|
+| ProcessExample | 流程示例   |
+| StreamExample  | 流的使用示例 |
 
 ## 安装说明
 
@@ -100,3 +106,9 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
     </bean>
 </beans>
 ```
+
+### 任意数量的实例模式
+
+自行设计 `FtpHandler` 的工厂类，调用相关工厂方法生成 `FtpHandlerImpl` 实例。
+需要注意的是：生成的 `FtpHandlerImpl` 在使用之前需要调用 `FtpHandlerImpl#start()` 启动处理器；同时在使用完毕之后，
+需要调用 `FtpHandlerImpl#stop()` 关闭处理器。
