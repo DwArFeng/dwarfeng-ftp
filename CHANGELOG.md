@@ -8,6 +8,11 @@
 
 - 增加 `ListFileExample`，用于演示列出文件的功能。
 
+- `FtpHandlerImpl` 中增加 `bufferSize` 属性，用于指定缓冲区大小。
+  - 该属性默认值为 `4096`。
+  - FtpHandlerImpl.storeFileByStream 方法中，使用该属性指定输入流的缓冲区大小。
+  - FtpHandlerImpl.retrieveFileByStream 方法中，使用该属性指定输出流的缓冲区大小。
+
 #### Bug修复
 
 - 修复了在某些情况下，`FtpHandler` 写入非 ASCII 文件名时，文件名编码不正确的问题。

@@ -20,18 +20,28 @@ public class SingletonConfiguration {
 
     @Value("${ftp.host}")
     private String ftpHost;
+
     @Value("${ftp.port}")
     private int ftpPort;
+
     @Value("${ftp.username}")
     private String ftpUserName;
+
     @Value("${ftp.password}")
     private String ftpPassword;
+
     @Value("${ftp.server_charset}")
     private String serverCharset;
+
     @Value("${ftp.connect_timeout}")
     private int connectTimeout;
+
     @Value("${ftp.noop_interval}")
     private long noopInterval;
+
+    // 设置默认值，以兼容旧版本。
+    @Value("${ftp.buffer_size:4096}")
+    private int bufferSize;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public SingletonConfiguration(ThreadPoolTaskScheduler scheduler) {
@@ -41,7 +51,8 @@ public class SingletonConfiguration {
     @Bean(initMethod = "start", destroyMethod = "stop")
     public FtpHandler ftpHandler() {
         return new FtpHandlerImpl(
-                scheduler, ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval
+                scheduler, ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval,
+                bufferSize
         );
     }
 }

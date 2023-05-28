@@ -29,6 +29,11 @@ public class FtpHandlerImpl implements FtpHandler {
      */
     private static final int MIN_CONNECT_TIMEOUT = 1000;
 
+    /**
+     * 默认缓冲区大小。
+     */
+    private static final int DEFAULT_BUFFER_SIZE = 4096;
+
     private final ThreadPoolTaskScheduler scheduler;
 
     private final String ftpHost;
@@ -38,6 +43,7 @@ public class FtpHandlerImpl implements FtpHandler {
     private final String serverCharset;
     private final int connectTimeout;
     private final long noopInterval;
+    private final int bufferSize;
 
     private final Lock lock = new ReentrantLock();
 
@@ -49,6 +55,16 @@ public class FtpHandlerImpl implements FtpHandler {
             ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
             String serverCharset, int connectTimeout, long noopInterval
     ) {
+        this(
+                scheduler, ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval,
+                DEFAULT_BUFFER_SIZE
+        );
+    }
+
+    public FtpHandlerImpl(
+            ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
+            String serverCharset, int connectTimeout, long noopInterval, int bufferSize
+    ) {
         this.scheduler = scheduler;
         this.ftpHost = ftpHost;
         this.ftpPort = ftpPort;
@@ -57,6 +73,7 @@ public class FtpHandlerImpl implements FtpHandler {
         this.serverCharset = serverCharset;
         this.connectTimeout = connectTimeout;
         this.noopInterval = noopInterval;
+        this.bufferSize = bufferSize;
     }
 
     @Override
@@ -94,6 +111,9 @@ public class FtpHandlerImpl implements FtpHandler {
 
             // 设置 FTP 客户端的控制编码。
             ftpClient.setControlEncoding(serverCharset);
+
+            // 设置 FTP 客户端的缓冲区大小。
+            ftpClient.setBufferSize(bufferSize);
 
             // 设置 FTP 服务器为本地被动模式。
             ftpClient.enterLocalPassiveMode();

@@ -93,6 +93,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
         <constructor-arg name="serverCharset" value="${ftp.server_charset.1}"/>
         <constructor-arg name="connectTimeout" value="${ftp.connect_timeout.1}"/>
         <constructor-arg name="noopInterval" value="${ftp.noop_interval.1}"/>
+        <constructor-arg name="bufferSize" value="${ftp.buffer_size.1}"/>
     </bean>
 
     <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
@@ -104,6 +105,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
         <constructor-arg name="serverCharset" value="${ftp.server_charset.2}"/>
         <constructor-arg name="connectTimeout" value="${ftp.connect_timeout.2}"/>
         <constructor-arg name="noopInterval" value="${ftp.noop_interval.2}"/>
+        <constructor-arg name="bufferSize" value="${ftp.buffer_size.2}"/>
     </bean>
 </beans>
 ```
