@@ -21,6 +21,15 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 | StreamExample   | 流的使用示例 |
 | ListFileExample | 列出文件示例 |
 
+## 测试
+
+该项目针对多个 FTP 服务端进行了测试，测试结果如下：
+
+| FTP 服务器类型             | 测试结果 |
+|-----------------------|------|
+| vsftpd                | 通过   |
+| Windows 10 内置 FTP 服务器 | 通过   |
+
 ## 安装说明
 
 1. 下载源码。  
