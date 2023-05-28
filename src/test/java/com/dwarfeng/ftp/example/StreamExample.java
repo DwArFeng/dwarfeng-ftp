@@ -129,7 +129,12 @@ public class StreamExample {
             scanner.nextLine();
             break;
         }
-        System.out.println("文件新建完毕, 您将会看到文件被创建");
+
+        // 4. 文件删除。
+        System.out.println();
+        System.out.println("4. 删除所有的测试文件...");
+        ftpHandler.deleteFile(new String[]{rootPath}, "comic-girl.jpg");
+        ftpHandler.deleteFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
         System.out.println("示例演示完毕, 感谢您测试与使用!");
 
         ctx.stop();
