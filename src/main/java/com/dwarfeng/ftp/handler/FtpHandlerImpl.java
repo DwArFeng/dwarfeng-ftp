@@ -25,10 +25,6 @@ public class FtpHandlerImpl implements FtpHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(FtpHandlerImpl.class);
 
     /**
-     * FTP协议所使用的标准字符集。
-     */
-    private static final String STANDARD_FILE_NAME_CHARSET = "ISO-8859-1";
-    /**
      * 最小超时时间。
      */
     private static final int MIN_CONNECT_TIMEOUT = 1000;
@@ -95,6 +91,9 @@ public class FtpHandlerImpl implements FtpHandler {
 
             // 初始化 FTP 客户端。
             ftpClient = new FTPClient();
+
+            // 设置 FTP 客户端的控制编码。
+            ftpClient.setControlEncoding(serverCharset);
 
             // 设置 FTP 服务器为本地被动模式。
             ftpClient.enterLocalPassiveMode();
@@ -199,10 +198,8 @@ public class FtpHandlerImpl implements FtpHandler {
             ensureStatus();
             enterDirection(filePaths);
             checkPositiveCompletion();
-            if (!ftpClient.storeFile(serverFileNameEncoding(fileName), bin)) {
-                throw new FtpFileStoreException(
-                        humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
-                );
+            if (!ftpClient.storeFile(fileName, bin)) {
+                throw new FtpFileStoreException(ftpClient.printWorkingDirectory() + '/' + fileName);
             }
             checkPositiveCompletion();
         } catch (Exception e) {
@@ -221,10 +218,8 @@ public class FtpHandlerImpl implements FtpHandler {
             ensureStatus();
             enterDirection(filePaths);
             checkPositiveCompletion();
-            if (!ftpClient.retrieveFile(serverFileNameEncoding(fileName), bout)) {
-                throw new FtpFileRetrieveException(
-                        humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
-                );
+            if (!ftpClient.retrieveFile(fileName, bout)) {
+                throw new FtpFileRetrieveException(ftpClient.printWorkingDirectory() + '/' + fileName);
             }
             checkPositiveCompletion();
             bout.flush();
@@ -245,10 +240,8 @@ public class FtpHandlerImpl implements FtpHandler {
             ensureStatus();
             enterDirection(filePaths);
             checkPositiveCompletion();
-            if (!ftpClient.storeFile(serverFileNameEncoding(fileName), in)) {
-                throw new FtpFileStoreException(
-                        humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
-                );
+            if (!ftpClient.storeFile(fileName, in)) {
+                throw new FtpFileStoreException(ftpClient.printWorkingDirectory() + '/' + fileName);
             }
             checkPositiveCompletion();
         } catch (Exception e) {
@@ -267,10 +260,8 @@ public class FtpHandlerImpl implements FtpHandler {
             ensureStatus();
             enterDirection(filePaths);
             checkPositiveCompletion();
-            if (!ftpClient.retrieveFile(serverFileNameEncoding(fileName), out)) {
-                throw new FtpFileRetrieveException(
-                        humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
-                );
+            if (!ftpClient.retrieveFile(fileName, out)) {
+                throw new FtpFileRetrieveException(ftpClient.printWorkingDirectory() + '/' + fileName);
             }
             checkPositiveCompletion();
         } catch (Exception e) {
@@ -288,10 +279,8 @@ public class FtpHandlerImpl implements FtpHandler {
             ensureStatus();
             enterDirection(filePaths);
             checkPositiveCompletion();
-            if (!ftpClient.deleteFile(serverFileNameEncoding(fileName))) {
-                throw new FtpFileDeleteException(
-                        humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + fileName
-                );
+            if (!ftpClient.deleteFile(fileName)) {
+                throw new FtpFileDeleteException(ftpClient.printWorkingDirectory() + '/' + fileName);
             }
             checkPositiveCompletion();
         } catch (Exception e) {
@@ -308,10 +297,8 @@ public class FtpHandlerImpl implements FtpHandler {
         try {
             enterDirection(filePaths);
             checkPositiveCompletion();
-            if (!ftpClient.removeDirectory(serverFileNameEncoding(directoryName))) {
-                throw new FtpFileDeleteException(
-                        humanReadableFileNameEncoding(ftpClient.printWorkingDirectory()) + '/' + directoryName
-                );
+            if (!ftpClient.removeDirectory(directoryName)) {
+                throw new FtpFileDeleteException(ftpClient.printWorkingDirectory() + '/' + directoryName);
             }
             checkPositiveCompletion();
         } catch (HandlerException e) {
@@ -345,7 +332,7 @@ public class FtpHandlerImpl implements FtpHandler {
                 int type;
                 long size;
                 // 映射变量。
-                name = humanReadableFileNameEncoding(ftpFile.getName());
+                name = ftpFile.getName();
                 switch (ftpFile.getType()) {
                     case FTPFile.FILE_TYPE:
                         type = Constants.FTP_FILE_TYPE_FILE;
@@ -389,7 +376,7 @@ public class FtpHandlerImpl implements FtpHandler {
             String[] result = new String[ftpFiles.length];
             for (int i = 0; i < ftpFiles.length; i++) {
                 FTPFile ftpFile = ftpFiles[i];
-                result[i] = humanReadableFileNameEncoding(ftpFile.getName());
+                result[i] = ftpFile.getName();
             }
             return result;
         } catch (Exception e) {
@@ -411,7 +398,7 @@ public class FtpHandlerImpl implements FtpHandler {
             checkPositiveCompletion();
 
             // 打开文件的输入流。
-            InputStream in = ftpClient.retrieveFileStream(serverFileNameEncoding(fileName));
+            InputStream in = ftpClient.retrieveFileStream(fileName);
             checkPositivePreliminary();
 
             // 包装输入流并返回。
@@ -435,7 +422,7 @@ public class FtpHandlerImpl implements FtpHandler {
             checkPositiveCompletion();
 
             // 打开文件的输出流。
-            OutputStream out = ftpClient.storeFileStream(serverFileNameEncoding(fileName));
+            OutputStream out = ftpClient.storeFileStream(fileName);
             checkPositivePreliminary();
 
             // 包装输出流并返回。
@@ -501,23 +488,14 @@ public class FtpHandlerImpl implements FtpHandler {
      * @throws IOException IO异常。
      */
     private void enterDirection(String[] filePaths) throws IOException {
-        ftpClient.changeWorkingDirectory(serverFileNameEncoding("/"));
+        ftpClient.changeWorkingDirectory("/");
         for (String filePath : filePaths) {
-            String adjustedFilePath = serverFileNameEncoding(filePath);
-            boolean result = ftpClient.changeWorkingDirectory(adjustedFilePath);
+            boolean result = ftpClient.changeWorkingDirectory(filePath);
             if (!result) {
-                ftpClient.mkd(adjustedFilePath);
-                ftpClient.changeWorkingDirectory(adjustedFilePath);
+                ftpClient.mkd(filePath);
+                ftpClient.changeWorkingDirectory(filePath);
             }
         }
-    }
-
-    private String serverFileNameEncoding(String fileName) throws UnsupportedEncodingException {
-        return new String(fileName.getBytes(serverCharset), STANDARD_FILE_NAME_CHARSET);
-    }
-
-    private String humanReadableFileNameEncoding(String fileName) throws UnsupportedEncodingException {
-        return new String(fileName.getBytes(STANDARD_FILE_NAME_CHARSET), serverCharset);
     }
 
     private void connectAndLogin() throws Exception {
