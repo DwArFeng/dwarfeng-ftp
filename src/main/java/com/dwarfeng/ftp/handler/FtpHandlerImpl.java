@@ -65,6 +65,14 @@ public class FtpHandlerImpl implements FtpHandler {
             ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
             String serverCharset, int connectTimeout, long noopInterval, int bufferSize
     ) {
+        //检查参数是否合法。
+        if (connectTimeout <= MIN_CONNECT_TIMEOUT) {
+            throw new IllegalArgumentException("配置ftp.connect_timeout的值太小，应该大于1000");
+        }
+        if (noopInterval >= connectTimeout) {
+            throw new IllegalArgumentException("配置ftp.noop_interval的值太大，应该小于ftp.connect_timeout");
+        }
+
         this.scheduler = scheduler;
         this.ftpHost = ftpHost;
         this.ftpPort = ftpPort;
@@ -97,14 +105,6 @@ public class FtpHandlerImpl implements FtpHandler {
 
             // 日志记录。
             LOGGER.info("FtpHandler 连接...");
-
-            //检查参数是否合法。
-            if (connectTimeout <= MIN_CONNECT_TIMEOUT) {
-                throw new IllegalArgumentException("配置ftp.connect_timeout的值太小，应该大于1000");
-            }
-            if (noopInterval >= connectTimeout) {
-                throw new IllegalArgumentException("配置ftp.noop_interval的值太大，应该小于ftp.connect_timeout");
-            }
 
             // 初始化 FTP 客户端。
             ftpClient = new FTPClient();
