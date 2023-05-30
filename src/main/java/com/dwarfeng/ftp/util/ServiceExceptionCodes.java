@@ -30,6 +30,8 @@ public final class ServiceExceptionCodes {
             new ServiceException.Code(offset(5), "ftp file store failed");
     public static final ServiceException.Code FTP_FILE_DELETE_FAILED =
             new ServiceException.Code(offset(6), "ftp file delete failed");
+    public static final ServiceException.Code FTP_FILE_NOT_EXISTS =
+            new ServiceException.Code(offset(8), "ftp file not exists");
     // 流异常。
     public static final ServiceException.Code FTP_STREAM_OPEN_FAILED =
             new ServiceException.Code(offset(7), "ftp stream open failed");
@@ -64,6 +66,7 @@ public final class ServiceExceptionCodes {
         FTP_FILE_RETRIEVE_FAILED.setCode(offset(4));
         FTP_FILE_STORE_FAILED.setCode(offset(5));
         FTP_FILE_DELETE_FAILED.setCode(offset(6));
+        FTP_FILE_NOT_EXISTS.setCode(offset(8));
         FTP_STREAM_OPEN_FAILED.setCode(offset(7));
     }
 

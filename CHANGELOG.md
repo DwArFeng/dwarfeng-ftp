@@ -4,6 +4,9 @@
 
 #### 功能构建
 
+- `FtpHandler` 增加新方法。
+  - FtpHandler.renameFile。
+
 - 使用 `FtpConfig` 结构体代替多项配置，简化构造器方法。
 
 - 优化 FtpHandlerImpl 中的方法，使其更加合理。

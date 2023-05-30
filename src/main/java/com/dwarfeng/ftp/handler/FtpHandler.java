@@ -207,4 +207,19 @@ public interface FtpHandler extends StartableHandler {
      * @throws HandlerException 处理器异常。
      */
     OutputStream openOutputStream(String[] filePaths, String fileName) throws HandlerException;
+
+    /**
+     * 重命名文件。
+     *
+     * @param oldFilePaths 旧的文件夹的路径。<br>
+     *                     路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param oldFileName  旧的文件的名称。
+     * @param neoFilePaths 新的文件夹的路径。<br>
+     *                     路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param neoFileName  新的文件的名称。
+     * @throws HandlerException 处理器异常。
+     */
+    void renameFile(
+            String[] oldFilePaths, String oldFileName, String[] neoFilePaths, String neoFileName
+    ) throws HandlerException;
 }

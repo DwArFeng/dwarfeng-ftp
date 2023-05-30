@@ -36,6 +36,9 @@ public class FtpHandlerImpl implements FtpHandler {
      */
     private static final int DEFAULT_BUFFER_SIZE = 4096;
 
+    private static final String ROOT_PATH = "/";
+    private static final char PATH_SEPARATOR = '/';
+
     private final ThreadPoolTaskScheduler scheduler;
 
     private final FtpConfig config;
@@ -209,17 +212,21 @@ public class FtpHandlerImpl implements FtpHandler {
     public boolean existsFile(String[] filePaths, String fileName) throws FtpException {
         lock.lock();
         try {
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-            FTPFile[] ftpFiles = ftpClient.listFiles(fileName);
-            checkPositiveCompletion();
-            return Objects.nonNull(ftpFiles) && ftpFiles.length > 0;
+            return internalExistsFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
             lock.unlock();
         }
+    }
+
+    private boolean internalExistsFile(String[] filePaths, String fileName) throws Exception {
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+        FTPFile[] ftpFiles = ftpClient.listFiles(fileName);
+        checkPositiveCompletion();
+        return Objects.nonNull(ftpFiles) && ftpFiles.length > 0;
     }
 
     @BehaviorAnalyse
@@ -231,7 +238,7 @@ public class FtpHandlerImpl implements FtpHandler {
             enterDirection(filePaths);
             checkPositiveCompletion();
             if (!ftpClient.storeFile(fileName, bin)) {
-                throw new FtpFileStoreException(ftpClient.printWorkingDirectory() + '/' + fileName);
+                throw new FtpFileStoreException(resolveAbsolutePath(filePaths, fileName));
             }
             checkPositiveCompletion();
         } catch (Exception e) {
@@ -251,7 +258,7 @@ public class FtpHandlerImpl implements FtpHandler {
             enterDirection(filePaths);
             checkPositiveCompletion();
             if (!ftpClient.retrieveFile(fileName, bout)) {
-                throw new FtpFileRetrieveException(ftpClient.printWorkingDirectory() + '/' + fileName);
+                throw new FtpFileRetrieveException(resolveAbsolutePath(filePaths, fileName));
             }
             checkPositiveCompletion();
             bout.flush();
@@ -273,7 +280,7 @@ public class FtpHandlerImpl implements FtpHandler {
             enterDirection(filePaths);
             checkPositiveCompletion();
             if (!ftpClient.storeFile(fileName, in)) {
-                throw new FtpFileStoreException(ftpClient.printWorkingDirectory() + '/' + fileName);
+                throw new FtpFileStoreException(resolveAbsolutePath(filePaths, fileName));
             }
             checkPositiveCompletion();
         } catch (Exception e) {
@@ -293,7 +300,7 @@ public class FtpHandlerImpl implements FtpHandler {
             enterDirection(filePaths);
             checkPositiveCompletion();
             if (!ftpClient.retrieveFile(fileName, out)) {
-                throw new FtpFileRetrieveException(ftpClient.printWorkingDirectory() + '/' + fileName);
+                throw new FtpFileRetrieveException(resolveAbsolutePath(filePaths, fileName));
             }
             checkPositiveCompletion();
         } catch (Exception e) {
@@ -308,18 +315,22 @@ public class FtpHandlerImpl implements FtpHandler {
     public void deleteFile(String[] filePaths, String fileName) throws FtpException {
         lock.lock();
         try {
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-            if (!ftpClient.deleteFile(fileName)) {
-                throw new FtpFileDeleteException(ftpClient.printWorkingDirectory() + '/' + fileName);
-            }
-            checkPositiveCompletion();
+            internalDeleteFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
             lock.unlock();
         }
+    }
+
+    private void internalDeleteFile(String[] filePaths, String fileName) throws Exception {
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+        if (!ftpClient.deleteFile(fileName)) {
+            throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, fileName));
+        }
+        checkPositiveCompletion();
     }
 
     @BehaviorAnalyse
@@ -330,7 +341,7 @@ public class FtpHandlerImpl implements FtpHandler {
             enterDirection(filePaths);
             checkPositiveCompletion();
             if (!ftpClient.removeDirectory(directoryName)) {
-                throw new FtpFileDeleteException(ftpClient.printWorkingDirectory() + '/' + directoryName);
+                throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, directoryName));
             }
             checkPositiveCompletion();
         } catch (HandlerException e) {
@@ -492,6 +503,50 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public void renameFile(
+            String[] oldFilePaths, String oldFileName, String[] neoFilePaths, String neoFileName
+    ) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认状态并打开文件目录。
+            ensureStatus();
+
+            // 确保旧文件存在。
+            if (!internalExistsFile(oldFilePaths, oldFileName)) {
+                throw new FtpFileNotExistsException(resolveAbsolutePath(oldFilePaths, oldFileName));
+            }
+
+            // 如果新文件存在，则删除新文件。
+            if (internalExistsFile(neoFilePaths, neoFileName)) {
+                internalDeleteFile(neoFilePaths, neoFileName);
+            }
+
+            // 执行重命名操作。
+            ftpClient.rename(
+                    resolveAbsolutePath(oldFilePaths, oldFileName),
+                    resolveAbsolutePath(neoFilePaths, neoFileName)
+            );
+            checkPositiveCompletion();
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private String resolveAbsolutePath(String[] filePaths, String fileName) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(ROOT_PATH);
+        for (String filePath : filePaths) {
+            builder.append(filePath).append(PATH_SEPARATOR);
+        }
+        builder.append(fileName);
+        return builder.toString();
+    }
+
     /**
      * 执行 FtpClient 具体操作之前确保 FTP 的状态正常。
      *
@@ -546,7 +601,7 @@ public class FtpHandlerImpl implements FtpHandler {
      * @throws IOException IO异常。
      */
     private void enterDirection(String[] filePaths) throws IOException {
-        ftpClient.changeWorkingDirectory("/");
+        ftpClient.changeWorkingDirectory(ROOT_PATH);
         for (String filePath : filePaths) {
             boolean result = ftpClient.changeWorkingDirectory(filePath);
             if (!result) {

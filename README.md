@@ -12,14 +12,16 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 4. 自动保持连接。
 5. 自动保持连接与断线重连。
 6. 打开文件的输入流/输出流。
+7. 文件重命名。
 
 运行 `src/test` 下的示例以观察全部特性。
 
-| 示例类名            | 说明     |
-|-----------------|--------|
-| ProcessExample  | 流程示例   |
-| StreamExample   | 流的使用示例 |
-| ListFileExample | 列出文件示例 |
+| 示例类名              | 说明     |
+|-------------------|--------|
+| ProcessExample    | 流程示例   |
+| StreamExample     | 流的使用示例 |
+| ListFileExample   | 列出文件示例 |
+| RenameFileExample | 列出文件示例 |
 
 ## 测试
 
