@@ -46,6 +46,9 @@ public class FtpHandlerImpl implements FtpHandler {
     private ScheduledFuture<?> noopSendTaskFuture;
     private boolean startedFlag = false;
 
+    /**
+     * @deprecated 该构造器已经过时，请使用 {@link #FtpHandlerImpl(ThreadPoolTaskScheduler, FtpConfig)}。
+     */
     @Deprecated
     public FtpHandlerImpl(
             ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
@@ -60,6 +63,9 @@ public class FtpHandlerImpl implements FtpHandler {
         );
     }
 
+    /**
+     * @deprecated 该构造器已经过时，请使用 {@link #FtpHandlerImpl(ThreadPoolTaskScheduler, FtpConfig)}。
+     */
     @Deprecated
     public FtpHandlerImpl(
             ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
@@ -412,6 +418,19 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    /**
+     * 打开指定文件的输入流。
+     *
+     * <p>
+     * 需要注意的是，该方法提供的输入流不是线程安全的，开发人员需要自行保证在该输入流关闭之前，
+     * 不得有其它的线程对该输入流进行操作，也不得有其它的线程对该 Ftp 处理器进行操作。
+     *
+     * @param filePaths 文件夹路径。<br>
+     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param fileName  文件的名称。
+     * @return 文件的输入流。
+     * @throws HandlerException 处理器异常。
+     */
     @Override
     @BehaviorAnalyse
     @SkipRecord
@@ -436,6 +455,19 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    /**
+     * 打开指定文件的输出流。
+     *
+     * <p>
+     * 需要注意的是，该方法提供的输出流不是线程安全的，开发人员需要自行保证在该输出流关闭之前，
+     * 不得有其它的线程对该输出流进行操作，也不得有其它的线程对该 Ftp 处理器进行操作。
+     *
+     * @param filePaths 文件夹路径。<br>
+     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param fileName  文件的名称。
+     * @return 文件的输出流。
+     * @throws HandlerException 处理器异常。
+     */
     @Override
     @BehaviorAnalyse
     @SkipRecord
