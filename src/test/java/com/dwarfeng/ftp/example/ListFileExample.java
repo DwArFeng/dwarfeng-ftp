@@ -72,7 +72,7 @@ public class ListFileExample {
 
         // 4. 文件删除。
         System.out.println();
-        System.out.println("4. 删除所有的测试文件...");
+        System.out.println("4. 文件删除...");
         ftpHandler.deleteFile(new String[]{rootPath}, "comic-girl.jpg");
         ftpHandler.deleteFile(new String[]{rootPath}, "漫画女孩.jpg");
         System.out.println("示例演示完毕, 感谢您测试与使用!");

@@ -148,6 +148,8 @@ public class ProcessExample {
         ftpHandler.deleteFile(new String[]{rootPath}, "comic-girl.jpg");
         ftpHandler.deleteFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg");
         ftpHandler.deleteFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
+        ftpHandler.removeDirectory(new String[]{rootPath, "comic-girl"});
+        ftpHandler.removeDirectory(new String[]{rootPath, "漫画女孩"});
         System.out.println("示例演示完毕, 感谢您测试与使用!");
 
         ctx.stop();

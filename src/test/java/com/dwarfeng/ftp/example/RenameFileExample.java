@@ -93,6 +93,10 @@ public class RenameFileExample {
         System.out.println();
         System.out.println("5. 文件删除...");
         ftpHandler.deleteFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
+        ftpHandler.removeDirectory(new String[]{rootPath, "aaa"});
+        ftpHandler.removeDirectory(new String[]{rootPath, "comic-girl"});
+        ftpHandler.removeDirectory(new String[]{rootPath, "漫画の少女"});
+        ftpHandler.removeDirectory(new String[]{rootPath, "漫画女孩"});
         System.out.println("示例演示完毕, 感谢您测试与使用!");
 
         ctx.stop();
