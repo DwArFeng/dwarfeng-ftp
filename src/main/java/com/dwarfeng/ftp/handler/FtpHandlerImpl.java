@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.*;
 import java.util.Date;
 import java.util.Objects;
@@ -333,15 +334,27 @@ public class FtpHandlerImpl implements FtpHandler {
         checkPositiveCompletion();
     }
 
-    @BehaviorAnalyse
     @Override
-    public void removeDirectory(String[] filePaths, String directoryName) throws FtpException {
+    public void removeDirectory(String[] filePaths) throws HandlerException {
         lock.lock();
         try {
-            enterDirection(filePaths);
+            // 如果目录为空，则直接抛出异常（不能删除根目录）。
+            if (filePaths.length == 0) {
+                throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, null));
+            }
+
+            // 如果目录不为空，则获取父目录路径。
+            String[] parentFilePaths = new String[filePaths.length - 1];
+            System.arraycopy(filePaths, 0, parentFilePaths, 0, parentFilePaths.length);
+
+            // 确认状态并打开文件目录。
+            ensureStatus();
+            enterDirection(parentFilePaths);
             checkPositiveCompletion();
-            if (!ftpClient.removeDirectory(directoryName)) {
-                throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, directoryName));
+
+            // 删除文件目录。
+            if (!ftpClient.removeDirectory(filePaths[filePaths.length - 1])) {
+                throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, null));
             }
             checkPositiveCompletion();
         } catch (HandlerException e) {
@@ -511,7 +524,7 @@ public class FtpHandlerImpl implements FtpHandler {
     ) throws HandlerException {
         lock.lock();
         try {
-            // 确认状态并打开文件目录。
+            // 确认状态。
             ensureStatus();
 
             // 确保旧文件存在。
@@ -537,13 +550,15 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
-    private String resolveAbsolutePath(String[] filePaths, String fileName) {
+    private String resolveAbsolutePath(@Nonnull String[] filePaths, @Nullable String fileName) {
         StringBuilder builder = new StringBuilder();
         builder.append(ROOT_PATH);
         for (String filePath : filePaths) {
             builder.append(filePath).append(PATH_SEPARATOR);
         }
-        builder.append(fileName);
+        if (Objects.nonNull(fileName)) {
+            builder.append(fileName);
+        }
         return builder.toString();
     }
 

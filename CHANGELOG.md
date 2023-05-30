@@ -4,6 +4,8 @@
 
 #### 功能构建
 
+- 规范 `FtpHandler` 中的方法名称，过时部分命名不合理的方法。
+
 - `FtpHandler` 增加新方法。
   - FtpHandler.renameFile。
 

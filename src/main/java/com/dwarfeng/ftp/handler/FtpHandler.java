@@ -142,8 +142,25 @@ public interface FtpHandler extends StartableHandler {
      * @param filePaths 文件夹路径。<br>
      *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
      * @throws HandlerException 处理器异常。
+     * @deprecated 该方法命名不规范，请使用 {@link #removeDirectory(String[])}。
      */
-    void removeDirectory(String[] filePaths, String directoryName) throws HandlerException;
+    @Deprecated
+    default void removeDirectory(String[] filePaths, String directoryName) throws HandlerException {
+        String[] neoFilePaths = new String[filePaths.length + 1];
+        System.arraycopy(filePaths, 0, neoFilePaths, 0, filePaths.length);
+        neoFilePaths[filePaths.length] = directoryName;
+        removeDirectory(neoFilePaths);
+    }
+
+    /**
+     * 删除目录。
+     *
+     * @param filePaths 文件夹路径。<br>
+     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。<br>
+     *                  如果需要删除的文件夹是根文件夹，那么该数组长度为 0。
+     * @throws HandlerException 处理器异常。
+     */
+    void removeDirectory(String[] filePaths) throws HandlerException;
 
     /**
      * 列出指定路径下的所有文件。
