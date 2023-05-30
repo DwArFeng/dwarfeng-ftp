@@ -2,6 +2,7 @@ package com.dwarfeng.ftp.handler;
 
 import com.dwarfeng.ftp.bean.dto.FtpFile;
 import com.dwarfeng.ftp.exception.*;
+import com.dwarfeng.ftp.struct.FtpConfig;
 import com.dwarfeng.ftp.util.Constants;
 import com.dwarfeng.subgrade.sdk.interceptor.analyse.BehaviorAnalyse;
 import com.dwarfeng.subgrade.sdk.interceptor.analyse.SkipRecord;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
+import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.Date;
 import java.util.Objects;
@@ -36,14 +38,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     private final ThreadPoolTaskScheduler scheduler;
 
-    private final String ftpHost;
-    private final int ftpPort;
-    private final String ftpUserName;
-    private final String ftpPassword;
-    private final String serverCharset;
-    private final int connectTimeout;
-    private final long noopInterval;
-    private final int bufferSize;
+    private final FtpConfig config;
 
     private final Lock lock = new ReentrantLock();
 
@@ -51,37 +46,47 @@ public class FtpHandlerImpl implements FtpHandler {
     private ScheduledFuture<?> noopSendTaskFuture;
     private boolean startedFlag = false;
 
+    @Deprecated
     public FtpHandlerImpl(
             ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
             String serverCharset, int connectTimeout, long noopInterval
     ) {
         this(
-                scheduler, ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval,
-                DEFAULT_BUFFER_SIZE
+                scheduler,
+                new FtpConfig(
+                        ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval,
+                        DEFAULT_BUFFER_SIZE
+                )
         );
     }
 
+    @Deprecated
     public FtpHandlerImpl(
             ThreadPoolTaskScheduler scheduler, String ftpHost, int ftpPort, String ftpUserName, String ftpPassword,
             String serverCharset, int connectTimeout, long noopInterval, int bufferSize
     ) {
-        //检查参数是否合法。
-        if (connectTimeout <= MIN_CONNECT_TIMEOUT) {
-            throw new IllegalArgumentException("配置ftp.connect_timeout的值太小，应该大于1000");
-        }
-        if (noopInterval >= connectTimeout) {
-            throw new IllegalArgumentException("配置ftp.noop_interval的值太大，应该小于ftp.connect_timeout");
-        }
+        this(
+                scheduler,
+                new FtpConfig(
+                        ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval,
+                        bufferSize
+                )
+        );
+    }
 
+    public FtpHandlerImpl(@Nonnull ThreadPoolTaskScheduler scheduler, @Nonnull FtpConfig config) {
+        checkConfig(config);
         this.scheduler = scheduler;
-        this.ftpHost = ftpHost;
-        this.ftpPort = ftpPort;
-        this.ftpUserName = ftpUserName;
-        this.ftpPassword = ftpPassword;
-        this.serverCharset = serverCharset;
-        this.connectTimeout = connectTimeout;
-        this.noopInterval = noopInterval;
-        this.bufferSize = bufferSize;
+        this.config = config;
+    }
+
+    private void checkConfig(FtpConfig config) {
+        if (config.getConnectTimeout() <= MIN_CONNECT_TIMEOUT) {
+            throw new IllegalArgumentException("配置 connectTimeout 的值太小，应该大于 1000");
+        }
+        if (config.getNoopInterval() >= config.getConnectTimeout()) {
+            throw new IllegalArgumentException("配置 noopInterval 的值太大，应该小于 connectTimeout");
+        }
     }
 
     @Override
@@ -110,10 +115,10 @@ public class FtpHandlerImpl implements FtpHandler {
             ftpClient = new FTPClient();
 
             // 设置 FTP 客户端的控制编码。
-            ftpClient.setControlEncoding(serverCharset);
+            ftpClient.setControlEncoding(config.getServerCharset());
 
             // 设置 FTP 客户端的缓冲区大小。
-            ftpClient.setBufferSize(bufferSize);
+            ftpClient.setBufferSize(config.getBufferSize());
 
             // 设置 FTP 服务器为本地被动模式。
             ftpClient.enterLocalPassiveMode();
@@ -127,7 +132,8 @@ public class FtpHandlerImpl implements FtpHandler {
 
             // 添加noop周期发送计划。
             this.noopSendTaskFuture = scheduler.scheduleWithFixedDelay(
-                    new NoopSendTask(), new Date(System.currentTimeMillis() + noopInterval), noopInterval
+                    new NoopSendTask(), new Date(System.currentTimeMillis() + config.getNoopInterval()),
+                    config.getNoopInterval()
             );
 
             // 设置状态。
@@ -525,17 +531,17 @@ public class FtpHandlerImpl implements FtpHandler {
 
         // 设置连接超时时间。
         // 连接的超时时间一定要在调用connect方法之前设置。
-        ftpClient.setConnectTimeout(connectTimeout);
+        ftpClient.setConnectTimeout(config.getConnectTimeout());
 
         // 连接 FTP 服务器,设置IP及端口
         try {
-            ftpClient.connect(ftpHost, ftpPort);
+            ftpClient.connect(config.getHost(), config.getPort());
         } catch (Exception e) {
             throw new FtpConnectException(e);
         }
 
         // 设置用户名和密码
-        ftpClient.login(ftpUserName, ftpPassword);
+        ftpClient.login(config.getUsername(), config.getPassword());
 
         // 设置文件传输为模式为binary。
         ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);

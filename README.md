@@ -60,7 +60,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 ### 单例模式
 
 加载 `com.dwarfeng.ftp.configuration.SingletonConfiguration`，即可获得单例模式的 `FtpHandler`。  
-在项目的 `application-context-scan.xml` 中追加包扫描，示例如下:
+在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.ftp.configuration` 包中全部 bean 的扫描，示例如下:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -74,8 +74,32 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
         http://www.springframework.org/schema/context/spring-context.xsd"
 >
 
-    <!-- 扫描 configuration 包。 -->
+    <!-- 扫描 configuration 包中的全部 bean。 -->
     <context:component-scan base-package="com.dwarfeng.ftp.configuration"/>
+</beans>
+```
+
+或者只扫描 `com.dwarfeng.ftp.configuration` 包中的 `SingletonConfiguration`，示例如下:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd"
+>
+
+    <!-- 扫描 configuration 包中的 SingletonConfiguration -->
+    <context:component-scan base-package="com.dwarfeng.ftp.configuration" use-default-filters="false">
+        <context:include-filter
+                type="assignable"
+                expression="com.dwarfeng.ftp.configuration.SingletonConfiguration"
+        />
+    </context:component-scan>
 </beans>
 ```
 
@@ -92,29 +116,36 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
         xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
-
+    <!-- 第一个实例 -->
+    <bean name="config1" class="com.dwarfeng.ftp.struct.FtpConfig">
+        <constructor-arg name="host" ref="${ftp.host.1}"/>
+        <constructor-arg name="port" ref="${ftp.port.1}"/>
+        <constructor-arg name="username" ref="${ftp.username.1}"/>
+        <constructor-arg name="password" ref="${ftp.password.1}"/>
+        <constructor-arg name="serverCharset" ref="${ftp.server_charset.1}"/>
+        <constructor-arg name="connectTimeout" ref="${ftp.connect_timeout.1}"/>
+        <constructor-arg name="noopInterval" ref="${ftp.noop_interval.1}"/>
+        <constructor-arg name="bufferSize" ref="${ftp.buffer_size.1}"/>
+    </bean>
     <bean name="instance1" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
         <constructor-arg name="scheduler" ref="scheduler"/>
-        <constructor-arg name="ftpHost" value="${ftp.host.1}"/>
-        <constructor-arg name="ftpPort" value="${ftp.port.1}"/>
-        <constructor-arg name="ftpUserName" value="${ftp.username.1}"/>
-        <constructor-arg name="ftpPassword" value="${ftp.password.1}"/>
-        <constructor-arg name="serverCharset" value="${ftp.server_charset.1}"/>
-        <constructor-arg name="connectTimeout" value="${ftp.connect_timeout.1}"/>
-        <constructor-arg name="noopInterval" value="${ftp.noop_interval.1}"/>
-        <constructor-arg name="bufferSize" value="${ftp.buffer_size.1}"/>
+        <constructor-arg name="config" ref="config1"/>
     </bean>
 
+    <!-- 第二个实例 -->
+    <bean name="config2" class="com.dwarfeng.ftp.struct.FtpConfig">
+        <constructor-arg name="host" ref="${ftp.host.2}"/>
+        <constructor-arg name="port" ref="${ftp.port.2}"/>
+        <constructor-arg name="username" ref="${ftp.username.2}"/>
+        <constructor-arg name="password" ref="${ftp.password.2}"/>
+        <constructor-arg name="serverCharset" ref="${ftp.server_charset.2}"/>
+        <constructor-arg name="connectTimeout" ref="${ftp.connect_timeout.2}"/>
+        <constructor-arg name="noopInterval" ref="${ftp.noop_interval.2}"/>
+        <constructor-arg name="bufferSize" ref="${ftp.buffer_size.2}"/>
+    </bean>
     <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
         <constructor-arg name="scheduler" ref="scheduler"/>
-        <constructor-arg name="ftpHost" value="${ftp.host.2}"/>
-        <constructor-arg name="ftpPort" value="${ftp.port.2}"/>
-        <constructor-arg name="ftpUserName" value="${ftp.username.2}"/>
-        <constructor-arg name="ftpPassword" value="${ftp.password.2}"/>
-        <constructor-arg name="serverCharset" value="${ftp.server_charset.2}"/>
-        <constructor-arg name="connectTimeout" value="${ftp.connect_timeout.2}"/>
-        <constructor-arg name="noopInterval" value="${ftp.noop_interval.2}"/>
-        <constructor-arg name="bufferSize" value="${ftp.buffer_size.2}"/>
+        <constructor-arg name="config" ref="config2"/>
     </bean>
 </beans>
 ```
