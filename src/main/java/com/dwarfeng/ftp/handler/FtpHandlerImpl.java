@@ -23,6 +23,23 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * FTP 处理器实现。
+ *
+ * <p>
+ * 该处理器实现基于 Apache Commons Net 的 FTPClient 实现。
+ *
+ * <p>
+ * 该实现是线程安全的，包括 {@link #openInputStream(String[], String)} 和 {@link #openOutputStream(String[], String)}
+ * 方法。<br>
+ * 除了 {@link #openInputStream(String[], String)} 和 {@link #openOutputStream(String[], String)} 方法以外，
+ * 其它方法在调用时会自动加锁，其它线程调用处理器的任何方法都会被阻塞，直到该方法执行完毕。<br>
+ * {@link #openInputStream(String[], String)} 和 {@link #openOutputStream(String[], String)} 在调用时会加锁，
+ * 但返回结果后不会解锁，直到调用者关闭流或者流被关闭时才会解锁，在这段时间内，其它线程调用处理器的任何方法都会被阻塞。
+ *
+ * @author DwArFeng
+ * @since 1.0.0
+ */
 public class FtpHandlerImpl implements FtpHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FtpHandlerImpl.class);
@@ -446,8 +463,12 @@ public class FtpHandlerImpl implements FtpHandler {
      * 打开指定文件的输入流。
      *
      * <p>
-     * 需要注意的是，该方法提供的输入流不是线程安全的，开发人员需要自行保证在该输入流关闭之前，
-     * 不得有其它的线程对该输入流进行操作，也不得有其它的线程对该 Ftp 处理器进行操作。
+     * 该方法返回的流应该在获取后立即使用，在关闭流之前，不得调用该处理器的任何其它方法。<br>
+     * 该方法返回的流只能在本线程中使用，不应该在其他线程中使用。
+     *
+     * <p>
+     * 该方法在调用时会加锁，但返回结果后不会解锁，直到调用者关闭流或者流被关闭时才会解锁，在这段时间内，
+     * 其它线程调用处理器的任何方法都会被阻塞。
      *
      * @param filePaths 文件夹路径。<br>
      *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
@@ -474,8 +495,6 @@ public class FtpHandlerImpl implements FtpHandler {
             return new CompletePendingInputStream(in);
         } catch (Exception e) {
             throw new FtpException(e);
-        } finally {
-            lock.unlock();
         }
     }
 
@@ -483,8 +502,12 @@ public class FtpHandlerImpl implements FtpHandler {
      * 打开指定文件的输出流。
      *
      * <p>
-     * 需要注意的是，该方法提供的输出流不是线程安全的，开发人员需要自行保证在该输出流关闭之前，
-     * 不得有其它的线程对该输出流进行操作，也不得有其它的线程对该 Ftp 处理器进行操作。
+     * 该方法返回的流应该在获取后立即使用，在关闭流之前，不得调用该处理器的任何其它方法。<br>
+     * 该方法返回的流只能在本线程中使用，不应该在其他线程中使用。
+     *
+     * <p>
+     * 该方法在调用时会加锁，但返回结果后不会解锁，直到调用者关闭流或者流被关闭时才会解锁，在这段时间内，
+     * 其它线程调用处理器的任何方法都会被阻塞。
      *
      * @param filePaths 文件夹路径。<br>
      *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
@@ -511,8 +534,6 @@ public class FtpHandlerImpl implements FtpHandler {
             return new CompletePendingOutputStream(out);
         } catch (Exception e) {
             throw new FtpException(e);
-        } finally {
-            lock.unlock();
         }
     }
 
@@ -679,53 +700,125 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
-    private class CompletePendingInputStream extends FilterInputStream {
+    private class CompletePendingInputStream extends InputStream {
+
+        private final InputStream in;
 
         public CompletePendingInputStream(InputStream in) {
-            super(in);
+            this.in = in;
+        }
+
+        @Override
+        public int read() throws IOException {
+            return in.read();
+        }
+
+        @Override
+        public int read(@Nonnull byte[] b) throws IOException {
+            return in.read(b);
+        }
+
+        @Override
+        public int read(@Nonnull byte[] b, int off, int len) throws IOException {
+            return in.read(b, off, len);
+        }
+
+        @Override
+        public long skip(long n) throws IOException {
+            return in.skip(n);
+        }
+
+        @Override
+        public int available() throws IOException {
+            return in.available();
+        }
+
+        @Override
+        public void mark(int readlimit) {
+            in.mark(readlimit);
+        }
+
+        @Override
+        public void reset() throws IOException {
+            in.reset();
+        }
+
+        @Override
+        public boolean markSupported() {
+            return in.markSupported();
         }
 
         @Override
         public void close() throws IOException {
-            // 调用父类的 close 方法，关闭输入流。
-            super.close();
+            try {
+                // 调用 in 的 close 方法，关闭输入流。
+                in.close();
 
-            // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
-            if (ftpClient.completePendingCommand()) {
-                return;
+                // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
+                if (ftpClient.completePendingCommand()) {
+                    return;
+                }
+
+                // 如果文件传输失败，则主动断开连接。
+                // 主动断开连接后，调用其它方法，会自动触发重连机制，所以这里不需要再次重连。
+                ftpClient.logout();
+                ftpClient.disconnect();
+                // 抛出 IOException，以通知上层调用者。
+                throw new IOException("completePendingCommand 失败，主动断开连接");
+            } finally {
+                lock.unlock();
             }
-
-            // 如果文件传输失败，则主动断开连接。
-            // 主动断开连接后，调用其它方法，会自动触发重连机制，所以这里不需要再次重连。
-            ftpClient.logout();
-            ftpClient.disconnect();
-            // 抛出 IOException，以通知上层调用者。
-            throw new IOException("completePendingCommand 失败，主动断开连接");
         }
     }
 
-    private class CompletePendingOutputStream extends FilterOutputStream {
+    private class CompletePendingOutputStream extends OutputStream {
+
+        private final OutputStream out;
 
         public CompletePendingOutputStream(OutputStream out) {
-            super(out);
+            this.out = out;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            out.write(b);
+        }
+
+        @Override
+        public void write(@Nonnull byte[] b) throws IOException {
+            out.write(b);
+        }
+
+        @Override
+        public void write(@Nonnull byte[] b, int off, int len) throws IOException {
+            out.write(b, off, len);
+        }
+
+        @Override
+        public void flush() throws IOException {
+            out.flush();
         }
 
         @Override
         public void close() throws IOException {
-            // 调用父类的 close 方法，关闭输出流。
-            super.close();
+            try {
+                // 调用 out 的 close 方法，关闭输出流。
+                out.close();
 
-            // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
-            if (ftpClient.completePendingCommand()) {
-                return;
+                // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
+                if (ftpClient.completePendingCommand()) {
+                    return;
+                }
+
+                // 如果文件传输失败，则主动断开连接。
+                // 主动断开连接后，调用其它方法，会自动触发重连机制，所以这里不需要再次重连。
+                ftpClient.logout();
+                ftpClient.disconnect();
+                // 抛出 IOException，以通知上层调用者。
+                throw new IOException("completePendingCommand 失败，主动断开连接");
+            } finally {
+                lock.unlock();
             }
-
-            // 如果文件传输失败，则主动断开连接。
-            // 主动断开连接后，调用其它方法，会自动触发重连机制，所以这里不需要再次重连。
-            ftpClient.logout();
-            ftpClient.disconnect();
-            // 抛出 IOException，以通知上层调用者。
-            throw new IOException("completePendingCommand 失败，主动断开连接");
         }
     }
 }

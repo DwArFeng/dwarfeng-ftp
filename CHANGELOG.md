@@ -4,7 +4,10 @@
 
 #### 功能构建
 
-- (无)
+- 优化 FTP 处理器实现。
+  - 大幅优化了 `FtpHandlerImpl.openOutputStream` 方法获取的输出流的性能。
+  - 优化 `FtpHandlerImpl.openInputStream` 方法的线程安全性。
+  - 优化 `FtpHandlerImpl.openOutputStream` 方法的线程安全性。
 
 #### Bug修复
 
