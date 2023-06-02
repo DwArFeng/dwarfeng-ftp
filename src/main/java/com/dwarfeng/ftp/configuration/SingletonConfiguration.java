@@ -22,26 +22,25 @@ public class SingletonConfiguration {
     @Value("${ftp.host}")
     private String host;
 
-    @Value("${ftp.port}")
-    private int port;
-
     @Value("${ftp.username}")
     private String username;
 
     @Value("${ftp.password}")
     private String password;
 
-    @Value("${ftp.server_charset}")
+    @Value("${ftp.port:#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_PORT}}")
+    private int port;
+
+    @Value("${ftp.server_charset:#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_SERVER_CHARSET}}")
     private String serverCharset;
 
-    @Value("${ftp.connect_timeout}")
+    @Value("${ftp.connect_timeout:#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_CONNECT_TIMEOUT}}")
     private int connectTimeout;
 
-    @Value("${ftp.noop_interval}")
+    @Value("${ftp.noop_interval:#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_NOOP_INTERVAL}}")
     private long noopInterval;
 
-    // 设置默认值，以兼容旧版本。
-    @Value("${ftp.buffer_size:4096}")
+    @Value("${ftp.buffer_size:#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_BUFFER_SIZE}}")
     private int bufferSize;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -51,9 +50,10 @@ public class SingletonConfiguration {
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public FtpHandler ftpHandler() {
-        return new FtpHandlerImpl(
-                scheduler,
-                new FtpConfig(host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize)
+        FtpConfig ftpConfig = new FtpConfig(
+                host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize
         );
+
+        return new FtpHandlerImpl(scheduler, ftpConfig);
     }
 }

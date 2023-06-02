@@ -44,16 +44,6 @@ public class FtpHandlerImpl implements FtpHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FtpHandlerImpl.class);
 
-    /**
-     * 最小超时时间。
-     */
-    private static final int MIN_CONNECT_TIMEOUT = 1000;
-
-    /**
-     * 默认缓冲区大小。
-     */
-    private static final int DEFAULT_BUFFER_SIZE = 4096;
-
     private static final String ROOT_PATH = "/";
     private static final char PATH_SEPARATOR = '/';
 
@@ -79,7 +69,7 @@ public class FtpHandlerImpl implements FtpHandler {
                 scheduler,
                 new FtpConfig(
                         ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval,
-                        DEFAULT_BUFFER_SIZE
+                        FtpConfig.Builder.DEFAULT_BUFFER_SIZE
                 )
         );
     }
@@ -102,18 +92,8 @@ public class FtpHandlerImpl implements FtpHandler {
     }
 
     public FtpHandlerImpl(@Nonnull ThreadPoolTaskScheduler scheduler, @Nonnull FtpConfig config) {
-        checkConfig(config);
         this.scheduler = scheduler;
         this.config = config;
-    }
-
-    private void checkConfig(FtpConfig config) {
-        if (config.getConnectTimeout() <= MIN_CONNECT_TIMEOUT) {
-            throw new IllegalArgumentException("配置 connectTimeout 的值太小，应该大于 1000");
-        }
-        if (config.getNoopInterval() >= config.getConnectTimeout()) {
-            throw new IllegalArgumentException("配置 noopInterval 的值太大，应该小于 connectTimeout");
-        }
     }
 
     @Override

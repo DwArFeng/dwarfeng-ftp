@@ -9,6 +9,11 @@
   - 优化 `FtpHandlerImpl.openInputStream` 方法的线程安全性。
   - 优化 `FtpHandlerImpl.openOutputStream` 方法的线程安全性。
 
+- 优化 FTP 处理器的配置机制。
+  - 提供了 `FtpConfig` 的构造器类 `FtpConfig.Builder`，类中包含了部分参数的默认值，使得 `FtpConfig` 更容易构造。
+  - 配置检查被提前到了 `FtpConfig` 和 `FtpConfig.Builder` 中，使得异常的配置能够更早地被发现。
+  - 优化了 `SingletonConfiguration` 字段的 `@Value` 注解，使得 `placeholder` 不存在时能够以默认值替代。
+
 #### Bug修复
 
 - (无)
