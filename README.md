@@ -34,23 +34,37 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 
 ## 安装说明
 
-1. 下载源码。  
-   使用 git 进行源码下载。
-   ```
-   git clone git@github.com:DwArFeng/dwarfeng-ftp.git
-   ```
-   对于中国用户，可以使用 gitee 进行高速下载。
-   ```
-   git clone git@gitee.com:dwarfeng/dwarfeng-ftp.git
-   ```
+1. 下载源码。
 
-2. 项目安装。  
+   - 使用 git 进行源码下载。
+      ```
+      git clone git@github.com:DwArFeng/dwarfeng-ftp.git
+      ```
+
+   - 对于中国用户，可以使用 gitee 进行高速下载。
+      ```
+      git clone git@gitee.com:dwarfeng/dwarfeng-ftp.git
+      ```
+
+2. 项目安装。
+
    进入项目根目录，执行 maven 命令
    ```
    mvn clean source:jar install
    ```
 
-3. enjoy it
+3. 项目引入。
+
+   在项目的 pom.xml 中添加如下依赖：
+   ```xml
+   <dependency>
+       <groupId>com.dwarfeng</groupId>
+       <artifactId>dwarfeng-ftp</artifactId>
+       <version>${dwarfeng-ftp.version}</version>
+   </dependency>
+   ```
+
+4. enjoy it.
 
 ---
 
