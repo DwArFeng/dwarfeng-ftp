@@ -1,9 +1,11 @@
 package com.dwarfeng.ftp.handler;
 
 import com.dwarfeng.ftp.bean.dto.FtpFile;
+import com.dwarfeng.ftp.struct.FtpFileLocation;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 import com.dwarfeng.subgrade.stack.handler.StartableHandler;
 
+import javax.annotation.Nonnull;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -38,7 +40,12 @@ public interface FtpHandler extends StartableHandler {
      * @return 文件是否存在。
      * @throws HandlerException 处理器异常。
      */
-    boolean existsFile(String[] filePaths, String fileName) throws HandlerException;
+    boolean existsFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
+
+    /**
+     * @see #existsFile(String[], String)
+     */
+    boolean existsFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 存储文件。
@@ -49,7 +56,14 @@ public interface FtpHandler extends StartableHandler {
      * @param content   文件的内容。
      * @throws HandlerException 处理器异常。
      */
-    void storeFile(String[] filePaths, String fileName, byte[] content) throws HandlerException;
+    void storeFile(
+            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull byte[] content
+    ) throws HandlerException;
+
+    /**
+     * @see #storeFile(String[], String, byte[])
+     */
+    void storeFile(@Nonnull FtpFileLocation fileLocation, @Nonnull byte[] content) throws HandlerException;
 
     /**
      * 获取文件。
@@ -60,7 +74,12 @@ public interface FtpHandler extends StartableHandler {
      * @return 文件的内容。
      * @throws HandlerException 处理器异常。
      */
-    byte[] retrieveFile(String[] filePaths, String fileName) throws HandlerException;
+    byte[] retrieveFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
+
+    /**
+     * @see #retrieveFile(String[], String)
+     */
+    byte[] retrieveFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 获取文件。
@@ -74,7 +93,7 @@ public interface FtpHandler extends StartableHandler {
      * 请使用 {@link #retrieveFile(String[], String)}。
      */
     @Deprecated
-    default byte[] getFileContent(String[] filePaths, String fileName) throws HandlerException {
+    default byte[] getFileContent(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException {
         return retrieveFile(filePaths, fileName);
     }
 
@@ -90,7 +109,14 @@ public interface FtpHandler extends StartableHandler {
      * @param in        文件的输入流。
      * @throws HandlerException 处理器异常。
      */
-    void storeFileByStream(String[] filePaths, String fileName, InputStream in) throws HandlerException;
+    void storeFileByStream(
+            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull InputStream in
+    ) throws HandlerException;
+
+    /**
+     * @see #storeFileByStream(String[], String, InputStream)
+     */
+    void storeFileByStream(@Nonnull FtpFileLocation fileLocation, @Nonnull InputStream in) throws HandlerException;
 
     /**
      * 通过流的形式获取文件。
@@ -104,7 +130,14 @@ public interface FtpHandler extends StartableHandler {
      * @param out       待写入文件内容的输出流。
      * @throws HandlerException 处理器异常。
      */
-    void retrieveFileByStream(String[] filePaths, String fileName, OutputStream out) throws HandlerException;
+    void retrieveFileByStream(
+            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull OutputStream out
+    ) throws HandlerException;
+
+    /**
+     * @see #retrieveFileByStream(String[], String, OutputStream)
+     */
+    void retrieveFileByStream(@Nonnull FtpFileLocation fileLocation, @Nonnull OutputStream out) throws HandlerException;
 
     /**
      * 通过流的形式获取文件。
@@ -121,8 +154,9 @@ public interface FtpHandler extends StartableHandler {
      * 请使用 {@link #retrieveFileByStream(String[], String, OutputStream)}。
      */
     @Deprecated
-    default void getFileContentByStream(String[] filePaths, String fileName, OutputStream out)
-            throws HandlerException {
+    default void getFileContentByStream(
+            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull OutputStream out
+    ) throws HandlerException {
         retrieveFileByStream(filePaths, fileName, out);
     }
 
@@ -134,7 +168,12 @@ public interface FtpHandler extends StartableHandler {
      * @param fileName  文件的名称。
      * @throws HandlerException 处理器异常。
      */
-    void deleteFile(String[] filePaths, String fileName) throws HandlerException;
+    void deleteFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
+
+    /**
+     * @see #deleteFile(String[], String)
+     */
+    void deleteFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 删除目录。
@@ -145,7 +184,7 @@ public interface FtpHandler extends StartableHandler {
      * @deprecated 该方法命名不规范，请使用 {@link #removeDirectory(String[])}。
      */
     @Deprecated
-    default void removeDirectory(String[] filePaths, String directoryName) throws HandlerException {
+    default void removeDirectory(@Nonnull String[] filePaths, @Nonnull String directoryName) throws HandlerException {
         String[] neoFilePaths = new String[filePaths.length + 1];
         System.arraycopy(filePaths, 0, neoFilePaths, 0, filePaths.length);
         neoFilePaths[filePaths.length] = directoryName;
@@ -160,7 +199,17 @@ public interface FtpHandler extends StartableHandler {
      *                  如果需要删除的文件夹是根文件夹，那么该数组长度为 0。
      * @throws HandlerException 处理器异常。
      */
-    void removeDirectory(String[] filePaths) throws HandlerException;
+    void removeDirectory(@Nonnull String[] filePaths) throws HandlerException;
+
+    /**
+     * 删除目录。
+     *
+     * <p>
+     * 执行该方法时，文件路径取文件夹，如路径包含文件名，则忽略。
+     *
+     * @see #removeDirectory(String[])
+     */
+    void removeDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 列出指定路径下的所有文件。
@@ -170,7 +219,17 @@ public interface FtpHandler extends StartableHandler {
      * @return 指定文件夹下所有文件的名称（不带路径前缀）组成的数组。
      * @throws HandlerException 处理器异常。
      */
-    FtpFile[] listFiles(String[] filePaths) throws HandlerException;
+    FtpFile[] listFiles(@Nonnull String[] filePaths) throws HandlerException;
+
+    /**
+     * 列出指定路径下的所有文件。
+     *
+     * <p>
+     * 执行该方法时，文件路径取文件夹，如路径包含文件名，则忽略。
+     *
+     * @see #listFiles(String[])
+     */
+    FtpFile[] listFiles(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 列出指定路径下的所有文件。
@@ -183,7 +242,17 @@ public interface FtpHandler extends StartableHandler {
      * @return 指定文件夹下所有文件的名称（不带路径前缀）组成的数组。
      * @throws HandlerException 处理器异常。
      */
-    String[] listFileNames(String[] filePaths) throws HandlerException;
+    String[] listFileNames(@Nonnull String[] filePaths) throws HandlerException;
+
+    /**
+     * 列出指定路径下的所有文件。
+     *
+     * <p>
+     * 执行该方法时，文件路径取文件夹，如路径包含文件名，则忽略。
+     *
+     * @see #listFileNames(String[])
+     */
+    String[] listFileNames(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 打开指定文件的输入流。
@@ -210,7 +279,12 @@ public interface FtpHandler extends StartableHandler {
      * @return 文件的输入流。
      * @throws HandlerException 处理器异常。
      */
-    InputStream openInputStream(String[] filePaths, String fileName) throws HandlerException;
+    InputStream openInputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
+
+    /**
+     * @see #openInputStream(String[], String)
+     */
+    InputStream openInputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 打开指定文件的输出流。
@@ -237,7 +311,12 @@ public interface FtpHandler extends StartableHandler {
      * @return 文件的输出流。
      * @throws HandlerException 处理器异常。
      */
-    OutputStream openOutputStream(String[] filePaths, String fileName) throws HandlerException;
+    OutputStream openOutputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
+
+    /**
+     * @see #openOutputStream(String[], String)
+     */
+    OutputStream openOutputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 重命名文件。
@@ -251,6 +330,13 @@ public interface FtpHandler extends StartableHandler {
      * @throws HandlerException 处理器异常。
      */
     void renameFile(
-            String[] oldFilePaths, String oldFileName, String[] neoFilePaths, String neoFileName
+            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
+            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
     ) throws HandlerException;
+
+    /**
+     * @see #renameFile(String[], String, String[], String)
+     */
+    void renameFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+            throws HandlerException;
 }

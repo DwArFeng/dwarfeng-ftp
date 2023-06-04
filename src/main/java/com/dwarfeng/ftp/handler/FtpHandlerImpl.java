@@ -3,7 +3,9 @@ package com.dwarfeng.ftp.handler;
 import com.dwarfeng.ftp.bean.dto.FtpFile;
 import com.dwarfeng.ftp.exception.*;
 import com.dwarfeng.ftp.struct.FtpConfig;
+import com.dwarfeng.ftp.struct.FtpFileLocation;
 import com.dwarfeng.ftp.util.Constants;
+import com.dwarfeng.ftp.util.FtpFileLocationUtil;
 import com.dwarfeng.subgrade.sdk.interceptor.analyse.BehaviorAnalyse;
 import com.dwarfeng.subgrade.sdk.interceptor.analyse.SkipRecord;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
@@ -207,9 +209,28 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public boolean existsFile(String[] filePaths, String fileName) throws FtpException {
+    public boolean existsFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
         lock.lock();
         try {
+            return internalExistsFile(filePaths, fileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @BehaviorAnalyse
+    @Override
+    public boolean existsFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+        lock.lock();
+        try {
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作，并返回结果。
             return internalExistsFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -229,16 +250,52 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void storeFile(String[] filePaths, String fileName, @SkipRecord byte[] content) throws FtpException {
+    public void storeFile(
+            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull @SkipRecord byte[] content
+    ) throws FtpException {
         lock.lock();
+        try {
+            internalStoreFile(filePaths, fileName, content);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @BehaviorAnalyse
+    @Override
+    public void storeFile(@Nonnull FtpFileLocation fileLocation, @Nonnull @SkipRecord byte[] content)
+            throws HandlerException {
+        lock.lock();
+        try {
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作。
+            internalStoreFile(filePaths, fileName, content);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void internalStoreFile(String[] filePaths, String fileName, byte[] content) throws Exception {
         try (ByteArrayInputStream bin = new ByteArrayInputStream(content)) {
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-            if (!ftpClient.storeFile(fileName, bin)) {
-                throw new FtpFileStoreException(resolveAbsolutePath(filePaths, fileName));
-            }
-            checkPositiveCompletion();
+            internalStoreFileByStream(filePaths, fileName, bin);
+        }
+    }
+
+    @BehaviorAnalyse
+    @SkipRecord
+    @Override
+    public byte[] retrieveFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
+        lock.lock();
+        try {
+            return internalRetrieveFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -249,18 +306,39 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @SkipRecord
     @Override
-    public byte[] retrieveFile(String[] filePaths, String fileName) throws FtpException {
+    public byte[] retrieveFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
+        try {
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作，并返回结果。
+            return internalRetrieveFile(filePaths, fileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private byte[] internalRetrieveFile(String[] filePaths, String fileName) throws Exception {
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-            if (!ftpClient.retrieveFile(fileName, bout)) {
-                throw new FtpFileRetrieveException(resolveAbsolutePath(filePaths, fileName));
-            }
-            checkPositiveCompletion();
+            internalRetrieveFileByStream(filePaths, fileName, bout);
             bout.flush();
             return bout.toByteArray();
+        }
+    }
+
+    @BehaviorAnalyse
+    @Override
+    public void storeFileByStream(
+            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull @SkipRecord InputStream in
+    ) throws HandlerException {
+        lock.lock();
+        try {
+            internalStoreFileByStream(filePaths, fileName, in);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -270,17 +348,43 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void storeFileByStream(String[] filePaths, String fileName, @SkipRecord InputStream in)
-            throws HandlerException {
+    public void storeFileByStream(
+            @Nonnull FtpFileLocation fileLocation, @Nonnull @SkipRecord InputStream in
+    ) throws HandlerException {
         lock.lock();
         try {
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-            if (!ftpClient.storeFile(fileName, in)) {
-                throw new FtpFileStoreException(resolveAbsolutePath(filePaths, fileName));
-            }
-            checkPositiveCompletion();
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作。
+            internalStoreFileByStream(filePaths, fileName, in);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void internalStoreFileByStream(String[] filePaths, String fileName, InputStream in) throws Exception {
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+        if (!ftpClient.storeFile(fileName, in)) {
+            throw new FtpFileStoreException(resolveAbsolutePath(filePaths, fileName));
+        }
+        checkPositiveCompletion();
+    }
+
+    @BehaviorAnalyse
+    @Override
+    public void retrieveFileByStream(
+            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull @SkipRecord OutputStream out
+    ) throws HandlerException {
+        lock.lock();
+        try {
+            internalRetrieveFileByStream(filePaths, fileName, out);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -290,17 +394,41 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void retrieveFileByStream(String[] filePaths, String fileName, @SkipRecord OutputStream out)
-            throws HandlerException {
+    public void retrieveFileByStream(
+            @Nonnull FtpFileLocation fileLocation, @Nonnull @SkipRecord OutputStream out
+    ) throws HandlerException {
         lock.lock();
         try {
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-            if (!ftpClient.retrieveFile(fileName, out)) {
-                throw new FtpFileRetrieveException(resolveAbsolutePath(filePaths, fileName));
-            }
-            checkPositiveCompletion();
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作。
+            internalRetrieveFileByStream(filePaths, fileName, out);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void internalRetrieveFileByStream(String[] filePaths, String fileName, OutputStream out) throws Exception {
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+        if (!ftpClient.retrieveFile(fileName, out)) {
+            throw new FtpFileRetrieveException(resolveAbsolutePath(filePaths, fileName));
+        }
+        checkPositiveCompletion();
+    }
+
+    @BehaviorAnalyse
+    @Override
+    public void deleteFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
+        lock.lock();
+        try {
+            internalDeleteFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -310,9 +438,15 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void deleteFile(String[] filePaths, String fileName) throws FtpException {
+    public void deleteFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作。
             internalDeleteFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -331,29 +465,12 @@ public class FtpHandlerImpl implements FtpHandler {
         checkPositiveCompletion();
     }
 
+    @BehaviorAnalyse
     @Override
-    public void removeDirectory(String[] filePaths) throws HandlerException {
+    public void removeDirectory(@Nonnull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
-            // 如果目录为空，则直接抛出异常（不能删除根目录）。
-            if (filePaths.length == 0) {
-                throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, null));
-            }
-
-            // 如果目录不为空，则获取父目录路径。
-            String[] parentFilePaths = new String[filePaths.length - 1];
-            System.arraycopy(filePaths, 0, parentFilePaths, 0, parentFilePaths.length);
-
-            // 确认状态并打开文件目录。
-            ensureStatus();
-            enterDirection(parentFilePaths);
-            checkPositiveCompletion();
-
-            // 删除文件目录。
-            if (!ftpClient.removeDirectory(filePaths[filePaths.length - 1])) {
-                throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, null));
-            }
-            checkPositiveCompletion();
+            internalRemoveDirectory(filePaths);
         } catch (HandlerException e) {
             throw e;
         } catch (Exception e) {
@@ -363,48 +480,53 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @BehaviorAnalyse
+    @Override
+    public void removeDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+        lock.lock();
+        try {
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            // 执行操作。
+            internalRemoveDirectory(filePaths);
+        } catch (HandlerException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void internalRemoveDirectory(String[] filePaths) throws Exception {
+        // 如果目录为空，则直接抛出异常（不能删除根目录）。
+        if (filePaths.length == 0) {
+            throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, null));
+        }
+
+        // 如果目录不为空，则获取父目录路径。
+        String[] parentFilePaths = new String[filePaths.length - 1];
+        System.arraycopy(filePaths, 0, parentFilePaths, 0, parentFilePaths.length);
+
+        // 确认状态并打开文件目录。
+        ensureStatus();
+        enterDirection(parentFilePaths);
+        checkPositiveCompletion();
+
+        // 删除文件目录。
+        if (!ftpClient.removeDirectory(filePaths[filePaths.length - 1])) {
+            throw new FtpFileDeleteException(resolveAbsolutePath(filePaths, null));
+        }
+        checkPositiveCompletion();
+    }
+
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public FtpFile[] listFiles(String[] filePaths) throws HandlerException {
+    public FtpFile[] listFiles(@Nonnull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
-            // 确认状态并列出文件。
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-            FTPFile[] ftpFiles = ftpClient.listFiles();
-            checkPositiveCompletion();
-
-            // 映射文件并返回结果。
-            FtpFile[] result = new FtpFile[ftpFiles.length];
-            for (int i = 0; i < ftpFiles.length; i++) {
-                FTPFile ftpFile = ftpFiles[i];
-                // 定义变量。
-                String name;
-                int type;
-                long size;
-                // 映射变量。
-                name = ftpFile.getName();
-                switch (ftpFile.getType()) {
-                    case FTPFile.FILE_TYPE:
-                        type = Constants.FTP_FILE_TYPE_FILE;
-                        break;
-                    case FTPFile.DIRECTORY_TYPE:
-                        type = Constants.FTP_FILE_TYPE_DIRECTORY;
-                        break;
-                    case FTPFile.SYMBOLIC_LINK_TYPE:
-                        type = Constants.FTP_FILE_TYPE_SYMBOLIC_LINK;
-                        break;
-                    default:
-                        type = Constants.FTP_FILE_TYPE_UNKNOWN;
-                        break;
-                }
-                size = ftpFile.getSize();
-                // 设置结果。
-                result[i] = new FtpFile(name, type, size);
-            }
-            return result;
+            return internalListFile(filePaths);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
@@ -415,28 +537,105 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public String[] listFileNames(String[] filePaths) throws HandlerException {
+    public FtpFile[] listFiles(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
-            // 确认状态并列出文件。
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-            FTPFile[] ftpFiles = ftpClient.listFiles();
-            checkPositiveCompletion();
-
-            // 映射文件并返回结果。
-            String[] result = new String[ftpFiles.length];
-            for (int i = 0; i < ftpFiles.length; i++) {
-                FTPFile ftpFile = ftpFiles[i];
-                result[i] = ftpFile.getName();
-            }
-            return result;
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            // 执行操作，并返回结果。
+            return internalListFile(filePaths);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
             lock.unlock();
         }
+    }
+
+    private FtpFile[] internalListFile(String[] filePaths) throws Exception {
+        // 确认状态并列出文件。
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+        FTPFile[] ftpFiles = ftpClient.listFiles();
+        checkPositiveCompletion();
+
+        // 映射文件并返回结果。
+        FtpFile[] result = new FtpFile[ftpFiles.length];
+        for (int i = 0; i < ftpFiles.length; i++) {
+            FTPFile ftpFile = ftpFiles[i];
+            // 定义变量。
+            String name;
+            int type;
+            long size;
+            // 映射变量。
+            name = ftpFile.getName();
+            switch (ftpFile.getType()) {
+                case FTPFile.FILE_TYPE:
+                    type = Constants.FTP_FILE_TYPE_FILE;
+                    break;
+                case FTPFile.DIRECTORY_TYPE:
+                    type = Constants.FTP_FILE_TYPE_DIRECTORY;
+                    break;
+                case FTPFile.SYMBOLIC_LINK_TYPE:
+                    type = Constants.FTP_FILE_TYPE_SYMBOLIC_LINK;
+                    break;
+                default:
+                    type = Constants.FTP_FILE_TYPE_UNKNOWN;
+                    break;
+            }
+            size = ftpFile.getSize();
+            // 设置结果。
+            result[i] = new FtpFile(name, type, size);
+        }
+        return result;
+    }
+
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public String[] listFileNames(@Nonnull String[] filePaths) throws HandlerException {
+        lock.lock();
+        try {
+            return internalListFileNames(filePaths);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public String[] listFileNames(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+        lock.lock();
+        try {
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            // 执行操作，并返回结果。
+            return internalListFileNames(filePaths);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private String[] internalListFileNames(String[] filePaths) throws Exception {
+        // 确认状态并列出文件。
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+        FTPFile[] ftpFiles = ftpClient.listFiles();
+        checkPositiveCompletion();
+
+        // 映射文件并返回结果。
+        String[] result = new String[ftpFiles.length];
+        for (int i = 0; i < ftpFiles.length; i++) {
+            FTPFile ftpFile = ftpFiles[i];
+            result[i] = ftpFile.getName();
+        }
+        return result;
     }
 
     /**
@@ -459,23 +658,48 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public InputStream openInputStream(String[] filePaths, String fileName) throws HandlerException {
+    public InputStream openInputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException {
         lock.lock();
         try {
-            // 确认状态并打开文件目录。
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-
-            // 打开文件的输入流。
-            InputStream in = ftpClient.retrieveFileStream(fileName);
-            checkPositivePreliminary();
-
-            // 包装输入流并返回。
-            return new CompletePendingInputStream(in);
+            return internalOpenInputStream(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
         }
+    }
+
+    /**
+     * @see #openInputStream(String[], String)
+     */
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public InputStream openInputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+        lock.lock();
+        try {
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作，并返回结果。
+            return internalOpenInputStream(filePaths, fileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        }
+    }
+
+    private CompletePendingInputStream internalOpenInputStream(String[] filePaths, String fileName) throws Exception {
+        // 确认状态并打开文件目录。
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+
+        // 打开文件的输入流。
+        InputStream in = ftpClient.retrieveFileStream(fileName);
+        checkPositivePreliminary();
+
+        // 包装输入流并返回。
+        return new CompletePendingInputStream(in);
     }
 
     /**
@@ -498,57 +722,113 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public OutputStream openOutputStream(String[] filePaths, String fileName) throws HandlerException {
+    public OutputStream openOutputStream(@Nonnull String[] filePaths, @Nonnull String fileName)
+            throws HandlerException {
         lock.lock();
         try {
-            // 确认状态并打开文件目录。
-            ensureStatus();
-            enterDirection(filePaths);
-            checkPositiveCompletion();
-
-            // 打开文件的输出流。
-            OutputStream out = ftpClient.storeFileStream(fileName);
-            checkPositivePreliminary();
-
-            // 包装输出流并返回。
-            return new CompletePendingOutputStream(out);
+            return internalOpenOutputStream(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
         }
+    }
+
+    /**
+     * @see #openOutputStream(String[], String)
+     */
+    @Override
+    public OutputStream openOutputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+        lock.lock();
+        try {
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作，并返回结果。
+            return internalOpenOutputStream(filePaths, fileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        }
+    }
+
+    private CompletePendingOutputStream internalOpenOutputStream(String[] filePaths, String fileName)
+            throws Exception {
+        // 确认状态并打开文件目录。
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+
+        // 打开文件的输出流。
+        OutputStream out = ftpClient.storeFileStream(fileName);
+        checkPositivePreliminary();
+
+        // 包装输出流并返回。
+        return new CompletePendingOutputStream(out);
     }
 
     @Override
     @BehaviorAnalyse
     @SkipRecord
     public void renameFile(
-            String[] oldFilePaths, String oldFileName, String[] neoFilePaths, String neoFileName
+            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName, @Nonnull String[] neoFilePaths,
+            @Nonnull String neoFileName
     ) throws HandlerException {
         lock.lock();
         try {
-            // 确认状态。
-            ensureStatus();
-
-            // 确保旧文件存在。
-            if (!internalExistsFile(oldFilePaths, oldFileName)) {
-                throw new FtpFileNotExistsException(resolveAbsolutePath(oldFilePaths, oldFileName));
-            }
-
-            // 如果新文件存在，则删除新文件。
-            if (internalExistsFile(neoFilePaths, neoFileName)) {
-                internalDeleteFile(neoFilePaths, neoFileName);
-            }
-
-            // 执行重命名操作。
-            ftpClient.rename(
-                    resolveAbsolutePath(oldFilePaths, oldFileName),
-                    resolveAbsolutePath(neoFilePaths, neoFileName)
-            );
-            checkPositiveCompletion();
+            internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
             throw new FtpException(e);
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    @SkipRecord
+    public void renameFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+            throws HandlerException {
+        lock.lock();
+        try {
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(oldFileLocation);
+            FtpFileLocationUtil.checkAsFile(neoFileLocation);
+            // 展开参数。
+            String[] oldFilePaths = oldFileLocation.getFilePaths();
+            String oldFileName = oldFileLocation.getFileName();
+            String[] neoFilePaths = neoFileLocation.getFilePaths();
+            String neoFileName = neoFileLocation.getFileName();
+            // 执行操作。
+            internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void internalRenameFile(
+            String[] oldFilePaths, String oldFileName, String[] neoFilePaths, String neoFileName
+    ) throws Exception {
+        // 确认状态。
+        ensureStatus();
+
+        // 确保旧文件存在。
+        if (!internalExistsFile(oldFilePaths, oldFileName)) {
+            throw new FtpFileNotExistsException(resolveAbsolutePath(oldFilePaths, oldFileName));
+        }
+
+        // 如果新文件存在，则删除新文件。
+        if (internalExistsFile(neoFilePaths, neoFileName)) {
+            internalDeleteFile(neoFilePaths, neoFileName);
+        }
+
+        // 执行重命名操作。
+        ftpClient.rename(
+                resolveAbsolutePath(oldFilePaths, oldFileName),
+                resolveAbsolutePath(neoFilePaths, neoFileName)
+        );
+        checkPositiveCompletion();
     }
 
     private String resolveAbsolutePath(@Nonnull String[] filePaths, @Nullable String fileName) {

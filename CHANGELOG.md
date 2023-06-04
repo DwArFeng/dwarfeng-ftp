@@ -4,7 +4,15 @@
 
 #### 功能构建
 
-- (无)
+- 优化 `FtpHandler` 中的方法。
+  - 在所有文件操作方法中，增加了一个使用 `FtpFileLocation` 作为参数的对位方法。
+  - 在此之前，文件操作方法中的参数有 `filePaths` 和 `fileName` 两个，这两个参数的组合可以定位一个文件，
+    其它框架引用时需要分别传入，造成不便。
+  - 添加对位方法后，其它框架引用时只需要传入一个 `FtpFileLocation` 参数即可，同时，旧方法仍然保留。
+
+- 增加 `FtpFileLocation` 结构体，以便用一个参数定位一个文件/文件夹。
+  - `FtpFileLocation` 包含了 `filePaths` 和 `fileName` 两个字段。
+  - 该实体用于简化 `FtpHandler` 中的方法的入口参数。
 
 #### Bug修复
 
