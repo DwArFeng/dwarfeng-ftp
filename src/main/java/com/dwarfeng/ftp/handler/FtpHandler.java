@@ -43,6 +43,11 @@ public interface FtpHandler extends StartableHandler {
     boolean existsFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
 
     /**
+     * 检查文件是否存在。
+     *
+     * @param fileLocation 文件位置。
+     * @return 文件是否存在。
+     * @throws HandlerException 处理器异常。
      * @see #existsFile(String[], String)
      */
     boolean existsFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
@@ -61,6 +66,11 @@ public interface FtpHandler extends StartableHandler {
     ) throws HandlerException;
 
     /**
+     * 存储文件。
+     *
+     * @param fileLocation 文件位置。
+     * @param content      文件的内容。
+     * @throws HandlerException 处理器异常。
      * @see #storeFile(String[], String, byte[])
      */
     void storeFile(@Nonnull FtpFileLocation fileLocation, @Nonnull byte[] content) throws HandlerException;
@@ -77,6 +87,11 @@ public interface FtpHandler extends StartableHandler {
     byte[] retrieveFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
 
     /**
+     * 获取文件。
+     *
+     * @param fileLocation 文件位置。
+     * @return 文件的内容。
+     * @throws HandlerException 处理器异常。
      * @see #retrieveFile(String[], String)
      */
     byte[] retrieveFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
@@ -114,6 +129,14 @@ public interface FtpHandler extends StartableHandler {
     ) throws HandlerException;
 
     /**
+     * 通过流的形式存储文件。
+     *
+     * <p>
+     * FtpHandler 本身不维护流的生命周期，请在调用该方法前妥善启动流，并在调用该方法结束后妥善关闭流。
+     *
+     * @param fileLocation 文件位置。
+     * @param in           文件的输入流。
+     * @throws HandlerException 处理器异常。
      * @see #storeFileByStream(String[], String, InputStream)
      */
     void storeFileByStream(@Nonnull FtpFileLocation fileLocation, @Nonnull InputStream in) throws HandlerException;
@@ -135,6 +158,14 @@ public interface FtpHandler extends StartableHandler {
     ) throws HandlerException;
 
     /**
+     * 通过流的形式获取文件。
+     *
+     * <p>
+     * FtpHandler 本身不维护流的生命周期，请在调用该方法前妥善启动流，并在调用该方法结束后妥善关闭流。
+     *
+     * @param fileLocation 文件位置。
+     * @param out          待写入文件内容的输出流。
+     * @throws HandlerException 处理器异常。
      * @see #retrieveFileByStream(String[], String, OutputStream)
      */
     void retrieveFileByStream(@Nonnull FtpFileLocation fileLocation, @Nonnull OutputStream out) throws HandlerException;
@@ -171,6 +202,10 @@ public interface FtpHandler extends StartableHandler {
     void deleteFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
 
     /**
+     * 删除文件。
+     *
+     * @param fileLocation 文件位置。
+     * @throws HandlerException 处理器异常。
      * @see #deleteFile(String[], String)
      */
     void deleteFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
@@ -282,7 +317,11 @@ public interface FtpHandler extends StartableHandler {
     InputStream openInputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
 
     /**
-     * @see #openInputStream(String[], String)
+     * 打开指定文件的输入流。
+     *
+     * @param fileLocation 文件位置
+     * @return 文件的输入流。
+     * @throws HandlerException 处理器异常。
      */
     InputStream openInputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
@@ -314,6 +353,11 @@ public interface FtpHandler extends StartableHandler {
     OutputStream openOutputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
 
     /**
+     * 打开指定文件的输出流。
+     *
+     * @param fileLocation 文件位置。
+     * @return 文件的输出流。
+     * @throws HandlerException 处理器异常。
      * @see #openOutputStream(String[], String)
      */
     OutputStream openOutputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
@@ -335,6 +379,11 @@ public interface FtpHandler extends StartableHandler {
     ) throws HandlerException;
 
     /**
+     * 重命名文件。
+     *
+     * @param oldFileLocation 旧的文件位置。
+     * @param neoFileLocation 新的文件位置。
+     * @throws HandlerException 处理器异常。
      * @see #renameFile(String[], String, String[], String)
      */
     void renameFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
