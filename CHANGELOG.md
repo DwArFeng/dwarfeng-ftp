@@ -4,7 +4,9 @@
 
 #### 功能构建
 
-- (无)
+- 过期方法。
+  - com.dwarfeng.ftp.handler.FtpHandler.connect。
+  - com.dwarfeng.ftp.handler.FtpHandler.disconnect。
 
 #### Bug修复
 

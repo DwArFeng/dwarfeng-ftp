@@ -21,14 +21,18 @@ public interface FtpHandler extends StartableHandler {
      * 执行连接动作。
      *
      * @throws HandlerException 处理器异常。
+     * @deprecated 该处理器实现 {@link StartableHandler} 接口，请使用 {@link #start()} 方法执行连接动作。
      */
+    @Deprecated
     void connect() throws HandlerException;
 
     /**
      * 执行断开连接动作。
      *
      * @throws HandlerException 处理器异常。
+     * @deprecated 该处理器实现 {@link StartableHandler} 接口，请使用 {@link #stop()} 方法执行断开连接动作。
      */
+    @Deprecated
     void disconnect() throws HandlerException;
 
     /**
