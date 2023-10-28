@@ -4,6 +4,12 @@
 
 #### 功能构建
 
+- 优化流方法。
+  - 优化 FtpHandlerImpl.openInputStream 方法返回的输入流，增强其不规范使用时的处理能力。
+  - 优化 FtpHandlerImpl.openInputStream 方法返回的输入流的关闭逻辑，并细化其日志输出。
+  - 优化 FtpHandlerImpl.openOutputStream 方法返回的输出流，增强其不规范使用时的处理能力。
+  - 优化 FtpHandlerImpl.openOutputStream 方法返回的输出流的关闭逻辑，并细化其日志输出。
+
 - 过期方法。
   - com.dwarfeng.ftp.handler.FtpHandler.connect。
   - com.dwarfeng.ftp.handler.FtpHandler.disconnect。

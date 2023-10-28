@@ -968,69 +968,113 @@ public class FtpHandlerImpl implements FtpHandler {
 
         private final InputStream in;
 
+        private boolean closed = false;
+
         public CompletePendingInputStream(InputStream in) {
             this.in = in;
         }
 
         @Override
         public int read() throws IOException {
+            makeSureOpen("流已经关闭");
             return in.read();
         }
 
         @Override
         public int read(@Nonnull byte[] b) throws IOException {
+            makeSureOpen("流已经关闭");
             return in.read(b);
         }
 
         @Override
         public int read(@Nonnull byte[] b, int off, int len) throws IOException {
+            makeSureOpen("流已经关闭");
             return in.read(b, off, len);
         }
 
         @Override
         public long skip(long n) throws IOException {
+            makeSureOpen("流已经关闭");
             return in.skip(n);
         }
 
         @Override
         public int available() throws IOException {
+            makeSureOpen("流已经关闭");
             return in.available();
         }
 
         @Override
         public void mark(int readlimit) {
+            makeSureOpen("流已经关闭");
             in.mark(readlimit);
         }
 
         @Override
         public void reset() throws IOException {
+            makeSureOpen("流已经关闭");
             in.reset();
         }
 
         @Override
         public boolean markSupported() {
+            makeSureOpen("流已经关闭");
             return in.markSupported();
         }
 
+        @SuppressWarnings("DuplicatedCode")
         @Override
         public void close() throws IOException {
-            try {
-                // 调用 in 的 close 方法，关闭输入流。
-                in.close();
+            makeSureOpen("不能多次关闭流");
 
-                // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
+            // 关闭 FtpClient 原生输入流。
+            try {
+                in.close();
+            } catch (Exception e) {
+                LOGGER.warn("关闭 FtpClient 原生输入流时发生异常，异常信息如下: ", e);
+                noThrowingDisconnectFtp();
+                closed = true;
+                lock.unlock();
+                return;
+            }
+
+            // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
+            try {
                 if (ftpClient.completePendingCommand()) {
+                    closed = true;
+                    lock.unlock();
                     return;
                 }
+            } catch (Exception e) {
+                LOGGER.warn("调用 FtpClient 的 completePendingCommand 方法时发生异常，异常信息如下: ", e);
+                noThrowingDisconnectFtp();
+                closed = true;
+                lock.unlock();
+                return;
+            }
 
-                // 如果文件传输失败，则主动断开连接。
-                // 主动断开连接后，调用其它方法，会自动触发重连机制，所以这里不需要再次重连。
+            // ftpClient.completePendingCommand 返回 false，说明文件传输失败，则主动断开连接。
+            LOGGER.debug("ftpClient.completePendingCommand 返回 false, 文件传输失败, 将主动断开连接, 并抛出异常...");
+            // 主动断开连接后，调用其它方法，会自动触发重连机制，所以不需要再次重连。
+            noThrowingDisconnectFtp();
+            closed = true;
+            lock.unlock();
+            // 抛出 IOException，以通知上层调用者。
+            throw new IOException("ftpClient.completePendingCommand 返回 false, 文件传输失败");
+        }
+
+        private void noThrowingDisconnectFtp() {
+            try {
                 ftpClient.logout();
                 ftpClient.disconnect();
-                // 抛出 IOException，以通知上层调用者。
-                throw new IOException("completePendingCommand 失败，主动断开连接");
-            } finally {
-                lock.unlock();
+            } catch (Exception e) {
+                LOGGER.warn("FtpClient 登出或断开连接时发生异常, 异常信息如下: ", e);
+            }
+        }
+
+        private void makeSureOpen(String exceptionMessage) throws IllegalStateException {
+            if (closed) {
+                throw new IllegalStateException(exceptionMessage);
             }
         }
     }
@@ -1039,49 +1083,89 @@ public class FtpHandlerImpl implements FtpHandler {
 
         private final OutputStream out;
 
+        private boolean closed = false;
+
         public CompletePendingOutputStream(OutputStream out) {
             this.out = out;
         }
 
         @Override
         public void write(int b) throws IOException {
+            makeSureOpen("流已经关闭");
             out.write(b);
         }
 
         @Override
         public void write(@Nonnull byte[] b) throws IOException {
+            makeSureOpen("流已经关闭");
             out.write(b);
         }
 
         @Override
         public void write(@Nonnull byte[] b, int off, int len) throws IOException {
+            makeSureOpen("流已经关闭");
             out.write(b, off, len);
         }
 
         @Override
         public void flush() throws IOException {
+            makeSureOpen("流已经关闭");
             out.flush();
         }
 
+        @SuppressWarnings("DuplicatedCode")
         @Override
         public void close() throws IOException {
-            try {
-                // 调用 out 的 close 方法，关闭输出流。
-                out.close();
+            makeSureOpen("不能多次关闭流");
 
-                // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
+            // 关闭 FtpClient 原生输出流。
+            try {
+                out.close();
+            } catch (Exception e) {
+                LOGGER.warn("关闭 FtpClient 原生输出流时发生异常，异常信息如下: ", e);
+                noThrowingDisconnectFtp();
+                closed = true;
+                lock.unlock();
+                return;
+            }
+
+            // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
+            try {
                 if (ftpClient.completePendingCommand()) {
+                    closed = true;
+                    lock.unlock();
                     return;
                 }
+            } catch (Exception e) {
+                LOGGER.warn("调用 FtpClient 的 completePendingCommand 方法时发生异常，异常信息如下: ", e);
+                noThrowingDisconnectFtp();
+                closed = true;
+                lock.unlock();
+                return;
+            }
 
-                // 如果文件传输失败，则主动断开连接。
-                // 主动断开连接后，调用其它方法，会自动触发重连机制，所以这里不需要再次重连。
+            // ftpClient.completePendingCommand 返回 false，说明文件传输失败，则主动断开连接。
+            LOGGER.debug("ftpClient.completePendingCommand 返回 false, 文件传输失败, 将主动断开连接, 并抛出异常...");
+            // 主动断开连接后，调用其它方法，会自动触发重连机制，所以不需要再次重连。
+            noThrowingDisconnectFtp();
+            closed = true;
+            lock.unlock();
+            // 抛出 IOException，以通知上层调用者。
+            throw new IOException("ftpClient.completePendingCommand 返回 false, 文件传输失败");
+        }
+
+        private void noThrowingDisconnectFtp() {
+            try {
                 ftpClient.logout();
                 ftpClient.disconnect();
-                // 抛出 IOException，以通知上层调用者。
-                throw new IOException("completePendingCommand 失败，主动断开连接");
-            } finally {
-                lock.unlock();
+            } catch (Exception e) {
+                LOGGER.warn("FtpClient 登出或断开连接时发生异常, 异常信息如下: ", e);
+            }
+        }
+
+        private void makeSureOpen(String exceptionMessage) throws IllegalStateException {
+            if (closed) {
+                throw new IllegalStateException(exceptionMessage);
             }
         }
     }
