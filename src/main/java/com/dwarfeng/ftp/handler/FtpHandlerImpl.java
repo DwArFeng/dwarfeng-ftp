@@ -663,6 +663,7 @@ public class FtpHandlerImpl implements FtpHandler {
         try {
             return internalOpenInputStream(filePaths, fileName);
         } catch (Exception e) {
+            lock.unlock();
             throw new FtpException(e);
         }
     }
@@ -684,6 +685,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作，并返回结果。
             return internalOpenInputStream(filePaths, fileName);
         } catch (Exception e) {
+            lock.unlock();
             throw new FtpException(e);
         }
     }
@@ -728,6 +730,7 @@ public class FtpHandlerImpl implements FtpHandler {
         try {
             return internalOpenOutputStream(filePaths, fileName);
         } catch (Exception e) {
+            lock.unlock();
             throw new FtpException(e);
         }
     }
@@ -747,6 +750,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作，并返回结果。
             return internalOpenOutputStream(filePaths, fileName);
         } catch (Exception e) {
+            lock.unlock();
             throw new FtpException(e);
         }
     }

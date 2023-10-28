@@ -10,7 +10,9 @@
 
 #### Bug修复
 
-- (无)
+- 修复流操作相关 bug。
+  - 修复 FtpHandlerImpl.openInputStream 方法抛出异常时，同步锁不会释放的 bug。
+  - 修复 FtpHandlerImpl.openOutputStream 方法抛出异常时，同步锁不会释放的 bug。
 
 #### 功能移除
 
