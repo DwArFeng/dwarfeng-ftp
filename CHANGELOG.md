@@ -4,6 +4,9 @@
 
 #### 功能构建
 
+- 优化测试配置。
+  - spring/application-context-scan.xml。
+
 - 依赖升级。
   - 升级 `subgrade` 依赖版本为 `1.4.7.a` 并解决兼容性问题，以应用其新功能。
   - 升级 `spring` 依赖版本为 `5.3.31` 以规避漏洞。

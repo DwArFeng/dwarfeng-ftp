@@ -10,7 +10,16 @@
 >
 
     <!-- 扫描配置类所在的包。 -->
-    <context:component-scan base-package="com.dwarfeng.ftp.configuration"/>
+    <context:component-scan base-package="com.dwarfeng.ftp.configuration" use-default-filters="false">
+        <context:include-filter
+                type="assignable"
+                expression="com.dwarfeng.ftp.configuration.SingletonConfiguration"
+        />
+        <context:include-filter
+                type="assignable"
+                expression="com.dwarfeng.ftp.configuration.ServiceExceptionMapperConfiguration"
+        />
+    </context:component-scan>
     <!--扫描aop增强所在的包。 -->
     <context:component-scan base-package="com.dwarfeng.subgrade.sdk.interceptor.analyse"/>
 </beans>
