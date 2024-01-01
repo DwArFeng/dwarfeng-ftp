@@ -1,5 +1,7 @@
 package com.dwarfeng.ftp.util;
 
+import java.util.Objects;
+
 /**
  * FTP 配置工具类。
  *
@@ -19,7 +21,7 @@ public final class FtpConfigUtil {
      * @param host 指定的主机。
      */
     public static void checkHost(String host) {
-        if (host == null) {
+        if (Objects.isNull(host)) {
             throw new NullPointerException("主机不能为 null");
         }
     }
@@ -30,7 +32,7 @@ public final class FtpConfigUtil {
      * @param username 指定的用户名。
      */
     public static void checkUsername(String username) {
-        if (username == null) {
+        if (Objects.isNull(username)) {
             throw new NullPointerException("用户名不能为 null");
         }
     }
@@ -62,7 +64,7 @@ public final class FtpConfigUtil {
      * @param serverCharset 指定的服务器字符集。
      */
     public static void checkServerCharset(String serverCharset) {
-        if (serverCharset == null) {
+        if (Objects.isNull(serverCharset)) {
             throw new NullPointerException("服务器字符集不能为 null");
         }
     }

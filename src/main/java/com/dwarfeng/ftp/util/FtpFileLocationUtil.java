@@ -28,10 +28,10 @@ public final class FtpFileLocationUtil {
      * @param fileLocation 指定的文件位置。
      */
     public static void checkAsFile(FtpFileLocation fileLocation) {
-        if (fileLocation == null) {
+        if (Objects.isNull(fileLocation)) {
             throw new NullPointerException("文件位置不能为 null");
         }
-        if (fileLocation.getFileName() == null) {
+        if (Objects.isNull(fileLocation.getFileName())) {
             throw new NullPointerException("文件名不能为 null");
         }
     }

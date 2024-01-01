@@ -4,7 +4,9 @@
 
 #### 功能构建
 
-- (无)
+- 优化空值判断方法，使用 `Objects.isNull` 替代部分 `xxx == null`。
+  - com.dwarfeng.ftp.util.FtpConfigUtil。
+  - com.dwarfeng.ftp.util.FtpFileLocationUtil。
 
 #### Bug修复
 
