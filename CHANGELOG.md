@@ -4,6 +4,10 @@
 
 #### 功能构建
 
+- 优化 FtpHandlerImpl 中的部分代码。
+  - 优化 `FtpHandlerImpl.openInputStream` 方法获取的输出流的关闭时的异常处理逻辑。
+  - 优化 `FtpHandlerImpl.openOutputStream` 方法获取的输出流的关闭时的异常处理逻辑。
+
 - 优化空值判断方法，使用 `Objects.isNull` 替代部分 `xxx == null`。
   - com.dwarfeng.ftp.util.FtpConfigUtil。
   - com.dwarfeng.ftp.util.FtpFileLocationUtil。

@@ -1031,11 +1031,11 @@ public class FtpHandlerImpl implements FtpHandler {
             try {
                 in.close();
             } catch (Exception e) {
-                LOGGER.warn("关闭 FtpClient 原生输入流时发生异常，异常信息如下: ", e);
+                LOGGER.debug("关闭 FtpClient 原生输入流时发生异常, 将主动断开连接, 并抛出异常...");
                 noThrowingDisconnectFtp();
                 closed = true;
                 lock.unlock();
-                return;
+                throw new IOException("关闭 FtpClient 原生输入流时发生异常", e);
             }
 
             // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
@@ -1046,11 +1046,11 @@ public class FtpHandlerImpl implements FtpHandler {
                     return;
                 }
             } catch (Exception e) {
-                LOGGER.warn("调用 FtpClient 的 completePendingCommand 方法时发生异常，异常信息如下: ", e);
+                LOGGER.debug("调用 FtpClient 的 completePendingCommand 方法时发生异常, 将主动断开连接, 并抛出异常...");
                 noThrowingDisconnectFtp();
                 closed = true;
                 lock.unlock();
-                return;
+                throw new IOException("调用 FtpClient 的 completePendingCommand 方法时发生异常", e);
             }
 
             // ftpClient.completePendingCommand 返回 false，说明文件传输失败，则主动断开连接。
@@ -1122,11 +1122,11 @@ public class FtpHandlerImpl implements FtpHandler {
             try {
                 out.close();
             } catch (Exception e) {
-                LOGGER.warn("关闭 FtpClient 原生输出流时发生异常，异常信息如下: ", e);
+                LOGGER.debug("关闭 FtpClient 原生输出流时发生异常, 将主动断开连接, 并抛出异常...");
                 noThrowingDisconnectFtp();
                 closed = true;
                 lock.unlock();
-                return;
+                throw new IOException("关闭 FtpClient 原生输出流时发生异常", e);
             }
 
             // 根据 FtpClient 的文档，必须调用 completePendingCommand 方法，以完成文件传输。
@@ -1137,11 +1137,11 @@ public class FtpHandlerImpl implements FtpHandler {
                     return;
                 }
             } catch (Exception e) {
-                LOGGER.warn("调用 FtpClient 的 completePendingCommand 方法时发生异常，异常信息如下: ", e);
+                LOGGER.debug("调用 FtpClient 的 completePendingCommand 方法时发生异常, 将主动断开连接, 并抛出异常...");
                 noThrowingDisconnectFtp();
                 closed = true;
                 lock.unlock();
-                return;
+                throw new IOException("调用 FtpClient 的 completePendingCommand 方法时发生异常", e);
             }
 
             // ftpClient.completePendingCommand 返回 false，说明文件传输失败，则主动断开连接。
