@@ -38,8 +38,8 @@ public interface FtpHandler extends StartableHandler {
     /**
      * 检查文件是否存在。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称。
      * @return 文件是否存在。
      * @throws HandlerException 处理器异常。
@@ -59,8 +59,8 @@ public interface FtpHandler extends StartableHandler {
     /**
      * 存储文件。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称。
      * @param content   文件的内容。
      * @throws HandlerException 处理器异常。
@@ -82,8 +82,8 @@ public interface FtpHandler extends StartableHandler {
     /**
      * 获取文件。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称。
      * @return 文件的内容。
      * @throws HandlerException 处理器异常。
@@ -103,8 +103,8 @@ public interface FtpHandler extends StartableHandler {
     /**
      * 获取文件。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称。
      * @return 文件的内容。
      * @throws HandlerException 处理器异常。
@@ -122,11 +122,12 @@ public interface FtpHandler extends StartableHandler {
      * <p>
      * FtpHandler 本身不维护流的生命周期，请在调用该方法前妥善启动流，并在调用该方法结束后妥善关闭流。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称。
      * @param in        文件的输入流。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.3
      */
     void storeFileByStream(
             @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull InputStream in
@@ -142,6 +143,7 @@ public interface FtpHandler extends StartableHandler {
      * @param in           文件的输入流。
      * @throws HandlerException 处理器异常。
      * @see #storeFileByStream(String[], String, InputStream)
+     * @since 1.1.10
      */
     void storeFileByStream(@Nonnull FtpFileLocation fileLocation, @Nonnull InputStream in) throws HandlerException;
 
@@ -151,11 +153,12 @@ public interface FtpHandler extends StartableHandler {
      * <p>
      * FtpHandler 本身不维护流的生命周期，请在调用该方法前妥善启动流，并在调用该方法结束后妥善关闭流。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称
      * @param out       待写入文件内容的输出流。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.6
      */
     void retrieveFileByStream(
             @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull OutputStream out
@@ -171,6 +174,7 @@ public interface FtpHandler extends StartableHandler {
      * @param out          待写入文件内容的输出流。
      * @throws HandlerException 处理器异常。
      * @see #retrieveFileByStream(String[], String, OutputStream)
+     * @since 1.1.10
      */
     void retrieveFileByStream(@Nonnull FtpFileLocation fileLocation, @Nonnull OutputStream out) throws HandlerException;
 
@@ -180,11 +184,12 @@ public interface FtpHandler extends StartableHandler {
      * <p>
      * FtpHandler 本身不维护流的生命周期，请在调用该方法前妥善启动流，并在调用该方法结束后妥善关闭流。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称
      * @param out       待写入文件内容的输出流。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.3
      * @deprecated 该方法命名不规范，get 一般用于直接获取对象，不应该用于需要消耗时间的过程方法。<br>
      * 请使用 {@link #retrieveFileByStream(String[], String, OutputStream)}。
      */
@@ -198,8 +203,8 @@ public interface FtpHandler extends StartableHandler {
     /**
      * 删除文件。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称。
      * @throws HandlerException 处理器异常。
      */
@@ -217,8 +222,8 @@ public interface FtpHandler extends StartableHandler {
     /**
      * 删除目录。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @throws HandlerException 处理器异常。
      * @deprecated 该方法命名不规范，请使用 {@link #removeDirectory(String[])}。
      */
@@ -233,10 +238,14 @@ public interface FtpHandler extends StartableHandler {
     /**
      * 删除目录。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。<br>
-     *                  如果需要删除的文件夹是根文件夹，那么该数组长度为 0。
+     * <p>
+     * 在 FTP 协议中，删除一个目录，需要保证该目录下没有文件，否则会抛出异常。
+     *
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。<br>
+     *                  如果需要删除的目录是根目录，那么该数组长度为 0。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.8
      */
     void removeDirectory(@Nonnull String[] filePaths) throws HandlerException;
 
@@ -244,19 +253,25 @@ public interface FtpHandler extends StartableHandler {
      * 删除目录。
      *
      * <p>
-     * 执行该方法时，文件路径取文件夹，如路径包含文件名，则忽略。
+     * 执行该方法时，只使用 {@link FtpFileLocation#getFilePaths()} 方法返回的路径，
+     * 忽略 {@link FtpFileLocation#getFileName()} 方法返回的文件名。
+     *
+     * <p>
+     * 在 FTP 协议中，删除一个目录，需要保证该目录下没有文件，否则会抛出异常。
      *
      * @see #removeDirectory(String[])
+     * @since 1.1.10
      */
     void removeDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 列出指定路径下的所有文件。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
-     * @return 指定文件夹下所有文件的名称（不带路径前缀）组成的数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
+     * @return 指定目录下所有文件组成的数组。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.4
      */
     FtpFile[] listFiles(@Nonnull String[] filePaths) throws HandlerException;
 
@@ -264,9 +279,13 @@ public interface FtpHandler extends StartableHandler {
      * 列出指定路径下的所有文件。
      *
      * <p>
-     * 执行该方法时，文件路径取文件夹，如路径包含文件名，则忽略。
+     * 执行该方法时，只使用 {@link FtpFileLocation#getFilePaths()} 方法返回的路径，
+     * 忽略 {@link FtpFileLocation#getFileName()} 方法返回的文件名。
      *
+     * @param fileLocation 文件位置。
+     * @return 指定目录下所有文件组成的数组。
      * @see #listFiles(String[])
+     * @since 1.1.10
      */
     FtpFile[] listFiles(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
@@ -274,12 +293,13 @@ public interface FtpHandler extends StartableHandler {
      * 列出指定路径下的所有文件。
      *
      * <p>
-     * 如果有专用的文件夹（这种文件夹通常只存放一种类型的文件），那么直接获取名称会更方便一些。
+     * 如果有专用的目录（这种目录通常只存放一种类型的文件），那么直接获取名称会更方便一些。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
-     * @return 指定文件夹下所有文件的名称（不带路径前缀）组成的数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
+     * @return 指定目录下所有文件的名称（不带路径前缀）组成的数组。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.4
      */
     String[] listFileNames(@Nonnull String[] filePaths) throws HandlerException;
 
@@ -287,9 +307,13 @@ public interface FtpHandler extends StartableHandler {
      * 列出指定路径下的所有文件。
      *
      * <p>
-     * 执行该方法时，文件路径取文件夹，如路径包含文件名，则忽略。
+     * 执行该方法时，只使用 {@link FtpFileLocation#getFilePaths()} 方法返回的路径，
+     * 忽略 {@link FtpFileLocation#getFileName()} 方法返回的文件名。
      *
+     * @param fileLocation 文件位置。
+     * @return 指定目录下所有文件的名称（不带路径前缀）组成的数组。
      * @see #listFileNames(String[])
+     * @since 1.1.10
      */
     String[] listFileNames(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
@@ -312,11 +336,12 @@ public interface FtpHandler extends StartableHandler {
      * <p>
      * 对于线程安全的实现，从调用开始直到用户关闭流的这段时间内，其它线程调用处理器的任何方法都应该被阻塞。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称。
      * @return 文件的输入流。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.6
      */
     InputStream openInputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
 
@@ -326,6 +351,8 @@ public interface FtpHandler extends StartableHandler {
      * @param fileLocation 文件位置
      * @return 文件的输入流。
      * @throws HandlerException 处理器异常。
+     * @see #openInputStream(String[], String)
+     * @since 1.1.10
      */
     InputStream openInputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
@@ -348,11 +375,12 @@ public interface FtpHandler extends StartableHandler {
      * <p>
      * 对于线程安全的实现，从调用开始直到用户关闭流的这段时间内，其它线程调用处理器的任何方法都应该被阻塞。
      *
-     * @param filePaths 文件夹路径。<br>
-     *                  路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param fileName  文件的名称。
      * @return 文件的输出流。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.6
      */
     OutputStream openOutputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
 
@@ -363,19 +391,21 @@ public interface FtpHandler extends StartableHandler {
      * @return 文件的输出流。
      * @throws HandlerException 处理器异常。
      * @see #openOutputStream(String[], String)
+     * @since 1.1.10
      */
     OutputStream openOutputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 
     /**
      * 重命名文件。
      *
-     * @param oldFilePaths 旧的文件夹的路径。<br>
-     *                     路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param oldFilePaths 旧的目录的路径。<br>
+     *                     路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param oldFileName  旧的文件的名称。
-     * @param neoFilePaths 新的文件夹的路径。<br>
-     *                     路径从根文件出发，一直到达最后一个文件夹，所有文件夹按照顺序组成数组。
+     * @param neoFilePaths 新的目录的路径。<br>
+     *                     路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
      * @param neoFileName  新的文件的名称。
      * @throws HandlerException 处理器异常。
+     * @since 1.1.8
      */
     void renameFile(
             @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
@@ -389,6 +419,7 @@ public interface FtpHandler extends StartableHandler {
      * @param neoFileLocation 新的文件位置。
      * @throws HandlerException 处理器异常。
      * @see #renameFile(String[], String, String[], String)
+     * @since 1.1.10
      */
     void renameFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
             throws HandlerException;

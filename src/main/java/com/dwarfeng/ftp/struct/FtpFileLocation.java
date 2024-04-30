@@ -6,9 +6,13 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * FTP文件位置。
+ * FTP 文件位置。
  *
  * <p>
+ * 文件位置是一个便捷类，用于封装 FTP 服务器上的文件的位置信息，它包括文件的路径和文件的名称。
+ *
+ * <p>
+ * 该类是一个不可变类。
  *
  * @author DwArFeng
  * @since 1.0.0
