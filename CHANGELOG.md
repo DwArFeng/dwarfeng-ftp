@@ -34,7 +34,8 @@
 
 #### Bug修复
 
-- (无)
+- 修复 FtpHandlerImpl 中的 bug。
+  - 修复连接部分 FTP 服务器时，调用 `existsFile` 方法，当目标文件不存在时抛出异常的 bug。
 
 #### 功能移除
 

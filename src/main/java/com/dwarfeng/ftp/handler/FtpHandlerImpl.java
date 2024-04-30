@@ -247,8 +247,17 @@ public class FtpHandlerImpl implements FtpHandler {
         enterDirection(filePaths);
         checkPositiveCompletion();
         FTPFile[] ftpFiles = ftpClient.listFiles(fileName);
-        checkPositiveCompletion();
-        return Objects.nonNull(ftpFiles) && ftpFiles.length > 0;
+        boolean existsFlag = Objects.nonNull(ftpFiles) && ftpFiles.length > 0;
+        /*
+         * 如果文件存在，检查 FTP 的状态；文件不存在时，不检查 FTP 的状态。
+         * 这是因为部分 FTP 服务器找不到文件时，会返回非 positiveCompletion 的代码。
+         * 已知会返回非 positiveCompletion 的 FTP 服务器清单：
+         *   1. Windows 内置服务器，找不到文件时，返回代码 550。
+         */
+        if (existsFlag) {
+            checkPositiveCompletion();
+        }
+        return existsFlag;
     }
 
     @BehaviorAnalyse
