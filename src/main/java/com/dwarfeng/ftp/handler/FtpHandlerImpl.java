@@ -19,8 +19,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -835,6 +834,125 @@ public class FtpHandlerImpl implements FtpHandler {
         checkPositiveCompletion();
     }
 
+    @Override
+    @BehaviorAnalyse
+    public void clearDirectory(@Nonnull String[] filePaths) throws HandlerException {
+        lock.lock();
+        try {
+            internalClearDirectory(filePaths);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    public void clearDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+        lock.lock();
+        try {
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            // 执行操作。
+            internalClearDirectory(filePaths);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void internalClearDirectory(String[] filePaths) throws Exception {
+        // 确认状态并列出文件。
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+
+        FTPFile[] ftpFiles = ftpClient.listFiles();
+        checkPositiveCompletion();
+
+        // 特殊情形：如果目录为空，则直接返回。
+        if (Objects.isNull(ftpFiles) || ftpFiles.length == 0) {
+            return;
+        }
+
+        // 定义帧栈，并初始化。
+        Stack<DirectoryClearFrame> frameStack = new Stack<>();
+        DirectoryClearFrame initialFrame = new DirectoryClearFrame(filePaths, new ArrayDeque<>());
+        initialFrame.getRemainingFiles().addAll(Arrays.asList(ftpFiles));
+        frameStack.push(initialFrame);
+
+        // 只要帧栈不为空，就一直循环。
+        while (!frameStack.isEmpty()) {
+            // 弹出栈顶帧。
+            DirectoryClearFrame frame = frameStack.pop();
+            // 清理单帧。
+            clearSingleFrame(filePaths, frame, frameStack);
+        }
+    }
+
+    private void clearSingleFrame(String[] filePaths, DirectoryClearFrame frame, Stack<DirectoryClearFrame> frameStack)
+            throws Exception {
+        // 展开参数。
+        String[] frameFilePaths = frame.getFilePaths();
+        Queue<FTPFile> frameRemainingFiles = frame.getRemainingFiles();
+        // 进入文件夹。
+        enterDirection(frameFilePaths);
+        checkPositiveCompletion();
+        // 只要剩余文件队列不为空，就一直循环。
+        while (!frameRemainingFiles.isEmpty()) {
+            // 弹出队首文件。
+            FTPFile ftpFile = frameRemainingFiles.poll();
+            // 如果是文件夹，则进入文件夹。
+            if (ftpFile.isDirectory()) {
+                // 列出文件。
+                FTPFile[] neoFtpFiles = ftpClient.listFiles(ftpFile.getName());
+                checkPositiveCompletion();
+                // 如果文件夹为空，则直接删除目录并返回。
+                if (Objects.isNull(neoFtpFiles) || neoFtpFiles.length == 0) {
+                    if (!ftpClient.removeDirectory(ftpFile.getName())) {
+                        throw new FtpFileDeleteException(resolveAbsolutePath(frameFilePaths, ftpFile.getName()));
+                    }
+                    continue;
+                }
+                // 创建新帧。
+                String[] newFilePaths = Arrays.copyOf(frameFilePaths, frameFilePaths.length + 1);
+                newFilePaths[frameFilePaths.length] = ftpFile.getName();
+                DirectoryClearFrame neoFrame = new DirectoryClearFrame(newFilePaths, new ArrayDeque<>());
+                neoFrame.getRemainingFiles().addAll(Arrays.asList(neoFtpFiles));
+                frameStack.push(frame);
+                frameStack.push(neoFrame);
+                return;
+            }
+            // 如果是文件，则删除文件。
+            if (!ftpClient.deleteFile(ftpFile.getName())) {
+                throw new FtpFileDeleteException(resolveAbsolutePath(frameFilePaths, ftpFile.getName()));
+            }
+            checkPositiveCompletion();
+        }
+        // 剩余文件删除完毕后，删除帧对应的目录（如果不是 filePaths）。
+        // 如果 frameFilePaths 与 filePaths 相等，则不删除
+        if (Arrays.equals(frameFilePaths, filePaths)) {
+            return;
+        }
+        // 如果目录为空，则直接抛出异常（不能删除根目录）。
+        if (frameFilePaths.length == 0) {
+            throw new FtpFileDeleteException(resolveAbsolutePath(frameFilePaths, null));
+        }
+        // 如果目录不为空，则获取父目录路径。
+        String[] frameParentFilePaths = new String[frameFilePaths.length - 1];
+        System.arraycopy(frameFilePaths, 0, frameParentFilePaths, 0, frameParentFilePaths.length);
+        // 打开文件目录。
+        enterDirection(frameParentFilePaths);
+        checkPositiveCompletion();
+        // 删除文件目录。
+        if (!ftpClient.removeDirectory(frameFilePaths[frameFilePaths.length - 1])) {
+            throw new FtpFileDeleteException(resolveAbsolutePath(frameFilePaths, null));
+        }
+        checkPositiveCompletion();
+    }
+
     private String resolveAbsolutePath(@Nonnull String[] filePaths, @Nullable String fileName) {
         StringBuilder builder = new StringBuilder();
         builder.append(ROOT_PATH);
@@ -939,6 +1057,33 @@ public class FtpHandlerImpl implements FtpHandler {
             throw new FtpLoginException();
         } else {
             LOGGER.info("FTP连接成功");
+        }
+    }
+
+    private static class DirectoryClearFrame {
+
+        private final String[] filePaths;
+        private final Queue<FTPFile> remainingFiles;
+
+        public DirectoryClearFrame(String[] filePaths, Queue<FTPFile> remainingFiles) {
+            this.filePaths = filePaths;
+            this.remainingFiles = remainingFiles;
+        }
+
+        public String[] getFilePaths() {
+            return filePaths;
+        }
+
+        public Queue<FTPFile> getRemainingFiles() {
+            return remainingFiles;
+        }
+
+        @Override
+        public String toString() {
+            return "DirectoryClearFrame{" +
+                    "filePaths=" + Arrays.toString(filePaths) +
+                    ", remainingFiles=" + remainingFiles +
+                    '}';
         }
     }
 

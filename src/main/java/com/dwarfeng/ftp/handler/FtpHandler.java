@@ -241,10 +241,16 @@ public interface FtpHandler extends StartableHandler {
      * <p>
      * 在 FTP 协议中，删除一个目录，需要保证该目录下没有文件，否则会抛出异常。
      *
+     * <p>
+     * 如果希望删除一个包含文件的目录，需要先递归地删除目录下的所有文件和子目录。
+     * 此时，可以使用 {@link #clearDirectory(String[])} 方法，该方法会清空目录下的所有文件，包括子目录。<br>
+     * {@link #clearDirectory(String[])} 调用完成后，再调用本方法删除目录本身。
+     *
      * @param filePaths 目录路径。<br>
      *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。<br>
      *                  如果需要删除的目录是根目录，那么该数组长度为 0。
      * @throws HandlerException 处理器异常。
+     * @see #clearDirectory(String[])
      * @since 1.1.8
      */
     void removeDirectory(@Nonnull String[] filePaths) throws HandlerException;
@@ -259,7 +265,13 @@ public interface FtpHandler extends StartableHandler {
      * <p>
      * 在 FTP 协议中，删除一个目录，需要保证该目录下没有文件，否则会抛出异常。
      *
+     * <p>
+     * 如果希望删除一个包含文件的目录，需要先递归地删除目录下的所有文件和子目录。
+     * 此时，可以使用 {@link #clearDirectory(String[])} 方法，该方法会清空目录下的所有文件，包括子目录。<br>
+     * {@link #clearDirectory(String[])} 调用完成后，再调用本方法删除目录本身。
+     *
      * @see #removeDirectory(String[])
+     * @see #clearDirectory(FtpFileLocation)
      * @since 1.1.10
      */
     void removeDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
@@ -423,4 +435,42 @@ public interface FtpHandler extends StartableHandler {
      */
     void renameFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
             throws HandlerException;
+
+    /**
+     * 清空目录。
+     *
+     * <p>
+     * 递归地清空目录下的所有文件以及子目录。清空目录不会删除目录本身。
+     *
+     * <p>
+     * 该功能不是 FTP 协议的标准功能，其实现需要按照递归逻辑多次列出目录下的文件并分别多次调用删除文件以及删除目录的方法，
+     * 该方法的执行时间与目录下的文件数量呈正相关。尽量不要在大目录上调用该方法。
+     *
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
+     * @throws HandlerException 处理器异常。
+     * @since 1.2.0
+     */
+    void clearDirectory(@Nonnull String[] filePaths) throws HandlerException;
+
+    /**
+     * 清空目录。
+     *
+     * <p>
+     * 递归地清空目录下的所有文件以及子目录。清空目录不会删除目录本身。
+     *
+     * <p>
+     * 执行该方法时，只使用 {@link FtpFileLocation#getFilePaths()} 方法返回的路径，
+     * 忽略 {@link FtpFileLocation#getFileName()} 方法返回的文件名。
+     *
+     * <p>
+     * 该功能不是 FTP 协议的标准功能，其实现需要按照递归逻辑多次列出目录下的文件并分别多次调用删除文件以及删除目录的方法，
+     * 该方法的执行时间与目录下的文件数量呈正相关。尽量不要在大目录上调用该方法。
+     *
+     * @param fileLocation 文件位置。
+     * @throws HandlerException 处理器异常。
+     * @see #clearDirectory(String[])
+     * @since 1.2.0
+     */
+    void clearDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 }
