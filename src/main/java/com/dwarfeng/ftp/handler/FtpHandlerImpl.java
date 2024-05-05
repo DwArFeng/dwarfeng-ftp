@@ -663,7 +663,7 @@ public class FtpHandlerImpl implements FtpHandler {
             return internalOpenInputStream(filePaths, fileName);
         } catch (Exception e) {
             lock.unlock();
-            throw new FtpException(e);
+            throw new FtpStreamOpenException(e);
         }
     }
 
@@ -685,7 +685,7 @@ public class FtpHandlerImpl implements FtpHandler {
             return internalOpenInputStream(filePaths, fileName);
         } catch (Exception e) {
             lock.unlock();
-            throw new FtpException(e);
+            throw new FtpStreamOpenException(e);
         }
     }
 
@@ -730,7 +730,7 @@ public class FtpHandlerImpl implements FtpHandler {
             return internalOpenOutputStream(filePaths, fileName);
         } catch (Exception e) {
             lock.unlock();
-            throw new FtpException(e);
+            throw new FtpStreamOpenException(e);
         }
     }
 
@@ -750,7 +750,7 @@ public class FtpHandlerImpl implements FtpHandler {
             return internalOpenOutputStream(filePaths, fileName);
         } catch (Exception e) {
             lock.unlock();
-            throw new FtpException(e);
+            throw new FtpStreamOpenException(e);
         }
     }
 

@@ -4,6 +4,12 @@
 
 #### 功能构建
 
+- 优化 `FtpHandlerImpl` 中部分方法抛出的异常类型。
+  - FtpHandlerImpl.openInputStream(java.lang.String[], java.lang.String)。
+  - FtpHandlerImpl.openInputStream(com.dwarfeng.ftp.struct.FtpFileLocation)。
+  - FtpHandlerImpl.openOutputStream(java.lang.String[], java.lang.String)。
+  - FtpHandlerImpl.openOutputStream(com.dwarfeng.ftp.struct.FtpFileLocation)。
+
 - `FtpHandler` 增加新方法。
   - FtpHandler.clearDirectory。
 
