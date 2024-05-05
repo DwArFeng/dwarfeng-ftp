@@ -24,16 +24,26 @@ public final class FtpConfig {
             String host, int port, String username, String password, String serverCharset, int connectTimeout,
             long noopInterval, int bufferSize
     ) {
-        // 检查参数。
-        FtpConfigUtil.checkHost(host);
-        FtpConfigUtil.checkPort(port);
-        FtpConfigUtil.checkUsername(username);
-        FtpConfigUtil.checkPassword(password);
-        FtpConfigUtil.checkServerCharset(serverCharset);
-        FtpConfigUtil.checkConnectTimeout(connectTimeout);
-        FtpConfigUtil.checkNoopInterval(noopInterval, connectTimeout);
-        FtpConfigUtil.checkBufferSize(bufferSize);
+        this(
+                host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize, false
+        );
+    }
 
+    private FtpConfig(
+            String host, int port, String username, String password, String serverCharset, int connectTimeout,
+            long noopInterval, int bufferSize, boolean paramReliable
+    ) {
+        // 如果参数不可靠，则检查参数。
+        if (!paramReliable) {
+            FtpConfigUtil.checkHost(host);
+            FtpConfigUtil.checkPort(port);
+            FtpConfigUtil.checkUsername(username);
+            FtpConfigUtil.checkPassword(password);
+            FtpConfigUtil.checkServerCharset(serverCharset);
+            FtpConfigUtil.checkConnectTimeout(connectTimeout);
+            FtpConfigUtil.checkNoopInterval(noopInterval, connectTimeout);
+            FtpConfigUtil.checkBufferSize(bufferSize);
+        }
         // 设置值。
         this.host = host;
         this.port = port;
@@ -128,40 +138,59 @@ public final class FtpConfig {
         }
 
         public Builder setPort(int port) {
-            FtpConfigUtil.checkPort(port);
             this.port = port;
             return this;
         }
 
         public Builder setServerCharset(String serverCharset) {
-            FtpConfigUtil.checkServerCharset(serverCharset);
             this.serverCharset = serverCharset;
             return this;
         }
 
         public Builder setConnectTimeout(int connectTimeout) {
-            FtpConfigUtil.checkConnectTimeout(connectTimeout);
             this.connectTimeout = connectTimeout;
             return this;
         }
 
         public Builder setNoopInterval(long noopInterval) {
-            FtpConfigUtil.checkNoopInterval(noopInterval, connectTimeout);
             this.noopInterval = noopInterval;
             return this;
         }
 
         public Builder setBufferSize(int bufferSize) {
-            FtpConfigUtil.checkBufferSize(bufferSize);
             this.bufferSize = bufferSize;
             return this;
         }
 
         @Override
         public FtpConfig build() {
+            // 检查参数。
+            FtpConfigUtil.checkHost(host);
+            FtpConfigUtil.checkPort(port);
+            FtpConfigUtil.checkUsername(username);
+            FtpConfigUtil.checkPassword(password);
+            FtpConfigUtil.checkServerCharset(serverCharset);
+            FtpConfigUtil.checkConnectTimeout(connectTimeout);
+            FtpConfigUtil.checkNoopInterval(noopInterval, connectTimeout);
+            FtpConfigUtil.checkBufferSize(bufferSize);
+            // 构造并返回配置。
             return new FtpConfig(
-                    host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize
+                    host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize, true
             );
+        }
+
+        @Override
+        public String toString() {
+            return "Builder{" +
+                    "host='" + host + '\'' +
+                    ", username='" + username + '\'' +
+                    ", password='" + password + '\'' +
+                    ", port=" + port +
+                    ", serverCharset='" + serverCharset + '\'' +
+                    ", connectTimeout=" + connectTimeout +
+                    ", noopInterval=" + noopInterval +
+                    ", bufferSize=" + bufferSize +
+                    '}';
         }
     }
 }

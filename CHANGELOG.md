@@ -4,6 +4,10 @@
 
 #### 功能构建
 
+- `FtpConfig` 结构优化。
+  - 优化 `FtpConfig` 构造器方法，由 `FtpConfig.Builder` 构造生成时可避免重复的参数校验。
+  - 优化 `FtpConfig.Builder` 的参数校验方式，在 build 方法中统一校验参数，避免参数设置顺序改变造成参数校验不通过。
+
 - 优化 `FtpHandlerImpl` 中部分方法抛出的异常类型。
   - FtpHandlerImpl.openInputStream(java.lang.String[], java.lang.String)。
   - FtpHandlerImpl.openInputStream(com.dwarfeng.ftp.struct.FtpFileLocation)。
