@@ -58,3 +58,8 @@ buildNumber.properties
 ## Configuration Files
 #################
 /conf/
+
+#################
+## Temporary Files
+#################
+/temp/

@@ -473,4 +473,43 @@ public interface FtpHandler extends StartableHandler {
      * @since 1.2.0
      */
     void clearDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
+
+    /**
+     * 复制文件。
+     *
+     * <p>
+     * 该功能不是 FTP 协议的标准功能，其实现需要先获取源文件的内容，再存储到目标文件中。
+     * 对于大文件，可能还需要将文件存储到文件系统中。
+     * 该方法的执行时间与文件的大小呈正相关。尽量不要在大文件上调用该方法。
+     *
+     * @param oldFilePaths 旧的目录的路径。<br>
+     *                     路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
+     * @param oldFileName  旧的文件的名称。
+     * @param neoFilePaths 新的目录的路径。<br>
+     *                     路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
+     * @param neoFileName  新的文件的名称。
+     * @throws HandlerException 处理器异常。
+     * @since 1.2.0
+     */
+    void copyFile(
+            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
+            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+    ) throws HandlerException;
+
+    /**
+     * 复制文件。
+     *
+     * <p>
+     * 该功能不是 FTP 协议的标准功能，其实现需要先获取源文件的内容，再存储到目标文件中。
+     * 对于大文件，可能还需要将文件存储到文件系统中。
+     * 该方法的执行时间与文件的大小呈正相关。尽量不要在大文件上调用该方法。
+     *
+     * @param oldFileLocation 旧的文件位置。
+     * @param neoFileLocation 新的文件位置。
+     * @throws HandlerException 处理器异常。
+     * @see #copyFile(String[], String, String[], String)
+     * @since 1.2.0
+     */
+    void copyFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+            throws HandlerException;
 }

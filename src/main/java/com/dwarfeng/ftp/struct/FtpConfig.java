@@ -20,18 +20,40 @@ public final class FtpConfig {
     private final long noopInterval;
     private final int bufferSize;
 
+    /**
+     * @since 1.2.0
+     */
+    private final String temporaryFileDirectoryPath;
+
+    /**
+     * @since 1.2.0
+     */
+    private final String temporaryFilePrefix;
+    /**
+     * @since 1.2.0
+     */
+    private final String temporaryFileSuffix;
+
+    /**
+     * @since 1.2.0
+     */
+    private final int fileCopyMemoryBufferSize;
+
     public FtpConfig(
             String host, int port, String username, String password, String serverCharset, int connectTimeout,
-            long noopInterval, int bufferSize
+            long noopInterval, int bufferSize, String temporaryFileDirectoryPath, String temporaryFilePrefix,
+            String temporaryFileSuffix, int fileCopyMemoryBufferSize
     ) {
         this(
-                host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize, false
+                host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize,
+                temporaryFileDirectoryPath, temporaryFilePrefix, temporaryFileSuffix, fileCopyMemoryBufferSize, false
         );
     }
 
     private FtpConfig(
             String host, int port, String username, String password, String serverCharset, int connectTimeout,
-            long noopInterval, int bufferSize, boolean paramReliable
+            long noopInterval, int bufferSize, String temporaryFileDirectoryPath, String temporaryFilePrefix,
+            String temporaryFileSuffix, int fileCopyMemoryBufferSize, boolean paramReliable
     ) {
         // 如果参数不可靠，则检查参数。
         if (!paramReliable) {
@@ -43,6 +65,10 @@ public final class FtpConfig {
             FtpConfigUtil.checkConnectTimeout(connectTimeout);
             FtpConfigUtil.checkNoopInterval(noopInterval, connectTimeout);
             FtpConfigUtil.checkBufferSize(bufferSize);
+            FtpConfigUtil.checkTemporaryFileDirectoryPath(temporaryFileDirectoryPath);
+            FtpConfigUtil.checkTemporaryFilePrefix(temporaryFilePrefix);
+            FtpConfigUtil.checkTemporaryFileSuffix(temporaryFileSuffix);
+            FtpConfigUtil.checkFileCopyMemoryBufferSize(fileCopyMemoryBufferSize);
         }
         // 设置值。
         this.host = host;
@@ -53,6 +79,10 @@ public final class FtpConfig {
         this.connectTimeout = connectTimeout;
         this.noopInterval = noopInterval;
         this.bufferSize = bufferSize;
+        this.temporaryFileDirectoryPath = temporaryFileDirectoryPath;
+        this.temporaryFilePrefix = temporaryFilePrefix;
+        this.temporaryFileSuffix = temporaryFileSuffix;
+        this.fileCopyMemoryBufferSize = fileCopyMemoryBufferSize;
     }
 
     public String getHost() {
@@ -87,6 +117,22 @@ public final class FtpConfig {
         return bufferSize;
     }
 
+    public String getTemporaryFileDirectoryPath() {
+        return temporaryFileDirectoryPath;
+    }
+
+    public String getTemporaryFilePrefix() {
+        return temporaryFilePrefix;
+    }
+
+    public String getTemporaryFileSuffix() {
+        return temporaryFileSuffix;
+    }
+
+    public int getFileCopyMemoryBufferSize() {
+        return fileCopyMemoryBufferSize;
+    }
+
     @Override
     public String toString() {
         return "FtpConfig{" +
@@ -98,6 +144,10 @@ public final class FtpConfig {
                 ", connectTimeout=" + connectTimeout +
                 ", noopInterval=" + noopInterval +
                 ", bufferSize=" + bufferSize +
+                ", temporaryFileDirectoryPath='" + temporaryFileDirectoryPath + '\'' +
+                ", temporaryFilePrefix='" + temporaryFilePrefix + '\'' +
+                ", temporaryFileSuffix='" + temporaryFileSuffix + '\'' +
+                ", fileCopyMemoryBufferSize=" + fileCopyMemoryBufferSize +
                 '}';
     }
 
@@ -115,6 +165,30 @@ public final class FtpConfig {
         public static final long DEFAULT_NOOP_INTERVAL = 4000;
         public static final int DEFAULT_BUFFER_SIZE = 4096;
 
+        /**
+         * @since 1.2.0
+         */
+        public static final String DEFAULT_TEMPORARY_FILE_DIRECTORY_PATH = System.getProperty("java.io.tmpdir");
+
+        /**
+         * @since 1.2.0
+         */
+        public static final String DEFAULT_TEMPORARY_FILE_PREFIX = "ftp-";
+        /**
+         * @since 1.2.0
+         */
+        public static final String DEFAULT_TEMPORARY_FILE_SUFFIX = ".tmp";
+
+        /**
+         * 默认的文件复制内存缓冲区大小。
+         *
+         * <p>
+         * 1048576 bytes = 1 MiB。
+         *
+         * @since 1.2.0
+         */
+        public static final int DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE = 1048576;
+
         private final String host;
         private final String username;
         private final String password;
@@ -124,6 +198,10 @@ public final class FtpConfig {
         private int connectTimeout = DEFAULT_CONNECT_TIMEOUT;
         private long noopInterval = DEFAULT_NOOP_INTERVAL;
         private int bufferSize = DEFAULT_BUFFER_SIZE;
+        private String temporaryFileDirectoryPath = DEFAULT_TEMPORARY_FILE_DIRECTORY_PATH;
+        private String temporaryFilePrefix = DEFAULT_TEMPORARY_FILE_PREFIX;
+        private String temporaryFileSuffix = DEFAULT_TEMPORARY_FILE_SUFFIX;
+        private int fileCopyMemoryBufferSize = DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE;
 
         public Builder(String host, String username, String password) {
             // 检查参数。
@@ -162,6 +240,26 @@ public final class FtpConfig {
             return this;
         }
 
+        public Builder setTemporaryFileDirectoryPath(String temporaryFileDirectoryPath) {
+            this.temporaryFileDirectoryPath = temporaryFileDirectoryPath;
+            return this;
+        }
+
+        public Builder setTemporaryFilePrefix(String temporaryFilePrefix) {
+            this.temporaryFilePrefix = temporaryFilePrefix;
+            return this;
+        }
+
+        public Builder setTemporaryFileSuffix(String temporaryFileSuffix) {
+            this.temporaryFileSuffix = temporaryFileSuffix;
+            return this;
+        }
+
+        public Builder setFileCopyMemoryBufferSize(int fileCopyMemoryBufferSize) {
+            this.fileCopyMemoryBufferSize = fileCopyMemoryBufferSize;
+            return this;
+        }
+
         @Override
         public FtpConfig build() {
             // 检查参数。
@@ -173,9 +271,15 @@ public final class FtpConfig {
             FtpConfigUtil.checkConnectTimeout(connectTimeout);
             FtpConfigUtil.checkNoopInterval(noopInterval, connectTimeout);
             FtpConfigUtil.checkBufferSize(bufferSize);
+            FtpConfigUtil.checkTemporaryFileDirectoryPath(temporaryFileDirectoryPath);
+            FtpConfigUtil.checkTemporaryFilePrefix(temporaryFilePrefix);
+            FtpConfigUtil.checkTemporaryFileSuffix(temporaryFileSuffix);
+            FtpConfigUtil.checkFileCopyMemoryBufferSize(fileCopyMemoryBufferSize);
+
             // 构造并返回配置。
             return new FtpConfig(
-                    host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize, true
+                    host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize,
+                    temporaryFileDirectoryPath, temporaryFilePrefix, temporaryFileSuffix, fileCopyMemoryBufferSize, true
             );
         }
 
@@ -190,6 +294,10 @@ public final class FtpConfig {
                     ", connectTimeout=" + connectTimeout +
                     ", noopInterval=" + noopInterval +
                     ", bufferSize=" + bufferSize +
+                    ", temporaryFileDirectoryPath='" + temporaryFileDirectoryPath + '\'' +
+                    ", temporaryFilePrefix='" + temporaryFilePrefix + '\'' +
+                    ", temporaryFileSuffix='" + temporaryFileSuffix + '\'' +
+                    ", fileCopyMemoryBufferSize=" + fileCopyMemoryBufferSize +
                     '}';
         }
     }

@@ -1,5 +1,6 @@
 package com.dwarfeng.ftp.util;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -103,6 +104,69 @@ public final class FtpConfigUtil {
     public static void checkBufferSize(int bufferSize) {
         // bufferSize 允许为负数，因为负数表示使用系统默认值。
         // 因此无论如何都不会抛出异常。
+    }
+
+    /**
+     * 检查指定的临时文件目录路径是否合法。
+     *
+     * @param temporaryFileDirectoryPath 指定的临时文件目录路径。
+     * @since 1.2.0
+     */
+    public static void checkTemporaryFileDirectoryPath(String temporaryFileDirectoryPath) {
+        if (Objects.isNull(temporaryFileDirectoryPath)) {
+            throw new NullPointerException("临时文件目录路径不能为 null");
+        }
+        File temporaryFileDirectory = new File(temporaryFileDirectoryPath);
+        // 确认目录是否存在，不存在则尝试创建，创建失败则抛出异常。
+        if (!temporaryFileDirectory.exists()) {
+            if (!temporaryFileDirectory.mkdirs()) {
+                throw new IllegalArgumentException("无法创建临时文件目录");
+            }
+        }
+        // 目录不能是文件。
+        if (temporaryFileDirectory.isFile()) {
+            throw new IllegalArgumentException("临时文件目录不能是文件");
+        }
+        // 需要有读写权限。
+        if (!temporaryFileDirectory.canRead() || !temporaryFileDirectory.canWrite()) {
+            throw new IllegalArgumentException("临时文件目录需要有读写权限");
+        }
+    }
+
+    /**
+     * 检查指定的临时文件前缀是否合法。
+     *
+     * @param temporaryFilePrefix 指定的临时文件前缀。
+     * @since 1.2.0
+     */
+    public static void checkTemporaryFilePrefix(String temporaryFilePrefix) {
+        if (Objects.isNull(temporaryFilePrefix)) {
+            throw new NullPointerException("临时文件前缀不能为 null");
+        }
+    }
+
+    /**
+     * 检查指定的临时文件后缀是否合法。
+     *
+     * @param temporaryFileSuffix 指定的临时文件后缀。
+     * @since 1.2.0
+     */
+    public static void checkTemporaryFileSuffix(String temporaryFileSuffix) {
+        if (Objects.isNull(temporaryFileSuffix)) {
+            throw new NullPointerException("临时文件后缀不能为 null");
+        }
+    }
+
+    /**
+     * 检查指定的文件复制内存缓冲区大小是否合法。
+     *
+     * @param fileCopyMemoryBufferSize 指定的文件复制内存缓冲区大小。
+     * @since 1.2.0
+     */
+    public static void checkFileCopyMemoryBufferSize(int fileCopyMemoryBufferSize) {
+        if (fileCopyMemoryBufferSize <= 0) {
+            throw new IllegalArgumentException("文件复制内存缓冲区大小必须大于 0");
+        }
     }
 
     private FtpConfigUtil() {

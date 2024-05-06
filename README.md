@@ -24,6 +24,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 | ListFileExample       | 列出文件示例 |
 | RenameFileExample     | 列出文件示例 |
 | ClearDirectoryExample | 清空目录示例 |
+| CopyFileExample       | 复制文件示例 |
 
 ## 测试
 
@@ -146,6 +147,10 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
         <property name="connectTimeout" value="${ftp.connect_timeout.1}"/>
         <property name="noopInterval" value="${ftp.noop_interval.1}"/>
         <property name="bufferSize" value="${ftp.buffer_size.1}"/>
+        <property name="temporaryFileDirectoryPath" value="${ftp.temporary_file_directory_path.1}"/>
+        <property name="temporaryFilePrefix" value="${ftp.temporary_file_prefix.1}"/>
+        <property name="temporaryFileSuffix" value="${ftp.temporary_file_suffix.1}"/>
+        <property name="fileCopyMemoryBufferSize" value="${ftp.file_copy_memory_buffer_size.1}"/>
     </bean>
     <bean name="config1" factory-bean="configBuilder1" factory-method="build"/>
     <bean name="instance1" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
@@ -163,6 +168,10 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
         <property name="connectTimeout" value="${ftp.connect_timeout.2}"/>
         <property name="noopInterval" value="${ftp.noop_interval.2}"/>
         <property name="bufferSize" value="${ftp.buffer_size.2}"/>
+        <property name="temporaryFileDirectoryPath" value="${ftp.temporary_file_directory_path.2}"/>
+        <property name="temporaryFilePrefix" value="${ftp.temporary_file_prefix.2}"/>
+        <property name="temporaryFileSuffix" value="${ftp.temporary_file_suffix.2}"/>
+        <property name="fileCopyMemoryBufferSize" value="${ftp.file_copy_memory_buffer_size.2}"/>
     </bean>
     <bean name="config2" factory-bean="configBuilder2" factory-method="build"/>
     <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">

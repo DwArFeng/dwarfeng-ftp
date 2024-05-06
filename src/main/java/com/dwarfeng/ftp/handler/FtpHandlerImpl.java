@@ -19,6 +19,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
@@ -70,7 +72,10 @@ public class FtpHandlerImpl implements FtpHandler {
                 scheduler,
                 new FtpConfig(
                         ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval,
-                        FtpConfig.Builder.DEFAULT_BUFFER_SIZE
+                        FtpConfig.Builder.DEFAULT_BUFFER_SIZE, FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_DIRECTORY_PATH,
+                        FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_PREFIX,
+                        FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_SUFFIX,
+                        FtpConfig.Builder.DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE
                 )
         );
     }
@@ -87,7 +92,10 @@ public class FtpHandlerImpl implements FtpHandler {
                 scheduler,
                 new FtpConfig(
                         ftpHost, ftpPort, ftpUserName, ftpPassword, serverCharset, connectTimeout, noopInterval,
-                        bufferSize
+                        bufferSize, FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_DIRECTORY_PATH,
+                        FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_PREFIX,
+                        FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_SUFFIX,
+                        FtpConfig.Builder.DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE
                 )
         );
     }
@@ -953,6 +961,81 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @Override
+    @BehaviorAnalyse
+    public void copyFile(
+            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
+            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+    ) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
+            internalCopyFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    public void copyFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+            throws HandlerException {
+        lock.lock();
+        try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(oldFileLocation);
+            FtpFileLocationUtil.checkAsFile(neoFileLocation);
+            // 展开参数。
+            String[] oldFilePaths = oldFileLocation.getFilePaths();
+            String oldFileName = oldFileLocation.getFileName();
+            String[] neoFilePaths = neoFileLocation.getFilePaths();
+            String neoFileName = neoFileLocation.getFileName();
+            // 执行操作。
+            internalCopyFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void internalCopyFile(
+            String[] oldFilePaths, String oldFileName, String[] neoFilePaths, String neoFileName
+    ) throws Exception {
+        // 新建文件复制临时存储。
+        FileCopyTemporaryStorage temporaryStorage = new FileCopyTemporaryStorage(
+                config.getFileCopyMemoryBufferSize(), config.getTemporaryFileDirectoryPath(),
+                config.getTemporaryFilePrefix(), config.getTemporaryFileSuffix()
+        );
+        // 读旧文件。
+        try (OutputStream out = temporaryStorage.openOutputStream()) {
+            ensureStatus();
+            enterDirection(oldFilePaths);
+            checkPositiveCompletion();
+            if (!ftpClient.retrieveFile(oldFileName, out)) {
+                throw new FtpFileRetrieveException(resolveAbsolutePath(oldFilePaths, oldFileName));
+            }
+            checkPositiveCompletion();
+        }
+        // 写新文件。
+        try (InputStream in = temporaryStorage.openInputStream()) {
+            ensureStatus();
+            enterDirection(neoFilePaths);
+            checkPositiveCompletion();
+            if (!ftpClient.storeFile(neoFileName, in)) {
+                throw new FtpFileStoreException(resolveAbsolutePath(neoFilePaths, neoFileName));
+            }
+            checkPositiveCompletion();
+        }
+        // 释放资源。
+        temporaryStorage.dispose();
+    }
+
     private void clearSingleFrame(String[] filePaths, DirectoryClearFrame frame, Stack<DirectoryClearFrame> frameStack)
             throws Exception {
         // 展开参数。
@@ -1151,6 +1234,328 @@ public class FtpHandlerImpl implements FtpHandler {
                     "filePaths=" + Arrays.toString(filePaths) +
                     ", remainingFiles=" + remainingFiles +
                     '}';
+        }
+    }
+
+    private static class FileCopyTemporaryStorage {
+
+        public byte[] memoryBuffer;
+        public File fileBuffer;
+
+        public int memoryBufferActualLength = 0;
+        public boolean fileBufferUsed = false;
+
+        private FileCopyTemporaryStorage(
+                int memoryBufferMaxSize, String temporaryFileDirectoryPath, String temporaryFilePrefix,
+                String temporaryFileSuffix
+        ) {
+            this.memoryBuffer = new byte[memoryBufferMaxSize];
+            this.fileBuffer = new File(
+                    temporaryFileDirectoryPath, temporaryFilePrefix + UUID.randomUUID() + temporaryFileSuffix
+            );
+            fileBuffer.deleteOnExit();
+        }
+
+        public InputStream openInputStream() {
+            return new FileCopyTemporaryStorageInputStream(this);
+        }
+
+        public OutputStream openOutputStream() {
+            return new FileCopyTemporaryStorageOutputStream(this);
+        }
+
+        public void dispose() {
+            // 释放内存缓冲区。
+            memoryBufferActualLength = 0;
+            memoryBuffer = null;
+            // 删除文件缓冲区。
+            fileBufferUsed = false;
+            if (Objects.nonNull(fileBuffer) && fileBuffer.exists()) {
+                if (!fileBuffer.delete()) {
+                    LOGGER.warn("删除文件缓冲区失败: {}", fileBuffer.getAbsolutePath());
+                }
+                fileBuffer = null;
+            }
+        }
+    }
+
+    private static class FileCopyTemporaryStorageInputStream extends InputStream {
+
+        private final FileCopyTemporaryStorage temporaryStorage;
+
+        private int memoryBufferAnchorIndex = 0;
+        private InputStream fileBufferInputStream;
+
+        public FileCopyTemporaryStorageInputStream(FileCopyTemporaryStorage temporaryStorage) {
+            this.temporaryStorage = temporaryStorage;
+        }
+
+        @Override
+        public int available() throws IOException {
+            // 如果 temporaryStorage.memoryBuffer 中没有数据了：
+            if (memoryBufferAnchorIndex >= temporaryStorage.memoryBufferActualLength) {
+                // 如果 fileBuffer 已经被使用，则直接返回 fileBufferInputStream 的 available 方法的返回值。
+                if (temporaryStorage.fileBufferUsed) {
+                    mayOpenFileBufferInputStream();
+                    return fileBufferInputStream.available();
+                }
+                // 否则，返回 0。
+                return 0;
+            }
+            // 如果 temporaryStorage.memoryBuffer 中还有数据：
+            // 计算剩余数据长度。
+            int memoryBufferRemainingLength = temporaryStorage.memoryBufferActualLength - memoryBufferAnchorIndex;
+            // 如果 fileBuffer 已经被使用，则返回 fileBuffer 的可用长度 + temporaryStorage.memoryBuffer 的剩余长度。
+            if (temporaryStorage.fileBufferUsed) {
+                mayOpenFileBufferInputStream();
+                return fileBufferInputStream.available() + memoryBufferRemainingLength;
+            }
+            // 如果 fileBuffer 没有被使用，则返回 temporaryStorage.memoryBuffer 的剩余长度。
+            return memoryBufferRemainingLength;
+        }
+
+        @Override
+        public int read(@Nonnull byte[] b, int off, int len) throws IOException {
+            return internalRead(b, off, len);
+        }
+
+        @Override
+        public int read(@Nonnull byte[] b) throws IOException {
+            return internalRead(b, 0, b.length);
+        }
+
+        private int internalRead(byte[] b, int i, int len) throws IOException {
+            // 如果 temporaryStorage.memoryBuffer 中没有数据了：
+            if (memoryBufferAnchorIndex >= temporaryStorage.memoryBufferActualLength) {
+                // 如果 fileBuffer 已经被使用，则直接从 fileBuffer 读取。
+                if (temporaryStorage.fileBufferUsed) {
+                    mayOpenFileBufferInputStream();
+                    return fileBufferInputStream.read(b, i, len);
+                }
+                // 否则，读取结束。
+                return -1;
+            }
+            // 如果 temporaryStorage.memoryBuffer 中还有数据：
+            // 计算剩余数据长度。
+            int memoryBufferRemainingLength = temporaryStorage.memoryBufferActualLength - memoryBufferAnchorIndex;
+            // 如果剩余数据长度大于等于 len，则直接从 temporaryStorage.memoryBuffer 读取。
+            if (memoryBufferRemainingLength >= len) {
+                System.arraycopy(temporaryStorage.memoryBuffer, memoryBufferAnchorIndex, b, i, len);
+                memoryBufferAnchorIndex += len;
+                return len;
+            }
+            // 如果剩余长度小于 len：
+            // 如果 fileBuffer 已经被使用：
+            if (temporaryStorage.fileBufferUsed) {
+                // 将 temporaryStorage.memoryBuffer 中的数据读取完毕，之后再从 fileBuffer 读取剩余部分。
+                System.arraycopy(
+                        temporaryStorage.memoryBuffer, memoryBufferAnchorIndex, b, i, memoryBufferRemainingLength
+                );
+                memoryBufferAnchorIndex = temporaryStorage.memoryBufferActualLength;
+                mayOpenFileBufferInputStream();
+                return memoryBufferRemainingLength + fileBufferInputStream.read(
+                        b, i + memoryBufferRemainingLength, len - memoryBufferRemainingLength
+                );
+            }
+            // 如果 fileBuffer 没有被使用，则直接从 temporaryStorage.memoryBuffer 读取剩余部分，返回真实的读取长度。
+            System.arraycopy(
+                    temporaryStorage.memoryBuffer, memoryBufferAnchorIndex, b, i, memoryBufferRemainingLength
+            );
+            memoryBufferAnchorIndex = temporaryStorage.memoryBufferActualLength;
+            return memoryBufferRemainingLength;
+        }
+
+        @Override
+        public int read() throws IOException {
+            // 如果 temporaryStorage.memoryBuffer 中没有数据了：
+            if (memoryBufferAnchorIndex >= temporaryStorage.memoryBufferActualLength) {
+                // 如果 fileBuffer 已经被使用，则直接从 fileBuffer 读取。
+                if (temporaryStorage.fileBufferUsed) {
+                    mayOpenFileBufferInputStream();
+                    return fileBufferInputStream.read();
+                }
+                // 否则，读取结束。
+                return -1;
+            }
+            // 如果 temporaryStorage.memoryBuffer 中还有数据：
+            return temporaryStorage.memoryBuffer[memoryBufferAnchorIndex++] & 0xFF;
+        }
+
+        @Override
+        public long skip(long n) throws IOException {
+            // 如果 temporaryStorage.memoryBuffer 中没有数据了：
+            if (memoryBufferAnchorIndex >= temporaryStorage.memoryBufferActualLength) {
+                // 如果 fileBuffer 已经被使用，则直接从 fileBuffer 跳过。
+                if (temporaryStorage.fileBufferUsed) {
+                    mayOpenFileBufferInputStream();
+                    return fileBufferInputStream.skip(n);
+                }
+                // 否则，跳过结束。
+                return 0;
+            }
+            // 如果 temporaryStorage.memoryBuffer 中还有数据：
+            // 计算剩余数据长度。
+            int memoryBufferRemainingLength = temporaryStorage.memoryBufferActualLength - memoryBufferAnchorIndex;
+            // 如果剩余数据长度大于等于 n，则直接从 temporaryStorage.memoryBuffer 跳过。
+            if (memoryBufferRemainingLength >= n) {
+                memoryBufferAnchorIndex += (int) n;
+                return n;
+            }
+            // 如果剩余长度小于 n：
+            // 如果 fileBuffer 已经被使用：
+            if (temporaryStorage.fileBufferUsed) {
+                // 将 temporaryStorage.memoryBuffer 中的数据跳过完毕，之后再从 fileBuffer 跳过剩余部分。
+                memoryBufferAnchorIndex = temporaryStorage.memoryBufferActualLength;
+                mayOpenFileBufferInputStream();
+                return memoryBufferRemainingLength + fileBufferInputStream.skip(n - memoryBufferRemainingLength);
+            }
+            // 如果 fileBuffer 没有被使用，则直接从 temporaryStorage.memoryBuffer 跳过剩余部分，返回真实的跳过长度。
+            memoryBufferAnchorIndex = temporaryStorage.memoryBufferActualLength;
+            return memoryBufferRemainingLength;
+        }
+
+        @Override
+        public void close() throws IOException {
+            // 根据情况关闭文件缓冲区输入流。
+            try {
+                mayCloseFileBufferInputStream();
+            } catch (Exception e) {
+                LOGGER.debug("关闭文件缓冲区输入流时发生异常, 将抛出异常...");
+                throw new IOException("关闭文件缓冲区输入流时发生异常", e);
+            }
+        }
+
+        private void mayOpenFileBufferInputStream() throws IOException {
+            if (Objects.nonNull(fileBufferInputStream)) {
+                return;
+            }
+            fileBufferInputStream = Files.newInputStream(
+                    temporaryStorage.fileBuffer.toPath(), StandardOpenOption.CREATE, StandardOpenOption.READ
+            );
+        }
+
+        private void mayCloseFileBufferInputStream() throws Exception {
+            if (Objects.isNull(fileBufferInputStream)) {
+                return;
+            }
+            fileBufferInputStream.close();
+            fileBufferInputStream = null;
+        }
+    }
+
+    private static class FileCopyTemporaryStorageOutputStream extends OutputStream {
+
+        private final FileCopyTemporaryStorage temporaryStorage;
+
+        private OutputStream fileBufferOutputStream;
+
+        public FileCopyTemporaryStorageOutputStream(FileCopyTemporaryStorage temporaryStorage) {
+            this.temporaryStorage = temporaryStorage;
+        }
+
+        @Override
+        public void write(@Nonnull byte[] b, int off, int len) throws IOException {
+            internalWrite(b, off, len);
+        }
+
+        @Override
+        public void write(@Nonnull byte[] b) throws IOException {
+            internalWrite(b, 0, b.length);
+        }
+
+        private void internalWrite(byte[] b, int off, int len) throws IOException {
+            // 特殊值判断：如果 len 为 0，则直接返回。
+            if (len == 0) {
+                return;
+            }
+            // 如果 temporaryStorage.memoryBuffer 已经被写满了：
+            if (temporaryStorage.memoryBufferActualLength >= temporaryStorage.memoryBuffer.length) {
+                // 置位 temporaryStorage.fileBufferUsed 标志。
+                temporaryStorage.fileBufferUsed = true;
+                // 将数据写入 fileBuffer。
+                mayOpenFileBufferOutputStream();
+                fileBufferOutputStream.write(b, off, len);
+                return;
+            }
+            // 如果 temporaryStorage.memoryBuffer 还有剩余空间：
+            // 计算 temporaryStorage.memoryBuffer 剩余空间。
+            int memoryBufferRemainingLength =
+                    temporaryStorage.memoryBuffer.length - temporaryStorage.memoryBufferActualLength;
+            // 如果剩余空间大于等于 len，则直接写入 temporaryStorage.memoryBuffer。
+            if (memoryBufferRemainingLength >= len) {
+                System.arraycopy(
+                        b, off, temporaryStorage.memoryBuffer, temporaryStorage.memoryBufferActualLength, len
+                );
+                temporaryStorage.memoryBufferActualLength += len;
+                return;
+            }
+            // 如果剩余空间小于 len：
+            // 先将 temporaryStorage.memoryBuffer 写满。
+            System.arraycopy(
+                    b, off, temporaryStorage.memoryBuffer, temporaryStorage.memoryBufferActualLength,
+                    memoryBufferRemainingLength
+            );
+            temporaryStorage.memoryBufferActualLength = temporaryStorage.memoryBuffer.length;
+            // 置位 temporaryStorage.fileBufferUsed 标志。
+            temporaryStorage.fileBufferUsed = true;
+            // 将剩余数据写入 fileBuffer。
+            mayOpenFileBufferOutputStream();
+            fileBufferOutputStream.write(b, off + memoryBufferRemainingLength, len - memoryBufferRemainingLength);
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            // 如果 temporaryStorage.memoryBuffer 已经被写满了：
+            if (temporaryStorage.memoryBufferActualLength >= temporaryStorage.memoryBuffer.length) {
+                // 置位 temporaryStorage.fileBufferUsed 标志。
+                temporaryStorage.fileBufferUsed = true;
+                // 将数据写入 fileBuffer。
+                mayOpenFileBufferOutputStream();
+                fileBufferOutputStream.write(b);
+                return;
+            }
+            // 如果 temporaryStorage.memoryBuffer 还有剩余空间：
+            temporaryStorage.memoryBuffer[temporaryStorage.memoryBufferActualLength] = (byte) b;
+        }
+
+        @Override
+        public void flush() throws IOException {
+            // 如果没有使用 fileBuffer，则直接返回。
+            if (!temporaryStorage.fileBufferUsed) {
+                return;
+            }
+            // 如果使用了 fileBuffer，则 flush fileBuffer。
+            mayOpenFileBufferOutputStream();
+            fileBufferOutputStream.flush();
+        }
+
+        @Override
+        public void close() throws IOException {
+            // 根据情况关闭文件缓冲区输出流。
+            try {
+                mayCloseFileBufferOutputStream();
+            } catch (Exception e) {
+                LOGGER.debug("关闭文件缓冲区输出流时发生异常, 将抛出异常...");
+                throw new IOException("关闭文件缓冲区输出流时发生异常", e);
+            }
+        }
+
+        private void mayOpenFileBufferOutputStream() throws IOException {
+            if (Objects.nonNull(fileBufferOutputStream)) {
+                return;
+            }
+            fileBufferOutputStream = Files.newOutputStream(
+                    temporaryStorage.fileBuffer.toPath(), StandardOpenOption.CREATE, StandardOpenOption.WRITE,
+                    StandardOpenOption.TRUNCATE_EXISTING
+            );
+        }
+
+        private void mayCloseFileBufferOutputStream() throws IOException {
+            if (Objects.isNull(fileBufferOutputStream)) {
+                return;
+            }
+            fileBufferOutputStream.close();
+            fileBufferOutputStream = null;
         }
     }
 
