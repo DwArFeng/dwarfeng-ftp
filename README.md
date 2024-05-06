@@ -128,6 +128,8 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
+<!--suppress SpringBeanConstructorArgInspection, SpringXmlModelInspection, SpringPlaceholdersInspection -->
 <beans
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.springframework.org/schema/beans"
@@ -135,32 +137,34 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
         http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
     <!-- 第一个实例 -->
-    <bean name="config1" class="com.dwarfeng.ftp.struct.FtpConfig">
-        <constructor-arg name="host" ref="${ftp.host.1}"/>
-        <constructor-arg name="port" ref="${ftp.port.1}"/>
-        <constructor-arg name="username" ref="${ftp.username.1}"/>
-        <constructor-arg name="password" ref="${ftp.password.1}"/>
-        <constructor-arg name="serverCharset" ref="${ftp.server_charset.1}"/>
-        <constructor-arg name="connectTimeout" ref="${ftp.connect_timeout.1}"/>
-        <constructor-arg name="noopInterval" ref="${ftp.noop_interval.1}"/>
-        <constructor-arg name="bufferSize" ref="${ftp.buffer_size.1}"/>
+    <bean name="configBuilder1" class="com.dwarfeng.ftp.struct.FtpConfig.Builder">
+        <constructor-arg name="host" value="${ftp.host.1}"/>
+        <constructor-arg name="username" value="${ftp.username.1}"/>
+        <constructor-arg name="password" value="${ftp.password.1}"/>
+        <property name="port" value="${ftp.port.1}"/>
+        <property name="serverCharset" value="${ftp.server_charset.1}"/>
+        <property name="connectTimeout" value="${ftp.connect_timeout.1}"/>
+        <property name="noopInterval" value="${ftp.noop_interval.1}"/>
+        <property name="bufferSize" value="${ftp.buffer_size.1}"/>
     </bean>
+    <bean name="config1" factory-bean="configBuilder1" factory-method="build"/>
     <bean name="instance1" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
         <constructor-arg name="scheduler" ref="scheduler"/>
         <constructor-arg name="config" ref="config1"/>
     </bean>
 
     <!-- 第二个实例 -->
-    <bean name="config2" class="com.dwarfeng.ftp.struct.FtpConfig">
-        <constructor-arg name="host" ref="${ftp.host.2}"/>
-        <constructor-arg name="port" ref="${ftp.port.2}"/>
-        <constructor-arg name="username" ref="${ftp.username.2}"/>
-        <constructor-arg name="password" ref="${ftp.password.2}"/>
-        <constructor-arg name="serverCharset" ref="${ftp.server_charset.2}"/>
-        <constructor-arg name="connectTimeout" ref="${ftp.connect_timeout.2}"/>
-        <constructor-arg name="noopInterval" ref="${ftp.noop_interval.2}"/>
-        <constructor-arg name="bufferSize" ref="${ftp.buffer_size.2}"/>
+    <bean name="configBuilder2" class="com.dwarfeng.ftp.struct.FtpConfig.Builder">
+        <constructor-arg name="host" value="${ftp.host.2}"/>
+        <constructor-arg name="username" value="${ftp.username.2}"/>
+        <constructor-arg name="password" value="${ftp.password.2}"/>
+        <property name="port" value="${ftp.port.2}"/>
+        <property name="serverCharset" value="${ftp.server_charset.2}"/>
+        <property name="connectTimeout" value="${ftp.connect_timeout.2}"/>
+        <property name="noopInterval" value="${ftp.noop_interval.2}"/>
+        <property name="bufferSize" value="${ftp.buffer_size.2}"/>
     </bean>
+    <bean name="config2" factory-bean="configBuilder2" factory-method="build"/>
     <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
         <constructor-arg name="scheduler" ref="scheduler"/>
         <constructor-arg name="config" ref="config2"/>

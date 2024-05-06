@@ -4,6 +4,8 @@
 
 #### 功能构建
 
+- 优化 `README.md` 中的内容。
+
 - 增加异常类型及其相关判断逻辑。
   - com.dwarfeng.ftp.exception.FtpHandlerStoppedException。
 
