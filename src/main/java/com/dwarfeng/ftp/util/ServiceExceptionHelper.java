@@ -37,6 +37,7 @@ public final class ServiceExceptionHelper {
         map.put(FtpFileDeleteException.class, ServiceExceptionCodes.FTP_FILE_DELETE_FAILED);
         map.put(FtpFileNotExistsException.class, ServiceExceptionCodes.FTP_FILE_NOT_EXISTS);
         map.put(FtpStreamOpenException.class, ServiceExceptionCodes.FTP_STREAM_OPEN_FAILED);
+        map.put(FtpHandlerStoppedException.class, ServiceExceptionCodes.FTP_HANDLER_STOPPED);
 
         return map;
     }

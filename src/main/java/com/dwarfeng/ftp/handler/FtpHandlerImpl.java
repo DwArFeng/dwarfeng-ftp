@@ -211,6 +211,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public boolean existsFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             return internalExistsFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -224,6 +226,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public boolean existsFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(fileLocation);
             // 展开参数。
@@ -254,6 +258,8 @@ public class FtpHandlerImpl implements FtpHandler {
     ) throws FtpException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             internalStoreFile(filePaths, fileName, content);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -268,6 +274,8 @@ public class FtpHandlerImpl implements FtpHandler {
             throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(fileLocation);
             // 展开参数。
@@ -294,6 +302,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public byte[] retrieveFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             return internalRetrieveFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -308,6 +318,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public byte[] retrieveFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(fileLocation);
             // 展开参数。
@@ -337,6 +349,8 @@ public class FtpHandlerImpl implements FtpHandler {
     ) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             internalStoreFileByStream(filePaths, fileName, in);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -352,6 +366,8 @@ public class FtpHandlerImpl implements FtpHandler {
     ) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(fileLocation);
             // 展开参数。
@@ -383,6 +399,8 @@ public class FtpHandlerImpl implements FtpHandler {
     ) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             internalRetrieveFileByStream(filePaths, fileName, out);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -398,6 +416,8 @@ public class FtpHandlerImpl implements FtpHandler {
     ) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(fileLocation);
             // 展开参数。
@@ -427,6 +447,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public void deleteFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             internalDeleteFile(filePaths, fileName);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -440,6 +462,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public void deleteFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(fileLocation);
             // 展开参数。
@@ -469,6 +493,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public void removeDirectory(@Nonnull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             internalRemoveDirectory(filePaths);
         } catch (HandlerException e) {
             throw e;
@@ -484,6 +510,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public void removeDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 展开参数。
             String[] filePaths = fileLocation.getFilePaths();
             // 执行操作。
@@ -525,6 +553,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public FtpFile[] listFiles(@Nonnull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             return internalListFile(filePaths);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -539,6 +569,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public FtpFile[] listFiles(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 展开参数。
             String[] filePaths = fileLocation.getFilePaths();
             // 执行操作，并返回结果。
@@ -595,6 +627,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public String[] listFileNames(@Nonnull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             return internalListFileNames(filePaths);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -609,6 +643,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public String[] listFileNames(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 展开参数。
             String[] filePaths = fileLocation.getFilePaths();
             // 执行操作，并返回结果。
@@ -660,6 +696,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public InputStream openInputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             return internalOpenInputStream(filePaths, fileName);
         } catch (Exception e) {
             lock.unlock();
@@ -676,6 +714,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public InputStream openInputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(fileLocation);
             // 展开参数。
@@ -727,6 +767,8 @@ public class FtpHandlerImpl implements FtpHandler {
             throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             return internalOpenOutputStream(filePaths, fileName);
         } catch (Exception e) {
             lock.unlock();
@@ -741,6 +783,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public OutputStream openOutputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(fileLocation);
             // 展开参数。
@@ -778,6 +822,8 @@ public class FtpHandlerImpl implements FtpHandler {
     ) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -793,6 +839,8 @@ public class FtpHandlerImpl implements FtpHandler {
             throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 校验参数。
             FtpFileLocationUtil.checkAsFile(oldFileLocation);
             FtpFileLocationUtil.checkAsFile(neoFileLocation);
@@ -839,6 +887,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public void clearDirectory(@Nonnull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             internalClearDirectory(filePaths);
         } catch (Exception e) {
             throw new FtpException(e);
@@ -852,6 +902,8 @@ public class FtpHandlerImpl implements FtpHandler {
     public void clearDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
             // 展开参数。
             String[] filePaths = fileLocation.getFilePaths();
             // 执行操作。
@@ -1057,6 +1109,12 @@ public class FtpHandlerImpl implements FtpHandler {
             throw new FtpLoginException();
         } else {
             LOGGER.info("FTP连接成功");
+        }
+    }
+
+    private void makeSureHandlerStart() throws HandlerException {
+        if (!startedFlag) {
+            throw new FtpHandlerStoppedException();
         }
     }
 

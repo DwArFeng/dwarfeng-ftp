@@ -35,6 +35,12 @@ public final class ServiceExceptionCodes {
     // 流异常。
     public static final ServiceException.Code FTP_STREAM_OPEN_FAILED =
             new ServiceException.Code(offset(7), "ftp stream open failed");
+    // 处理器异常。
+    /**
+     * @since 1.2.0
+     */
+    public static final ServiceException.Code FTP_HANDLER_STOPPED =
+            new ServiceException.Code(offset(9), "ftp handler stopped");
 
     private static int offset(int i) {
         return EXCEPTION_CODE_OFFSET + i;
@@ -68,6 +74,7 @@ public final class ServiceExceptionCodes {
         FTP_FILE_DELETE_FAILED.setCode(offset(6));
         FTP_FILE_NOT_EXISTS.setCode(offset(8));
         FTP_STREAM_OPEN_FAILED.setCode(offset(7));
+        FTP_HANDLER_STOPPED.setCode(offset(9));
     }
 
     private ServiceExceptionCodes() {
