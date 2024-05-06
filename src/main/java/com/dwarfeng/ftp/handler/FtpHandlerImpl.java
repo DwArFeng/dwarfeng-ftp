@@ -826,6 +826,7 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     @BehaviorAnalyse
     public void renameFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
@@ -1080,6 +1081,7 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     @BehaviorAnalyse
     public void moveFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)

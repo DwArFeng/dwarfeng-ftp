@@ -43,7 +43,7 @@ public final class FtpConfigUtil {
      *
      * @param password 指定的密码。
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "EmptyMethod"})
     public static void checkPassword(String password) {
         // 无论密码是否为 null，都不会抛出异常。
     }
@@ -100,7 +100,7 @@ public final class FtpConfigUtil {
      *
      * @param bufferSize 指定的缓冲区大小。
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "EmptyMethod"})
     public static void checkBufferSize(int bufferSize) {
         // bufferSize 允许为负数，因为负数表示使用系统默认值。
         // 因此无论如何都不会抛出异常。
