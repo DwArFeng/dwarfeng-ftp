@@ -810,7 +810,6 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @Override
     @BehaviorAnalyse
-    @SkipRecord
     public void renameFile(
             @Nonnull String[] oldFilePaths, @Nonnull String oldFileName, @Nonnull String[] neoFilePaths,
             @Nonnull String neoFileName
@@ -829,7 +828,6 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @Override
     @BehaviorAnalyse
-    @SkipRecord
     public void renameFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
             throws HandlerException {
         lock.lock();
