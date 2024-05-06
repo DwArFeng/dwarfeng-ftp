@@ -512,4 +512,35 @@ public interface FtpHandler extends StartableHandler {
      */
     void copyFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
             throws HandlerException;
+
+    /**
+     * 描述文件。
+     *
+     * <p>
+     * 该功能不是 FTP 协议的标准功能，其实现需要先列出目标文件所在目录下的所有文件，再查找目标文件。
+     * 该方法的执行时间与目录下的文件数量呈正相关。尽量不要在大目录上调用该方法。
+     *
+     * @param filePaths 目录路径。<br>
+     *                  路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
+     * @param fileName  文件的名称。
+     * @return 指定文件对应的文件对象。
+     * @throws HandlerException 处理器异常。
+     * @since 1.2.0
+     */
+    FtpFile descFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException;
+
+    /**
+     * 描述文件。
+     *
+     * <p>
+     * 该功能不是 FTP 协议的标准功能，其实现需要先列出目标文件所在目录下的所有文件，再查找目标文件。
+     * 该方法的执行时间与目录下的文件数量呈正相关。尽量不要在大目录上调用该方法。
+     *
+     * @param fileLocation 文件位置。
+     * @return 指定文件对应的文件对象。
+     * @throws HandlerException 处理器异常。
+     * @see #descFile(String[], String)
+     * @since 1.2.0
+     */
+    FtpFile descFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
 }

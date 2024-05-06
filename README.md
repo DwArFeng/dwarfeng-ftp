@@ -25,6 +25,7 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 | RenameFileExample     | 列出文件示例 |
 | ClearDirectoryExample | 清空目录示例 |
 | CopyFileExample       | 复制文件示例 |
+| DescFileExample       | 描述文件示例 |
 
 ## 测试
 

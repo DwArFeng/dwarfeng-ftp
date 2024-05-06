@@ -611,29 +611,7 @@ public class FtpHandlerImpl implements FtpHandler {
         FtpFile[] result = new FtpFile[ftpFiles.length];
         for (int i = 0; i < ftpFiles.length; i++) {
             FTPFile ftpFile = ftpFiles[i];
-            // 定义变量。
-            String name;
-            int type;
-            long size;
-            // 映射变量。
-            name = ftpFile.getName();
-            switch (ftpFile.getType()) {
-                case FTPFile.FILE_TYPE:
-                    type = Constants.FTP_FILE_TYPE_FILE;
-                    break;
-                case FTPFile.DIRECTORY_TYPE:
-                    type = Constants.FTP_FILE_TYPE_DIRECTORY;
-                    break;
-                case FTPFile.SYMBOLIC_LINK_TYPE:
-                    type = Constants.FTP_FILE_TYPE_SYMBOLIC_LINK;
-                    break;
-                default:
-                    type = Constants.FTP_FILE_TYPE_UNKNOWN;
-                    break;
-            }
-            size = ftpFile.getSize();
-            // 设置结果。
-            result[i] = new FtpFile(name, type, size);
+            result[i] = apacheFtpFileToDwarfengFtpFile(ftpFile);
         }
         return result;
     }
@@ -1036,6 +1014,56 @@ public class FtpHandlerImpl implements FtpHandler {
         temporaryStorage.dispose();
     }
 
+    @Override
+    @BehaviorAnalyse
+    public FtpFile descFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
+            return internalDescFile(filePaths, fileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    public FtpFile descFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(fileLocation);
+            // 展开参数。
+            String[] filePaths = fileLocation.getFilePaths();
+            String fileName = fileLocation.getFileName();
+            // 执行操作，并返回结果。
+            return internalDescFile(filePaths, fileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private FtpFile internalDescFile(String[] filePaths, String fileName) throws Exception {
+        ensureStatus();
+        enterDirection(filePaths);
+        checkPositiveCompletion();
+        FTPFile ftpFile = Arrays.stream(
+                ftpClient.listFiles(null, f -> f.getName().equals(fileName))
+        ).findFirst().orElse(null);
+        if (Objects.isNull(ftpFile)) {
+            throw new FtpFileNotExistsException(resolveAbsolutePath(filePaths, fileName));
+        }
+        checkPositiveCompletion();
+        return apacheFtpFileToDwarfengFtpFile(ftpFile);
+    }
+
     private void clearSingleFrame(String[] filePaths, DirectoryClearFrame frame, Stack<DirectoryClearFrame> frameStack)
             throws Exception {
         // 展开参数。
@@ -1107,6 +1135,36 @@ public class FtpHandlerImpl implements FtpHandler {
             builder.append(fileName);
         }
         return builder.toString();
+    }
+
+    private FtpFile apacheFtpFileToDwarfengFtpFile(FTPFile ftpFile) {
+        // 特殊值判断。
+        if (Objects.isNull(ftpFile)) {
+            return null;
+        }
+        // 定义变量。
+        String name;
+        int type;
+        long size;
+        // 映射变量。
+        name = ftpFile.getName();
+        switch (ftpFile.getType()) {
+            case FTPFile.FILE_TYPE:
+                type = Constants.FTP_FILE_TYPE_FILE;
+                break;
+            case FTPFile.DIRECTORY_TYPE:
+                type = Constants.FTP_FILE_TYPE_DIRECTORY;
+                break;
+            case FTPFile.SYMBOLIC_LINK_TYPE:
+                type = Constants.FTP_FILE_TYPE_SYMBOLIC_LINK;
+                break;
+            default:
+                type = Constants.FTP_FILE_TYPE_UNKNOWN;
+                break;
+        }
+        size = ftpFile.getSize();
+        // 设置结果。
+        return new FtpFile(name, type, size);
     }
 
     /**
