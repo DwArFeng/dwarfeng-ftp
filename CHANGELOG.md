@@ -26,6 +26,7 @@
   - FtpHandler.clearDirectory。
   - FtpHandler.copyFile。
   - FtpHandler.descFile。
+  - FtpHandler.moveFile。
 
 - 优化部分类的文档注释。
   - com.dwarfeng.ftp.handler.FtpHandler。

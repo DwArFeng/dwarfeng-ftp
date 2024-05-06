@@ -1062,6 +1062,49 @@ public class FtpHandlerImpl implements FtpHandler {
         return apacheFtpFileToDwarfengFtpFile(ftpFile);
     }
 
+    @Override
+    @BehaviorAnalyse
+    public void moveFile(
+            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName, @Nonnull String[] neoFilePaths,
+            @Nonnull String neoFileName
+    ) throws HandlerException {
+        lock.lock();
+        try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
+            internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    @BehaviorAnalyse
+    public void moveFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+            throws HandlerException {
+        lock.lock();
+        try {
+            // 确认处理器已经启动。
+            makeSureHandlerStart();
+            // 校验参数。
+            FtpFileLocationUtil.checkAsFile(oldFileLocation);
+            FtpFileLocationUtil.checkAsFile(neoFileLocation);
+            // 展开参数。
+            String[] oldFilePaths = oldFileLocation.getFilePaths();
+            String oldFileName = oldFileLocation.getFileName();
+            String[] neoFilePaths = neoFileLocation.getFilePaths();
+            String neoFileName = neoFileLocation.getFileName();
+            // 执行操作。
+            internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
+        } catch (Exception e) {
+            throw new FtpException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
     private void clearSingleFrame(String[] filePaths, DirectoryClearFrame frame, Stack<DirectoryClearFrame> frameStack)
             throws Exception {
         // 展开参数。

@@ -543,4 +543,43 @@ public interface FtpHandler extends StartableHandler {
      * @since 1.2.0
      */
     FtpFile descFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException;
+
+    /**
+     * 移动文件。
+     *
+     * <p>
+     * 移动文件与重命名文件的作用以及实现是完全一样的。增加该方法是为了满足语义上的需求，以及部分开发人员的使用习惯。
+     *
+     * @param oldFilePaths 旧的目录的路径。<br>
+     *                     路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
+     * @param oldFileName  旧的文件的名称。
+     * @param neoFilePaths 新的目录的路径。<br>
+     *                     路径从根文件出发，一直到达最后一个目录，所有目录按照顺序组成数组。
+     * @param neoFileName  新的文件的名称。
+     * @throws HandlerException 处理器异常。
+     * @since 1.2.0
+     */
+    default void moveFile(
+            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
+            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+    ) throws HandlerException {
+        renameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
+    }
+
+    /**
+     * 移动文件。
+     *
+     * <p>
+     * 移动文件与重命名文件的作用以及实现是完全一样的。增加该方法是为了满足语义上的需求，以及部分开发人员的使用习惯。
+     *
+     * @param oldFileLocation 旧的文件位置。
+     * @param neoFileLocation 新的文件位置。
+     * @throws HandlerException 处理器异常。
+     * @see #moveFile(String[], String, String[], String)
+     * @since 1.2.0
+     */
+    default void moveFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+            throws HandlerException {
+        renameFile(oldFileLocation, neoFileLocation);
+    }
 }
