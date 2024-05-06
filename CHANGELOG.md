@@ -1,6 +1,6 @@
 # ChangeLog
 
-### Release_1.2.0_20240430_build_A
+### Release_1.2.0_20240506_build_A
 
 #### 功能构建
 
