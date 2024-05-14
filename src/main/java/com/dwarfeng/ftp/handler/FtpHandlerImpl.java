@@ -1053,13 +1053,9 @@ public class FtpHandlerImpl implements FtpHandler {
         ensureStatus();
         enterDirection(filePaths);
         checkPositiveCompletion();
-        FTPFile ftpFile = Arrays.stream(
-                ftpClient.listFiles(null, f -> f.getName().equals(fileName))
-        ).findFirst().orElse(null);
-        if (Objects.isNull(ftpFile)) {
-            throw new FtpFileNotExistsException(resolveAbsolutePath(filePaths, fileName));
-        }
+        FTPFile[] ftpFiles = ftpClient.listFiles(null, f -> f.getName().equals(fileName));
         checkPositiveCompletion();
+        FTPFile ftpFile = Arrays.stream(ftpFiles).findFirst().orElse(null);
         return apacheFtpFileToDwarfengFtpFile(ftpFile);
     }
 
