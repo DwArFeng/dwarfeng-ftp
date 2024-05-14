@@ -4,7 +4,8 @@
 
 #### 功能构建
 
-- (无)
+- 优化部分类的文档注释。
+  - com.dwarfeng.ftp.handler.FtpHandler。
 
 #### Bug修复
 
