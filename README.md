@@ -17,15 +17,15 @@ Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-
 
 运行 `src/test` 下的示例以观察全部特性。
 
-| 示例类名                  | 说明     |
-|-----------------------|--------|
-| ProcessExample        | 流程示例   |
-| StreamExample         | 流的使用示例 |
-| ListFileExample       | 列出文件示例 |
-| RenameFileExample     | 列出文件示例 |
-| ClearDirectoryExample | 清空目录示例 |
-| CopyFileExample       | 复制文件示例 |
-| DescFileExample       | 描述文件示例 |
+| 示例类名                                           | 说明     |
+|------------------------------------------------|--------|
+| com.dwarfeng.ftp.example.ProcessExample        | 流程示例   |
+| com.dwarfeng.ftp.example.StreamExample         | 流的使用示例 |
+| com.dwarfeng.ftp.example.ListFileExample       | 列出文件示例 |
+| com.dwarfeng.ftp.example.RenameFileExample     | 列出文件示例 |
+| com.dwarfeng.ftp.example.ClearDirectoryExample | 清空目录示例 |
+| com.dwarfeng.ftp.example.CopyFileExample       | 复制文件示例 |
+| com.dwarfeng.ftp.example.DescFileExample       | 描述文件示例 |
 
 ## 测试
 
