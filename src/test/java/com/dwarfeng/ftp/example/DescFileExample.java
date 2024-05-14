@@ -48,24 +48,34 @@ public class DescFileExample {
         System.out.print("按回车键继续...");
         scanner.nextLine();
 
-        // 2. 描述文件及目录。
+        // 2. 描述存在的文件及目录。
         System.out.println();
-        System.out.println("2. 描述文件及目录...");
+        System.out.println("2. 描述存在的文件及目录...");
         FtpFile ftpFile;
         ftpFile = ftpHandler.descFile(new String[]{rootPath}, "comic-girl");
-        System.out.printf("/%s/comic-girl: %s\n", rootPath, ftpFile.toString());
+        System.out.printf("/%s/comic-girl: %s\n", rootPath, ftpFile);
         ftpFile = ftpHandler.descFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg");
-        System.out.printf("/%s/comic-girl/comic-girl.jpg: %s\n", rootPath, ftpFile.toString());
+        System.out.printf("/%s/comic-girl/comic-girl.jpg: %s\n", rootPath, ftpFile);
         ftpFile = ftpHandler.descFile(new String[]{rootPath}, "漫画女孩");
-        System.out.printf("/%s/漫画女孩: %s\n", rootPath, ftpFile.toString());
+        System.out.printf("/%s/漫画女孩: %s\n", rootPath, ftpFile);
         ftpFile = ftpHandler.descFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
-        System.out.printf("/%s/漫画女孩/漫画女孩.jpg: %s\n", rootPath, ftpFile.toString());
+        System.out.printf("/%s/漫画女孩/漫画女孩.jpg: %s\n", rootPath, ftpFile);
         System.out.print("按回车键继续...");
         scanner.nextLine();
 
-        // 3. 文件删除。
+        // 3. 描述不存在的文件及目录。
         System.out.println();
-        System.out.println("3. 文件删除...");
+        System.out.println("3. 描述不存在的文件及目录...");
+        ftpFile = ftpHandler.descFile(new String[]{rootPath}, "何もありません");
+        System.out.printf("/%s/何もありません: %s\n", rootPath, ftpFile);
+        ftpFile = ftpHandler.descFile(new String[]{rootPath}, "何もありません.jpg");
+        System.out.printf("/%s/何もありません.jpg: %s\n", rootPath, ftpFile);
+        System.out.print("按回车键继续...");
+        scanner.nextLine();
+
+        // 4. 文件删除。
+        System.out.println();
+        System.out.println("4. 文件删除...");
         ftpHandler.deleteFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg");
         ftpHandler.deleteFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
         ftpHandler.removeDirectory(new String[]{rootPath, "comic-girl"});
