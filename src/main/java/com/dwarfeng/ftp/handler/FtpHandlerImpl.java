@@ -136,9 +136,6 @@ public class FtpHandlerImpl implements FtpHandler {
             // 设置 FTP 客户端的缓冲区大小。
             ftpClient.setBufferSize(config.getBufferSize());
 
-            // 设置 FTP 服务器为本地被动模式。
-            ftpClient.enterLocalPassiveMode();
-
             // 连接并登录。
             try {
                 connectAndLogin();
