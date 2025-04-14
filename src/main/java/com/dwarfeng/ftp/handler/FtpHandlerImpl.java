@@ -19,8 +19,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
+import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
@@ -75,7 +77,11 @@ public class FtpHandlerImpl implements FtpHandler {
                         FtpConfig.Builder.DEFAULT_BUFFER_SIZE, FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_DIRECTORY_PATH,
                         FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_PREFIX,
                         FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_SUFFIX,
-                        FtpConfig.Builder.DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE
+                        FtpConfig.Builder.DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE,
+                        FtpConfig.Builder.DEFAULT_DATA_CONNECTION_MODE,
+                        FtpConfig.Builder.DEFAULT_DATA_TIMEOUT,
+                        FtpConfig.Builder.DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_HOST,
+                        FtpConfig.Builder.DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_PORT
                 )
         );
     }
@@ -95,7 +101,11 @@ public class FtpHandlerImpl implements FtpHandler {
                         bufferSize, FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_DIRECTORY_PATH,
                         FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_PREFIX,
                         FtpConfig.Builder.DEFAULT_TEMPORARY_FILE_SUFFIX,
-                        FtpConfig.Builder.DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE
+                        FtpConfig.Builder.DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE,
+                        FtpConfig.Builder.DEFAULT_DATA_CONNECTION_MODE,
+                        FtpConfig.Builder.DEFAULT_DATA_TIMEOUT,
+                        FtpConfig.Builder.DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_HOST,
+                        FtpConfig.Builder.DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_PORT
                 )
         );
     }
@@ -135,6 +145,9 @@ public class FtpHandlerImpl implements FtpHandler {
 
             // 设置 FTP 客户端的缓冲区大小。
             ftpClient.setBufferSize(config.getBufferSize());
+
+            // 设置 FTP 客户端的数据超时时间。
+            ftpClient.setDataTimeout(Duration.ofMillis(config.getDataTimeout()));
 
             // 连接并登录。
             try {
@@ -1285,6 +1298,27 @@ public class FtpHandlerImpl implements FtpHandler {
 
         // 设置用户名和密码
         ftpClient.login(config.getUsername(), config.getPassword());
+
+        // 设置数据连接模式。
+        switch (config.getDataConnectionMode()) {
+            case FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_LOCAL:
+                ftpClient.enterLocalActiveMode();
+                break;
+            case FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_REMOTE:
+                ftpClient.enterRemoteActiveMode(
+                        InetAddress.getByName(config.getActiveRemoteDataConnectionModeServerHost()),
+                        config.getActiveRemoteDataConnectionModeServerPort()
+                );
+                break;
+            case FtpConfig.Builder.DATA_CONNECTION_MODE_PASSIVE_LOCALE:
+                ftpClient.enterLocalPassiveMode();
+                break;
+            case FtpConfig.Builder.DATA_CONNECTION_MODE_PASSIVE_REMOTE:
+                ftpClient.enterRemotePassiveMode();
+                break;
+            default:
+                throw new IllegalArgumentException("不支持的数据连接模式");
+        }
 
         // 设置文件传输为模式为binary。
         ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);

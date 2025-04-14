@@ -1,7 +1,12 @@
 package com.dwarfeng.ftp.util;
 
+import com.dwarfeng.ftp.struct.FtpConfig;
+
 import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * FTP 配置工具类。
@@ -15,6 +20,22 @@ public final class FtpConfigUtil {
      * 最小超时时间。
      */
     private static final int MIN_CONNECT_TIMEOUT = 1000;
+
+    /**
+     * 数据连接模式空间。
+     *
+     * @since 1.3.0
+     */
+    private static final Set<Integer> DATA_CONNECTION_MODE_SPACE;
+
+    static {
+        Set<Integer> DATA_CONNECTION_MODE_SPACE_DEJA_VU = new HashSet<>();
+        DATA_CONNECTION_MODE_SPACE_DEJA_VU.add(FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_LOCAL);
+        DATA_CONNECTION_MODE_SPACE_DEJA_VU.add(FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_REMOTE);
+        DATA_CONNECTION_MODE_SPACE_DEJA_VU.add(FtpConfig.Builder.DATA_CONNECTION_MODE_PASSIVE_LOCALE);
+        DATA_CONNECTION_MODE_SPACE_DEJA_VU.add(FtpConfig.Builder.DATA_CONNECTION_MODE_PASSIVE_REMOTE);
+        DATA_CONNECTION_MODE_SPACE = Collections.unmodifiableSet(DATA_CONNECTION_MODE_SPACE_DEJA_VU);
+    }
 
     /**
      * 检查指定的主机是否合法。
@@ -166,6 +187,67 @@ public final class FtpConfigUtil {
     public static void checkFileCopyMemoryBufferSize(int fileCopyMemoryBufferSize) {
         if (fileCopyMemoryBufferSize <= 0) {
             throw new IllegalArgumentException("文件复制内存缓冲区大小必须大于 0");
+        }
+    }
+
+    /**
+     * 检查指定的数据连接模式是否合法。
+     *
+     * @param dataConnectionMode 指定的数据连接模式。
+     * @since 1.3.0
+     */
+    public static void checkDataConnectionMode(int dataConnectionMode) {
+        if (!DATA_CONNECTION_MODE_SPACE.contains(dataConnectionMode)) {
+            throw new IllegalArgumentException("数据连接模式 " + dataConnectionMode + " 非法");
+        }
+    }
+
+    /**
+     * 检查指定的数据超时时间是否合法。
+     *
+     * @param dataTimeout 指定的数据超时时间。
+     * @since 1.3.0
+     */
+    @SuppressWarnings({"unused", "EmptyMethod"})
+    public static void checkDataTimeout(int dataTimeout) {
+        // dataTimeout 允许为 0 或负数，因为 0 或负数表示用不超时。
+        // 因此无论如何都不会抛出异常。
+    }
+
+    /**
+     * 检查远程主动数据连接模式的服务主机地址是否合法。
+     *
+     * @param activeRemoteDataConnectionModeServerHost 指定的远程主动数据连接模式的服务主机地址。
+     * @param refDataConnectionMode                    参考的指定的数据连接模式。
+     * @since 1.3.0
+     */
+    public static void checkActiveRemoteDataConnectionModeServerHost(
+            String activeRemoteDataConnectionModeServerHost, int refDataConnectionMode
+    ) {
+        // 如果开发的数据连接模式不是主动远程数据连接模式，则直接返回。
+        if (!Objects.equals(refDataConnectionMode, FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_REMOTE)) {
+            return;
+        }
+        if (Objects.isNull(activeRemoteDataConnectionModeServerHost)) {
+            throw new NullPointerException("远程主动数据连接模式下的服务主机地址不能为 null");
+        }
+    }
+
+    /**
+     * 检查远程主动数据连接模式的服务端口是否合法。
+     *
+     * @param activeRemoteDataConnectionModeServerPort 指定的远程主动数据连接模式的服务端口。
+     * @param refDataConnectionMode                    参考的指定的数据连接模式。
+     */
+    public static void checkActiveRemoteDataConnectionModeServerPort(
+            int activeRemoteDataConnectionModeServerPort, int refDataConnectionMode
+    ) {
+        // 如果开发的数据连接模式不是主动远程数据连接模式，则直接返回。
+        if (!Objects.equals(refDataConnectionMode, FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_REMOTE)) {
+            return;
+        }
+        if (activeRemoteDataConnectionModeServerPort < 0 || activeRemoteDataConnectionModeServerPort > 65535) {
+            throw new IllegalArgumentException("远程主动数据连接模式下的服务端口必须在 0 - 65535 之间");
         }
     }
 

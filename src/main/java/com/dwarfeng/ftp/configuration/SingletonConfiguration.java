@@ -25,6 +25,14 @@ public class SingletonConfiguration {
             "#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_TEMPORARY_FILE_SUFFIX}}";
     public static final String SPEL_DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE = "${ftp.file_copy_memory_buffer_size:" +
             "#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE}}";
+    public static final String SPEL_DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_HOST =
+            "${ftp.active_remote_data_connection_mode_server_host:" +
+                    "#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder)" +
+                    ".DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_HOST}}";
+    public static final String SPEL_DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_PORT =
+            "${ftp.active_remote_data_connection_mode_server_port:" +
+                    "#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder)" +
+                    ".DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_PORT}}";
 
     private final ThreadPoolTaskScheduler scheduler;
 
@@ -79,6 +87,32 @@ public class SingletonConfiguration {
     @Value(SPEL_DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE)
     private int fileCopyMemoryBufferSize;
 
+    /**
+     * @since 1.3.0
+     */
+    @Value("${ftp.data_connection_mode:#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_DATA_CONNECTION_MODE}}")
+    private int dataConnectionMode;
+
+    /**
+     * @since 1.3.0
+     */
+    @Value("${ftp.data_timeout:#{T(com.dwarfeng.ftp.struct.FtpConfig$Builder).DEFAULT_DATA_TIMEOUT}}")
+    private int dataTimeout;
+
+    /**
+     * @since 1.3.0
+     */
+    // SPEL 太长，故使用常量缩短长度。
+    @Value(SPEL_DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_HOST)
+    private String activeRemoteDataConnectionModeServerHost;
+
+    /**
+     * @since 1.3.0
+     */
+    // SPEL 太长，故使用常量缩短长度。
+    @Value(SPEL_DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_PORT)
+    private int activeRemoteDataConnectionModeServerPort;
+
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public SingletonConfiguration(ThreadPoolTaskScheduler scheduler) {
         this.scheduler = scheduler;
@@ -88,7 +122,9 @@ public class SingletonConfiguration {
     public FtpHandler ftpHandler() {
         FtpConfig ftpConfig = new FtpConfig(
                 host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize,
-                temporaryFileDirectoryPath, temporaryFilePrefix, temporaryFileSuffix, fileCopyMemoryBufferSize
+                temporaryFileDirectoryPath, temporaryFilePrefix, temporaryFileSuffix, fileCopyMemoryBufferSize,
+                dataConnectionMode, dataTimeout, activeRemoteDataConnectionModeServerHost,
+                activeRemoteDataConnectionModeServerPort
         );
 
         return new FtpHandlerImpl(scheduler, ftpConfig);

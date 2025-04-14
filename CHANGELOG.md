@@ -4,7 +4,11 @@
 
 #### 功能构建
 
-- (无)
+- 新增 `FtpConfig` 配置项。
+  - 新增 `FtpConfig.dataConnectionMode`，以用于指定数据连接模式。
+  - 新增 `FtpConfig.dataTimeout`，以用于指定数据超时时间。
+  - 新增 `FtpConfig.activeRemoteDataConnectionModeServerHost`，以用于指定远程主动数据连接模式下的服务主机地址。
+  - 新增 `FtpConfig.activeRemoteDataConnectionModeServerPort`，以用于指定远程主动数据连接模式下的服务端口。
 
 #### Bug修复
 
