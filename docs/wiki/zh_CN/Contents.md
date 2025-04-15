@@ -7,3 +7,7 @@
 ## 简介
 
 - [Introduction](./Introduction.md) - 简介，与 `README.md` 基本相同。
+
+## FTP 知识
+
+- [Data Connect Modes](./DataConnectModes.md) - 数据连接模式，详细介绍了 FTP 四种数据连接模式的区别以及使用场景。

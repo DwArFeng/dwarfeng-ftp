@@ -4,6 +4,9 @@
 
 #### 功能构建
 
+- Wiki 编写。
+  - docs/wiki/zh_CN/DataConnectModes.md。
+
 - 新增 `FtpConfig` 配置项。
   - 新增 `FtpConfig.dataConnectionMode`，以用于指定数据连接模式。
   - 新增 `FtpConfig.dataTimeout`，以用于指定数据超时时间。
