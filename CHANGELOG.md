@@ -4,7 +4,7 @@
 
 #### 功能构建
 
-- (无)
+- 优化 `connection.properties` 注释。
 
 #### Bug修复
 
