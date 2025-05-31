@@ -4,6 +4,10 @@
 
 #### 功能构建
 
+- Wiki 编写。
+  - docs/wiki/zh_CN/HowToInstallVsftpdOnCentos7.md。
+  - docs/wiki/zh_CN/QuickStart.md。
+
 - 更新 README.md。
 
 - Wiki 更新。
