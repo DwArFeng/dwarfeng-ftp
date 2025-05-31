@@ -49,7 +49,7 @@ public class RenameFileExample {
         ftpHandler.storeFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg", content);
         ftpHandler.storeFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg", alterContent);
         System.out.println("文件新建完毕, 您将会看到文件被创建");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 2. 重命名文件。
@@ -60,7 +60,7 @@ public class RenameFileExample {
                 new String[]{rootPath, "漫画の少女"}, "漫画の少女.jpg"
         );
         System.out.println("文件重命名完毕, 您将会看到文件被重命名");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 3. 旧文件不存在的情形。
@@ -75,7 +75,7 @@ public class RenameFileExample {
             LOGGER.warn("重命名失败, 异常信息如下", e);
         }
         System.out.println("您将在警告级别以下的日志中看到异常信息");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 4. 文件重命名，覆盖已存在的文件。
@@ -86,7 +86,7 @@ public class RenameFileExample {
                 new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg"
         );
         System.out.println("文件重命名完毕, 您将会看到文件被重命名, 且已经存在的目标文件被覆盖");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 5. 文件删除

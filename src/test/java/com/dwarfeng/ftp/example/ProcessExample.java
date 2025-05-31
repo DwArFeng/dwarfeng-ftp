@@ -52,7 +52,7 @@ public class ProcessExample {
         ftpHandler.storeFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg", ResourceUtil.getContent());
         System.out.println("文件新建完毕, 您将会看到文件被创建");
         System.out.println("如果路径中的文件夹不存在, 则文件夹将会被创建, 中文名称被支持。");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 2. 演示文件替换。
@@ -62,7 +62,7 @@ public class ProcessExample {
         ftpHandler.storeFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg", ResourceUtil.getAlterContent());
         ftpHandler.storeFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg", ResourceUtil.getAlterContent());
         System.out.println("文件新建完毕, 您将会看到文件被替换");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 3. 文件读取。
@@ -81,7 +81,7 @@ public class ProcessExample {
         if (Arrays.equals(ftpContent, ResourceUtil.getAlterContent())) {
             System.out.println("文件内容相等!");
         }
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 4. 列出文件。
@@ -108,7 +108,7 @@ public class ProcessExample {
             }
             System.out.printf("%d: name: %s, type: %s, size: %d%n", i + 1, ftpFile.getName(), type, ftpFile.getSize());
         }
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 5. 断线重连
@@ -116,7 +116,7 @@ public class ProcessExample {
         System.out.println("5. 断线重连...");
         System.out.println("请关闭 FTP 服务, 并观察 dwarf-ftp 的断线文件处理机制");
         System.out.println("按下回车键后观察在断线模式下 dwarf-ftp 的文件操作");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
         try {
             ftpHandler.storeFile(new String[]{rootPath}, "comic-girl.jpg", ResourceUtil.getContent());
@@ -125,19 +125,19 @@ public class ProcessExample {
         }
         System.out.println("请开启 FTP 服务, 并观察 dwarf-ftp 的断线重连处理机制");
         System.out.println("按下回车键后观察 dwarf-ftp 自动重连文件操作");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
         while (true) {
             try {
                 ftpHandler.storeFile(new String[]{rootPath}, "comic-girl.jpg", ResourceUtil.getContent());
                 System.out.println("由于断线重连机制被启用, 文件已经存储完毕");
-                System.out.print("按回车键继续...");
+                System.out.print("请按回车键继续...");
                 scanner.nextLine();
                 break;
             } catch (Exception e) {
                 System.out.println("文件没有存储成功, 此时 FTP 服务还未启动完毕");
                 LOGGER.warn("存储文件失败, 异常信息如下: ", e);
-                System.out.print("按回车键继续, 或直接关闭测试...");
+                System.out.print("请按回车键继续, 或直接关闭测试...");
                 scanner.nextLine();
             }
         }

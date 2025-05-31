@@ -45,7 +45,7 @@ public class CopyFileExample {
         ftpHandler.storeFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg", content);
         ftpHandler.storeFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg", content);
         System.out.println("文件新建完毕, 您将会看到文件被创建");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 2. 复制文件。
@@ -60,7 +60,7 @@ public class CopyFileExample {
                 new String[]{rootPath, "漫画女孩-1"}, "漫画女孩.jpg"
         );
         System.out.println("文件复制完毕, 您将会看到文件被复制");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 3. 读取复制的文件，检查文件内容是否一致。
@@ -75,7 +75,7 @@ public class CopyFileExample {
         if (Arrays.equals(content, testContent)) {
             System.out.println("漫画女孩.jpg 文件内容一致");
         }
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 3. 文件删除。

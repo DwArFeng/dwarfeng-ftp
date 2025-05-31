@@ -45,7 +45,7 @@ public class ListFileExample {
         ftpHandler.storeFile(new String[]{rootPath}, "comic-girl.jpg", content);
         ftpHandler.storeFile(new String[]{rootPath}, "漫画女孩.jpg", content);
         System.out.println("文件新建完毕, 您将会看到文件被创建");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 2. 列出文件。
@@ -56,7 +56,7 @@ public class ListFileExample {
         for (FtpFile ftpFile : ftpFiles) {
             System.out.println("  " + ftpFile.toString());
         }
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 3. 列出文件名。
@@ -67,7 +67,7 @@ public class ListFileExample {
         for (String fileName : fileNames) {
             System.out.println("  " + fileName);
         }
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 4. 文件删除。

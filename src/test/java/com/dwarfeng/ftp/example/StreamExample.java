@@ -65,7 +65,7 @@ public class StreamExample {
         }
         System.out.println("文件新建完毕, 您将会看到文件被创建");
         System.out.println("如果路径中的文件夹不存在, 则文件夹将会被创建, 中文名称被支持。");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 2. 演示文件读取。
@@ -98,7 +98,7 @@ public class StreamExample {
 
             System.out.println("已经向 comic-girl.jpg 中写入 1KB 数据");
             System.out.println("请关闭 FTP 服务, 并观察 dwarf-ftp 的断线文件处理机制");
-            System.out.print("按回车键继续...");
+            System.out.print("请按回车键继续...");
             scanner.nextLine();
 
             // 从 in 中读取剩余数据，写入 out。
@@ -109,7 +109,7 @@ public class StreamExample {
             LOGGER.warn("存储文件失败, 异常信息如下: ", e);
         }
         System.out.println("请重新启动 FTP 服务, 并观察 dwarf-ftp 的断线文件处理机制");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
         while (true) {
             try (
@@ -120,12 +120,12 @@ public class StreamExample {
             } catch (Exception e) {
                 System.out.println("文件没有存储成功, 此时 FTP 服务还未启动完毕");
                 LOGGER.warn("存储文件失败, 异常信息如下: ", e);
-                System.out.print("按回车键继续, 或直接关闭测试...");
+                System.out.print("请按回车键继续, 或直接关闭测试...");
                 scanner.nextLine();
                 continue;
             }
             System.out.println("由于断线重连机制被启用, 文件已经存储完毕");
-            System.out.print("按回车键继续...");
+            System.out.print("请按回车键继续...");
             scanner.nextLine();
             break;
         }

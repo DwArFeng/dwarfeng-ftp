@@ -45,7 +45,7 @@ public class DescFileExample {
         ftpHandler.storeFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg", content);
         ftpHandler.storeFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg", content);
         System.out.println("文件新建完毕, 您将会看到文件被创建");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 2. 描述存在的文件及目录。
@@ -60,7 +60,7 @@ public class DescFileExample {
         System.out.printf("/%s/漫画女孩: %s\n", rootPath, ftpFile);
         ftpFile = ftpHandler.descFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
         System.out.printf("/%s/漫画女孩/漫画女孩.jpg: %s\n", rootPath, ftpFile);
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 3. 描述不存在的文件及目录。
@@ -70,7 +70,7 @@ public class DescFileExample {
         System.out.printf("/%s/何もありません: %s\n", rootPath, ftpFile);
         ftpFile = ftpHandler.descFile(new String[]{rootPath}, "何もありません.jpg");
         System.out.printf("/%s/何もありません.jpg: %s\n", rootPath, ftpFile);
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 4. 文件删除。

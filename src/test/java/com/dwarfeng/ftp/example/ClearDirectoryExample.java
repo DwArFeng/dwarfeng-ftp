@@ -48,7 +48,7 @@ public class ClearDirectoryExample {
         ftpHandler.storeFile(new String[]{rootPath, middlePath, "comic-girl"}, "comic-girl.jpg", content);
         ftpHandler.storeFile(new String[]{rootPath, middlePath, "漫画女孩"}, "漫画女孩.jpg", content);
         System.out.println("文件新建完毕, 您将会在中间目录 " + middlePath + " 下看到文件被创建");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 2. 清空目录。
@@ -56,7 +56,7 @@ public class ClearDirectoryExample {
         System.out.println("2. 清空目录...");
         ftpHandler.clearDirectory(new String[]{rootPath, middlePath});
         System.out.println("清空目录 " + rootPath + "/" + middlePath + " 下的文件");
-        System.out.print("按回车键继续...");
+        System.out.print("请按回车键继续...");
         scanner.nextLine();
 
         // 4. 文件删除。

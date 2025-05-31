@@ -4,6 +4,16 @@
 
 #### 功能构建
 
+- 优化 `src/test` 下的部分示例的控制台输出文案。
+  - com.dwarfeng.ftp.example.ClearDirectoryExample。
+  - com.dwarfeng.ftp.example.CopyFileExample。
+  - com.dwarfeng.ftp.example.DescFileExample。
+  - com.dwarfeng.ftp.example.ListFileExample。
+  - com.dwarfeng.ftp.example.MoveFileExample。
+  - com.dwarfeng.ftp.example.ProcessExample。
+  - com.dwarfeng.ftp.example.RenameFileExample。
+  - com.dwarfeng.ftp.example.StreamExample。
+
 - Wiki 编写。
   - docs/wiki/zh_CN/HowToInstallVsftpdOnCentos7.md。
   - docs/wiki/zh_CN/QuickStart.md。
