@@ -4,7 +4,10 @@
 
 #### 功能构建
 
+- 更新 README.md。
+
 - Wiki 更新。
+  - docs/wiki/zh_CN/Introduction.md。
   - docs/wiki/zh_CN/Contents.md。
 
 - 依赖升级。
