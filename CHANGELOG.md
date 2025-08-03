@@ -1,24 +1,24 @@
 # ChangeLog
 
-### Release_1.3.4_20250803_build_A
+## Release_1.3.4_20250803_build_A
 
-#### 功能构建
-
-- (无)
-
-#### Bug修复
+### 功能构建
 
 - (无)
 
-#### 功能移除
+### Bug 修复
+
+- (无)
+
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.3.3_20250601_build_A
+## Release_1.3.3_20250601_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化 `src/test` 下的部分示例的控制台输出文案。
   - com.dwarfeng.ftp.example.ClearDirectoryExample。
@@ -43,19 +43,19 @@
 - 依赖升级。
   - 升级 `subgrade` 依赖版本为 `1.5.10.a` 以规避漏洞。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.3.2_20250504_build_A
+## Release_1.3.2_20250504_build_A
 
-#### 功能构建
+### 功能构建
 
 - Wiki 编写。
   - docs/wiki/zh_CN/VersionBlacklist.md。
@@ -63,35 +63,35 @@
 - 依赖升级。
   - 升级 `subgrade` 依赖版本为 `1.5.9.a` 以规避漏洞。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.3.1_20250428_build_A
+## Release_1.3.1_20250428_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化 `connection.properties` 注释。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.3.0_20250415_build_A
+## Release_1.3.0_20250415_build_A
 
-#### 功能构建
+### 功能构建
 
 - Wiki 编写。
   - docs/wiki/zh_CN/DataConnectModes.md。
@@ -102,19 +102,19 @@
   - 新增 `FtpConfig.activeRemoteDataConnectionModeServerHost`，以用于指定远程主动数据连接模式下的服务主机地址。
   - 新增 `FtpConfig.activeRemoteDataConnectionModeServerPort`，以用于指定远程主动数据连接模式下的服务端口。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - 去除 `FtpHandlerImpl` 中未生效的代码。
 
 ---
 
-### Release_1.2.4_20250324_build_A
+## Release_1.2.4_20250324_build_A
 
-#### 功能构建
+### 功能构建
 
 - 依赖升级。
   - 升级 `subgrade` 依赖版本为 `1.5.8.a` 以规避漏洞。
@@ -128,37 +128,37 @@
   - docs/wiki/zh_CN/Contents.md。
   - docs/wiki/zh_CN/Introduction.md。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.2.3_20241117_build_A
+## Release_1.2.3_20241117_build_A
 
-#### 功能构建
+### 功能构建
 
 - 依赖升级。
   - 升级 `spring` 依赖版本为 `5.3.39` 以规避漏洞。
   - 升级 `subgrade` 依赖版本为 `1.5.7.a` 以规避漏洞。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.2.2_20240730_build_A
+## Release_1.2.2_20240730_build_A
 
-#### 功能构建
+### 功能构建
 
 - 依赖升级。
   - 升级 `spring` 依赖版本为 `5.3.37` 以规避漏洞。
@@ -166,19 +166,19 @@
 
 - 优化 `README.md` 中的内容。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.2.1_20240514_build_A
+## Release_1.2.1_20240514_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化部分示例代码。
   - com.dwarfeng.ftp.example.DescFileExample。
@@ -186,20 +186,20 @@
 - 优化部分类的文档注释。
   - com.dwarfeng.ftp.handler.FtpHandler。
 
-#### Bug修复
+### Bug 修复
 
 - 修复 FtpHandlerImpl 中的 bug。
   - 修复描述文件时，当文件不存在时抛出异常的 bug。
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.2.0_20240506_build_A
+## Release_1.2.0_20240506_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化 `FtpHandlerImpl` 中方法的行为分析注解。
   - 去除部分方法上不必要的 `@SkipRecord` 注解。
@@ -237,20 +237,20 @@
   - 升级 `slf4j` 依赖版本为 `1.7.36` 以规避漏洞。
   - 升级 `subgrade` 依赖版本为 `1.5.3.a` 以规避漏洞。
 
-#### Bug修复
+### Bug 修复
 
 - 修复 FtpHandlerImpl 中的 bug。
   - 修复连接部分 FTP 服务器时，调用 `existsFile` 方法，当目标文件不存在时抛出异常的 bug。
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.13_20240102_build_A
+## Release_1.1.13_20240102_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化 FtpHandlerImpl 中的部分代码。
   - 优化 `FtpHandlerImpl.openInputStream` 方法获取的输出流的关闭时的异常处理逻辑。
@@ -260,19 +260,19 @@
   - com.dwarfeng.ftp.util.FtpConfigUtil。
   - com.dwarfeng.ftp.util.FtpFileLocationUtil。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.12_20231228_build_A
+## Release_1.1.12_20231228_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化测试配置。
   - spring/application-context-scan.xml。
@@ -281,19 +281,19 @@
   - 升级 `subgrade` 依赖版本为 `1.4.7.a` 并解决兼容性问题，以应用其新功能。
   - 升级 `spring` 依赖版本为 `5.3.31` 以规避漏洞。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.11_20231029_build_A
+## Release_1.1.11_20231029_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化流方法。
   - 优化 FtpHandlerImpl.openInputStream 方法返回的输入流，增强其不规范使用时的处理能力。
@@ -305,21 +305,21 @@
   - com.dwarfeng.ftp.handler.FtpHandler.connect。
   - com.dwarfeng.ftp.handler.FtpHandler.disconnect。
 
-#### Bug修复
+### Bug 修复
 
 - 修复流操作相关 bug。
   - 修复 FtpHandlerImpl.openInputStream 方法抛出异常时，同步锁不会释放的 bug。
   - 修复 FtpHandlerImpl.openOutputStream 方法抛出异常时，同步锁不会释放的 bug。
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.10_20230604_build_A
+## Release_1.1.10_20230604_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化 `FtpHandler` 中的方法。
   - 在所有文件操作方法中，增加了一个使用 `FtpFileLocation` 作为参数的对位方法。
@@ -331,19 +331,19 @@
   - `FtpFileLocation` 包含了 `filePaths` 和 `fileName` 两个字段。
   - 该实体用于简化 `FtpHandler` 中的方法的入口参数。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.9_20230602_build_A
+## Release_1.1.9_20230602_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化 FTP 处理器实现。
   - 大幅优化了 `FtpHandlerImpl.openOutputStream` 方法获取的输出流的性能。
@@ -355,19 +355,19 @@
   - 配置检查被提前到了 `FtpConfig` 和 `FtpConfig.Builder` 中，使得异常的配置能够更早地被发现。
   - 优化了 `SingletonConfiguration` 字段的 `@Value` 注解，使得 `placeholder` 不存在时能够以默认值替代。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.8_20230530_build_A
+## Release_1.1.8_20230530_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化示例代码。
   - 示例代码演示结束后，不仅删除文件，还删除文件夹。
@@ -382,19 +382,19 @@
 - 优化 FtpHandlerImpl 中的方法，使其更加合理。
   - Ftp 服务器参数异常时，在构造器中抛出异常，而不是在方法中抛出异常。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.7_20230528_build_A
+## Release_1.1.7_20230528_build_A
 
-#### 功能构建
+### 功能构建
 
 - 优化 `StreamExample` 中的代码，使其更加合理。
 
@@ -405,19 +405,19 @@
   - FtpHandlerImpl.storeFileByStream 方法中，使用该属性指定输入流的缓冲区大小。
   - FtpHandlerImpl.retrieveFileByStream 方法中，使用该属性指定输出流的缓冲区大小。
 
-#### Bug修复
+### Bug 修复
 
 - 修复了在某些情况下，`FtpHandler` 写入非 ASCII 文件名时，文件名编码不正确的问题。
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.6_20230527_build_A
+## Release_1.1.6_20230527_build_A
 
-#### 功能构建
+### 功能构建
 
 - 规范 `FtpHandler` 中的方法名称，过时部分命名不合理的方法。
 
@@ -428,19 +428,19 @@
   - FtpHandler.openInputStream。
   - FtpHandler.openOutputStream。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.5_20230421_build_A
+## Release_1.1.5_20230421_build_A
 
-#### 功能构建
+### 功能构建
 
 - 代码优化。
   - 为部分代码增加 @SuppressWarnings 注解，以消除不合理的警报。
@@ -452,38 +452,38 @@
   - 升级 `spring` 依赖版本为 `5.3.27` 以规避漏洞。
   - 升级 `subgrade` 依赖版本为 `1.3.3.a` 以规避漏洞。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.4_20230203_build_A
+## Release_1.1.4_20230203_build_A
 
-#### 功能构建
+### 功能构建
 
 - 增加列出指定路径下所有文件的功能。
 
 - 依赖升级。
   - 升级 `commons-net` 依赖版本为 `3.9.0`。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.3_20221212_build_A
+## Release_1.1.3_20221212_build_A
 
-#### 功能构建
+### 功能构建
 
 - 为了实现短生命周期（多例）使用，暴露生命周期方法。
   - com.dwarfeng.ftp.handler.FtpHandler.connect。
@@ -496,20 +496,20 @@
 - 依赖升级。
   - 升级 `subgrade` 依赖版本为 `1.3.0.a`。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - 删除不需要的依赖。
   - 删除 `dutil` 依赖。
 
 ---
 
-### Release_1.1.2_20221118_build_A
+## Release_1.1.2_20221118_build_A
 
-#### 功能构建
+### 功能构建
 
 - 依赖升级。
   - 升级 `commons-lang3` 依赖版本为 `3.12.0`。
@@ -518,53 +518,53 @@
 
 - 优化 `README.md` 的格式。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.1_20220921_build_A
+## Release_1.1.1_20220921_build_A
 
-#### 功能构建
+### 功能构建
 
 - FtpHandlerImpl 增加行为分析注解。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.1.0_20220917_build_A
+## Release_1.1.0_20220917_build_A
 
-#### 功能构建
+### 功能构建
 
 - 改进 `FtpHandlerImpl` 结构，使其支持多实例。
 
 - 增加单例配置，并解决兼容问题。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.0.2_20220912_build_A
+## Release_1.0.2_20220912_build_A
 
-#### 功能构建
+### 功能构建
 
 - 插件升级。
   - 升级 `maven-deploy-plugin` 插件版本为 `2.8.2`。
@@ -572,19 +572,19 @@
 - 依赖升级。
   - 升级 `subgrade` 依赖版本为 `1.2.10.a`。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.0.1_20220703_build_A
+## Release_1.0.1_20220703_build_A
 
-#### 功能构建
+### 功能构建
 
 - 依赖升级。
   - 升级 `junit` 依赖版本为 `4.13.2` 以规避漏洞。
@@ -592,28 +592,28 @@
   - 升级 `log4j2` 依赖版本为 `2.17.2` 以规避漏洞。
   - 升级 `subgrade` 依赖版本为 `1.2.8.a` 以规避漏洞。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
 
 ---
 
-### Release_1.0.0_20220127_build_A
+## Release_1.0.0_20220127_build_A
 
-#### 功能构建
+### 功能构建
 
 - 项目结构建立，程序清理测试通过。
 
 - 实现了 FtpHandler 核心机制，并编写示例代码。
 
-#### Bug修复
+### Bug 修复
 
 - (无)
 
-#### 功能移除
+### 功能移除
 
 - (无)
