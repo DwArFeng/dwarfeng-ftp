@@ -200,5 +200,5 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 ### 任意数量的实例模式
 
 自行设计 `FtpHandler` 的工厂类，调用相关工厂方法生成 `FtpHandlerImpl` 实例。
-需要注意的是：生成的 `FtpHandlerImpl` 在使用之前需要调用 `FtpHandlerImpl#start()` 启动处理器；同时在使用完毕之后，
-需要调用 `FtpHandlerImpl#stop()` 关闭处理器。
+
+需要注意的是：使用者需要自行管理 `FtpHandlerImpl` 实例的生命周期，包括在适合的时机调用 `start` 和 `stop` 方法。

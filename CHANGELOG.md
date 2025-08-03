@@ -4,6 +4,9 @@
 
 ### 功能构建
 
+- README.md 文档内容优化。
+  - 优化 `任意数量的实例模式` 中的文档描述。
+
 - 优化部分 Configuration 类中的常量命名。
   - com.dwarfeng.ftp.configuration.SingletonConfiguration。
 
