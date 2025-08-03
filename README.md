@@ -93,7 +93,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 ### 单例模式
 
 加载 `com.dwarfeng.ftp.configuration.SingletonConfiguration`，即可获得单例模式的 `FtpHandler`。  
-在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.ftp.configuration` 包中全部 bean 的扫描，示例如下:
+在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.ftp.configuration` 包中相应 bean 的扫描，示例如下:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -107,8 +107,10 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         http://www.springframework.org/schema/context/spring-context.xsd"
 >
 
-    <!-- 扫描 configuration 包中的全部 bean。 -->
-    <context:component-scan base-package="com.dwarfeng.ftp.configuration"/>
+    <!--扫描 dwarfeng-ftp 的包。 -->
+    <context:component-scan base-package="com.dwarfeng.ftp.configuration" use-default-filters="false">
+        <context:include-filter type="assignable" expression="com.dwarfeng.ftp.configuration.SingletonConfiguration"/>
+    </context:component-scan>
 </beans>
 ```
 
@@ -167,7 +169,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         <property name="fileCopyMemoryBufferSize" value="${ftp.file_copy_memory_buffer_size.1}"/>
     </bean>
     <bean name="config1" factory-bean="configBuilder1" factory-method="build"/>
-    <bean name="instance1" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
+    <bean name="instance1" class="com.dwarfeng.ftp.handler.FtpHandlerImpl" init-method="start" destroy-method="stop">
         <constructor-arg name="scheduler" ref="scheduler"/>
         <constructor-arg name="config" ref="config1"/>
     </bean>
@@ -188,7 +190,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         <property name="fileCopyMemoryBufferSize" value="${ftp.file_copy_memory_buffer_size.2}"/>
     </bean>
     <bean name="config2" factory-bean="configBuilder2" factory-method="build"/>
-    <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
+    <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl" init-method="start" destroy-method="stop">
         <constructor-arg name="scheduler" ref="scheduler"/>
         <constructor-arg name="config" ref="config2"/>
     </bean>
