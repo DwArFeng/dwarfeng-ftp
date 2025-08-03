@@ -90,7 +90,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 1. 运行 `src/test` 下的 `Example` 以观察全部特性。
 2. 观察项目结构，将其中的配置运用到其它的 subgrade 项目中。
 
-### 单例模式
+### 单实例模式
 
 加载 `com.dwarfeng.ftp.configuration.SingletonConfiguration`，即可获得单例模式的 `FtpHandler`。  
 在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.ftp.configuration` 包中相应 bean 的扫描，示例如下:
