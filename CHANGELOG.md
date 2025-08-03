@@ -4,7 +4,8 @@
 
 ### 功能构建
 
-- (无)
+- 优化部分 Configuration 类中的常量命名。
+  - com.dwarfeng.ftp.configuration.SingletonConfiguration。
 
 ### Bug 修复
 
