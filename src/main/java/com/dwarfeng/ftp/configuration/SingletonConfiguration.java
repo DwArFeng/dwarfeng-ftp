@@ -188,6 +188,7 @@ public class SingletonConfiguration {
     // SPEL 太长，故使用常量缩短长度。
     @Value(SPEL_TEMPORARY_FILE_PREFIX)
     private String temporaryFilePrefix;
+
     /**
      * @since 1.2.0
      */
