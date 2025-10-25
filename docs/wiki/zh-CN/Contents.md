@@ -23,3 +23,7 @@
 ## FTP 知识
 
 - [Data Connect Modes](./DataConnectModes.md) - 数据连接模式，详细介绍了 FTP 四种数据连接模式的区别以及使用场景。
+
+## 项目功能
+
+- [Extra Features](./ExtraFeatures.md) - 额外功能详解，详细介绍了 dwarfeng-ftp 在标准 FTP 协议基础上提供的额外便利功能。
