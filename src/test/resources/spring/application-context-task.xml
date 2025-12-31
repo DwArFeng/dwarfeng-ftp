@@ -9,6 +9,6 @@
         http://www.springframework.org/schema/task/spring-task.xsd"
 >
 
-    <!-- 装配Scheduler -->
+    <!-- 装配 scheduler。 -->
     <task:scheduler id="scheduler" pool-size="1"/>
 </beans>
