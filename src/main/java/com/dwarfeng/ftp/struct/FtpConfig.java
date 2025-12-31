@@ -66,8 +66,10 @@ public final class FtpConfig {
      * <p>
      * 设置从数据连接读取时的超时时间。<br>
      * 在建立本地主动模式（传统主动模式 / PORT 模式）数据连接时调用 <code>ServerSocket.accept()</code> 时也会应用此超时设置。
+     *
      * <p>
      * 该值的单位是毫秒，小于等于 0 表示无限超时。
+     *
      * <p>
      * 当 <code>dataConnectionMode</code> 取值为 <code>0（本地主动模式）</code> 时，
      * 建议将此值设置为大于 0，以避免服务端故障或网络环境波动导致的程序阻塞。
@@ -82,6 +84,7 @@ public final class FtpConfig {
      *
      * <p>
      * 当 <code>dataConnectionMode</code> 不为远程主动模式（反向主动模式）时，该值将被忽略。
+     *
      * <p>
      * 当 <code>dataConnectionMode</code> 取值为 <code>1（远程主动模式）</code> 时，
      * 该值将作为服务的主机地址。
@@ -96,6 +99,7 @@ public final class FtpConfig {
      *
      * <p>
      * 当 <code>dataConnectionMode</code> 不为远程主动模式（反向主动模式）时，该值将被忽略。
+     *
      * <p>
      * 当 <code>dataConnectionMode</code> 取值为 <code>1（远程主动模式）</code> 时，
      * 该值将作为服务的端口。
@@ -341,6 +345,7 @@ public final class FtpConfig {
          *
          * <p>
          * 默认值：null。
+         *
          * <p>
          * 当 <code>dataConnectionMode</code> 取值为 <code>1（远程主动模式）</code> 时，默认值将无法通过检查，
          * 在此条件下，请勿使用默认值。
@@ -352,6 +357,7 @@ public final class FtpConfig {
          *
          * <p>
          * 默认值：-1。
+         *
          * <p>
          * 当 <code>dataConnectionMode</code> 取值为 <code>1（远程主动模式）</code> 时，默认值将无法通过检查，
          * 在此条件下，请勿使用默认值。

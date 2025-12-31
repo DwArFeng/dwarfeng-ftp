@@ -156,7 +156,7 @@ public class FtpHandlerImpl implements FtpHandler {
                 LOGGER.warn("FTP 连接失败，将会启用重连机制尝试重新连接", e);
             }
 
-            // 添加noop周期发送计划。
+            // 添加 noop 周期发送计划。
             this.noopSendTaskFuture = scheduler.scheduleWithFixedDelay(
                     new NoopSendTask(), new Date(System.currentTimeMillis() + config.getNoopInterval()),
                     config.getNoopInterval()
@@ -186,7 +186,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 断开连接 noop 发送计划。
             noopSendTaskFuture.cancel(true);
 
-            // FTP服务器登出，如果遇到异常，则打印异常。
+            // FTP 服务器登出，如果遇到异常，则打印异常。
             try {
                 ftpClient.logout();
             } catch (Exception e) {
@@ -1267,7 +1267,7 @@ public class FtpHandlerImpl implements FtpHandler {
      * 按照 filePaths 依次打开指定的目录，如果目录不存在就创建。
      *
      * @param filePaths 指定的文件目录。
-     * @throws IOException IO异常。
+     * @throws IOException IO 异常。
      */
     private void enterDirection(String[] filePaths) throws IOException {
         ftpClient.changeWorkingDirectory(ROOT_PATH);
@@ -1286,10 +1286,10 @@ public class FtpHandlerImpl implements FtpHandler {
         }
 
         // 设置连接超时时间。
-        // 连接的超时时间一定要在调用connect方法之前设置。
+        // 连接的超时时间一定要在调用 connect 方法之前设置。
         ftpClient.setConnectTimeout(config.getConnectTimeout());
 
-        // 连接 FTP 服务器,设置IP及端口
+        // 连接 FTP 服务器,设置 IP 及端口
         try {
             ftpClient.connect(config.getHost(), config.getPort());
         } catch (Exception e) {
@@ -1320,7 +1320,7 @@ public class FtpHandlerImpl implements FtpHandler {
                 throw new IllegalArgumentException("不支持的数据连接模式");
         }
 
-        // 设置文件传输为模式为binary。
+        // 设置文件传输为模式为 binary。
         ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
 
         // 检查连接结果，确认连接正常。
@@ -1328,7 +1328,7 @@ public class FtpHandlerImpl implements FtpHandler {
             ftpClient.disconnect();
             throw new FtpLoginException();
         } else {
-            LOGGER.info("FTP连接成功");
+            LOGGER.info("FTP 连接成功");
         }
     }
 
