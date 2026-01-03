@@ -5,6 +5,7 @@
 ### 功能构建
 
 - Wiki 更新。
+  - docs/wiki/zh-CN/ExtraFeatures.md。
   - docs/wiki/zh-CN/DataConnectModes.md。
   - docs/wiki/zh-CN/QuickStart.md。
   - docs/wiki/en-US/README.md。
