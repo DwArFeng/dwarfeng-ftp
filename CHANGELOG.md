@@ -4,6 +4,9 @@
 
 ### 功能构建
 
+- Wiki 编写。
+  - docs/wiki/zh-CN/UseWithMaven.md。
+
 - Wiki 更新。
   - docs/wiki/zh-CN/ExtraFeatures.md。
   - docs/wiki/zh-CN/DataConnectModes.md。
