@@ -4,6 +4,11 @@
 
 ### 功能构建
 
+- 更新 README.md。
+
+- Wiki 更新。
+  - docs/wiki/zh-CN/Introduction.md。
+
 - Wiki 编写。
   - docs/wiki/zh-CN/ConfigParameters.md。
 

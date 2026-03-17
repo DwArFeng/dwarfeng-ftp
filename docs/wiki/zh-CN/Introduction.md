@@ -151,7 +151,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
-    <!-- 第 1 个实例 -->
+    <!-- 第 1 个实例。 -->
     <bean name="configBuilder1" class="com.dwarfeng.ftp.struct.FtpConfig.Builder">
         <constructor-arg name="host" value="${ftp.host.1}"/>
         <constructor-arg name="username" value="${ftp.username.1}"/>
@@ -165,14 +165,25 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         <property name="temporaryFilePrefix" value="${ftp.temporary_file_prefix.1}"/>
         <property name="temporaryFileSuffix" value="${ftp.temporary_file_suffix.1}"/>
         <property name="fileCopyMemoryBufferSize" value="${ftp.file_copy_memory_buffer_size.1}"/>
+        <property name="dataConnectionMode" value="${ftp.data_connection_mode.1}"/>
+        <property name="dataTimeout" value="${ftp.data_timeout.1}"/>
+        <property
+                name="activeRemoteDataConnectionModeServerHost"
+                value="${ftp.active_remote_data_connection_mode_server_host.1}"
+        />
+        <property
+                name="activeRemoteDataConnectionModeServerPort"
+                value="${ftp.active_remote_data_connection_mode_server_port.1}"
+
+        />
     </bean>
     <bean name="config1" factory-bean="configBuilder1" factory-method="build"/>
-    <bean name="instance1" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
+    <bean name="instance1" class="com.dwarfeng.ftp.handler.FtpHandlerImpl" init-method="start" destroy-method="stop">
         <constructor-arg name="scheduler" ref="scheduler"/>
         <constructor-arg name="config" ref="config1"/>
     </bean>
 
-    <!-- 第 2 个实例 -->
+    <!-- 第 2 个实例。 -->
     <bean name="configBuilder2" class="com.dwarfeng.ftp.struct.FtpConfig.Builder">
         <constructor-arg name="host" value="${ftp.host.2}"/>
         <constructor-arg name="username" value="${ftp.username.2}"/>
@@ -186,9 +197,19 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         <property name="temporaryFilePrefix" value="${ftp.temporary_file_prefix.2}"/>
         <property name="temporaryFileSuffix" value="${ftp.temporary_file_suffix.2}"/>
         <property name="fileCopyMemoryBufferSize" value="${ftp.file_copy_memory_buffer_size.2}"/>
+        <property name="dataConnectionMode" value="${ftp.data_connection_mode.2}"/>
+        <property name="dataTimeout" value="${ftp.data_timeout.2}"/>
+        <property
+                name="activeRemoteDataConnectionModeServerHost"
+                value="${ftp.active_remote_data_connection_mode_server_host.2}"
+        />
+        <property
+                name="activeRemoteDataConnectionModeServerPort"
+                value="${ftp.active_remote_data_connection_mode_server_port.2}"
+        />
     </bean>
     <bean name="config2" factory-bean="configBuilder2" factory-method="build"/>
-    <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl">
+    <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl" init-method="start" destroy-method="stop">
         <constructor-arg name="scheduler" ref="scheduler"/>
         <constructor-arg name="config" ref="config2"/>
     </bean>
