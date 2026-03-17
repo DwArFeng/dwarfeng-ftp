@@ -4,6 +4,9 @@
 
 ### 功能构建
 
+- Wiki 编写。
+  - docs/wiki/zh-CN/ConfigParameters.md。
+
 - 依赖升级。
   - 升级 `dutil` 依赖版本为 `0.4.1.a-beta` 以规避漏洞。
   - 升级 `subgrade` 依赖版本为 `1.7.3.a` 以规避漏洞。

@@ -21,6 +21,10 @@
 
 - [Quick Start](./QuickStart.md) - 快速开始，用最快的方式体验本项目。
 
+## 配置
+
+- [Config Parameters](./ConfigParameters.md) - 配置参数详解，说明 FtpConfig 各配置项含义、默认值与校验规则。
+
 ## FTP 知识
 
 - [Data Connect Modes](./DataConnectModes.md) - 数据连接模式，详细介绍了 FTP 四种数据连接模式的区别以及使用场景。
