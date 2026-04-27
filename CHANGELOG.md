@@ -4,6 +4,9 @@
 
 ### 功能构建
 
+- Wiki 编写。
+  - docs/wiki/zh-CN/UsageGuide.md。
+
 - `dwarfeng-ftp` 模块类优化注释、文档注释格式、代码换行格式。
   - com.dwarfeng.ftp.handler.FtpHandlerImpl。
   - com.dwarfeng.ftp.struct.FtpFileLocation。
