@@ -44,7 +44,6 @@ public final class FtpFileLocation {
 
         FtpFileLocation that = (FtpFileLocation) o;
 
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
         if (!Arrays.equals(filePaths, that.filePaths)) return false;
         return Objects.equals(fileName, that.fileName);
     }

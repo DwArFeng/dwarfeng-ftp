@@ -89,7 +89,7 @@ public class MoveFileExample {
         System.out.print("请按回车键继续...");
         scanner.nextLine();
 
-        // 5. 文件删除
+        // 5. 文件删除。
         System.out.println();
         System.out.println("5. 文件删除...");
         ftpHandler.deleteFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");

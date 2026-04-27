@@ -1153,7 +1153,7 @@ public class FtpHandlerImpl implements FtpHandler {
             checkPositiveCompletion();
         }
         // 剩余文件删除完毕后，删除帧对应的目录（如果不是 filePaths）。
-        // 如果 frameFilePaths 与 filePaths 相等，则不删除
+        // 如果 frameFilePaths 与 filePaths 相等，则不删除。
         if (Arrays.equals(frameFilePaths, filePaths)) {
             return;
         }
@@ -1289,14 +1289,14 @@ public class FtpHandlerImpl implements FtpHandler {
         // 连接的超时时间一定要在调用 connect 方法之前设置。
         ftpClient.setConnectTimeout(config.getConnectTimeout());
 
-        // 连接 FTP 服务器,设置 IP 及端口
+        // 连接 FTP 服务器,设置 IP 及端口。
         try {
             ftpClient.connect(config.getHost(), config.getPort());
         } catch (Exception e) {
             throw new FtpConnectException(e);
         }
 
-        // 设置用户名和密码
+        // 设置用户名和密码。
         ftpClient.login(config.getUsername(), config.getPassword());
 
         // 设置数据连接模式。

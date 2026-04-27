@@ -4,6 +4,13 @@
 
 ### 功能构建
 
+- `dwarfeng-ftp` 模块类优化注释、文档注释格式、代码换行格式。
+  - com.dwarfeng.ftp.handler.FtpHandlerImpl。
+  - com.dwarfeng.ftp.struct.FtpFileLocation。
+  - com.dwarfeng.ftp.example.MoveFileExample。
+  - com.dwarfeng.ftp.example.ProcessExample。
+  - com.dwarfeng.ftp.example.RenameFileExample。
+
 - 依赖升级。
   - 升级 `log4j2` 依赖版本为 `2.25.4` 以规避漏洞。
   - 升级 `dutil` 依赖版本为 `0.4.2.a-beta` 以规避漏洞。

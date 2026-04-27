@@ -111,7 +111,7 @@ public class ProcessExample {
         System.out.print("请按回车键继续...");
         scanner.nextLine();
 
-        // 5. 断线重连
+        // 5. 断线重连。
         System.out.println();
         System.out.println("5. 断线重连...");
         System.out.println("请关闭 FTP 服务, 并观察 dwarf-ftp 的断线文件处理机制");
@@ -142,7 +142,7 @@ public class ProcessExample {
             }
         }
 
-        // 6. 文件删除
+        // 6. 文件删除。
         System.out.println();
         System.out.println("6. 删除所有的测试文件...");
         ftpHandler.deleteFile(new String[]{rootPath}, "comic-girl.jpg");
