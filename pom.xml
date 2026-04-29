@@ -43,6 +43,13 @@
     <!-- 只定义依赖的版本，并不实际依赖 -->
     <dependencyManagement>
         <dependencies>
+            <!-- 单元测试 -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
             <!-- Apache 工具组件 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>

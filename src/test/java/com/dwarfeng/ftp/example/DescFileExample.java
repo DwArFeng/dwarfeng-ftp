@@ -1,7 +1,7 @@
 package com.dwarfeng.ftp.example;
 
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import com.dwarfeng.ftp.util.ResourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
