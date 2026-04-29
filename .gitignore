@@ -71,14 +71,17 @@ buildNumber.properties
 #################
 ## Logger Files
 #################
-/logs/
+/dwarfeng-ftp-core/logs/
+/dwarfeng-ftp-api/logs/
 
 #################
 ## Configuration Files
 #################
-/conf/
+/dwarfeng-ftp-core/conf/
+/dwarfeng-ftp-api/conf/
 
 #################
 ## Temporary Files
 #################
-/temp/
+/dwarfeng-ftp-core/temp/
+/dwarfeng-ftp-api/temp/
