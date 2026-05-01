@@ -12,35 +12,62 @@ public final class ServiceExceptionCodes {
 
     private static int EXCEPTION_CODE_OFFSET = 20000;
 
-    // 根异常。
     public static final ServiceException.Code FTP_FAILED =
             new ServiceException.Code(offset(0), "ftp failed");
-    // 连接与登录异常。
+
     public static final ServiceException.Code FTP_CONNECT_FAILED =
             new ServiceException.Code(offset(1), "ftp connect failed");
+
     public static final ServiceException.Code FTP_LOGIN_FAILED =
             new ServiceException.Code(offset(2), "ftp login failed");
-    // 文件异常。
+
     public static final ServiceException.Code FTP_FILE_FAILED =
             new ServiceException.Code(offset(3), "ftp file failed");
-    // 文件子异常。
+
     public static final ServiceException.Code FTP_FILE_RETRIEVE_FAILED =
             new ServiceException.Code(offset(4), "ftp file retrieve failed");
+
     public static final ServiceException.Code FTP_FILE_STORE_FAILED =
             new ServiceException.Code(offset(5), "ftp file store failed");
+
     public static final ServiceException.Code FTP_FILE_DELETE_FAILED =
             new ServiceException.Code(offset(6), "ftp file delete failed");
+
     public static final ServiceException.Code FTP_FILE_NOT_EXISTS =
             new ServiceException.Code(offset(8), "ftp file not exists");
-    // 流异常。
+
     public static final ServiceException.Code FTP_STREAM_OPEN_FAILED =
             new ServiceException.Code(offset(7), "ftp stream open failed");
-    // 处理器异常。
+
     /**
      * @since 1.2.0
      */
     public static final ServiceException.Code FTP_HANDLER_STOPPED =
             new ServiceException.Code(offset(9), "ftp handler stopped");
+
+    /**
+     * @since 2.0.0
+     */
+    public static final ServiceException.Code FTP_QOS_FAILED =
+            new ServiceException.Code(offset(10), "ftp qos failed");
+
+    /**
+     * @since 2.0.0
+     */
+    public static final ServiceException.Code AMBIGUOUS_FTP_HANDLER =
+            new ServiceException.Code(offset(11), "ambiguous ftp handler");
+
+    /**
+     * @since 2.0.0
+     */
+    public static final ServiceException.Code NO_FTP_HANDLER_PRESENT =
+            new ServiceException.Code(offset(12), "no ftp handler present");
+
+    /**
+     * @since 2.0.0
+     */
+    public static final ServiceException.Code FTP_QOS_HANDLER_NOT_FOUND =
+            new ServiceException.Code(offset(13), "ftp qos handler not found");
 
     private static int offset(int i) {
         return EXCEPTION_CODE_OFFSET + i;
@@ -75,6 +102,10 @@ public final class ServiceExceptionCodes {
         FTP_FILE_NOT_EXISTS.setCode(offset(8));
         FTP_STREAM_OPEN_FAILED.setCode(offset(7));
         FTP_HANDLER_STOPPED.setCode(offset(9));
+        FTP_QOS_FAILED.setCode(offset(10));
+        AMBIGUOUS_FTP_HANDLER.setCode(offset(11));
+        NO_FTP_HANDLER_PRESENT.setCode(offset(12));
+        FTP_QOS_HANDLER_NOT_FOUND.setCode(offset(13));
     }
 
     private ServiceExceptionCodes() {

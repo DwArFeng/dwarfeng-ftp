@@ -1,12 +1,20 @@
 package com.dwarfeng.ftp.node.configuration;
 
 import com.dwarfeng.ftp.impl.handler.FtpHandlerImpl;
+import com.dwarfeng.ftp.impl.handler.FtpQosHandlerImpl;
+import com.dwarfeng.ftp.impl.service.FtpQosServiceImpl;
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpQosHandler;
+import com.dwarfeng.ftp.stack.service.FtpQosService;
 import com.dwarfeng.ftp.stack.struct.FtpConfig;
+import com.dwarfeng.subgrade.stack.exception.ServiceExceptionMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 单例模式配置。
@@ -149,6 +157,13 @@ public class SingletonConfiguration {
     public static final String SPEL_DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_PORT =
             SPEL_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_PORT;
 
+    /**
+     * FTP 处理器的 Bean 名称。
+     *
+     * @since 2.0.0
+     */
+    public static final String BEAN_NAME_FTP_HANDLER = "ftpHandler";
+
     private final ThreadPoolTaskScheduler scheduler;
 
     @Value("${ftp.host}")
@@ -234,7 +249,7 @@ public class SingletonConfiguration {
         this.scheduler = scheduler;
     }
 
-    @Bean(initMethod = "start", destroyMethod = "stop")
+    @Bean(name = BEAN_NAME_FTP_HANDLER, initMethod = "start")
     public FtpHandler ftpHandler() {
         FtpConfig ftpConfig = new FtpConfig(
                 host, port, username, password, serverCharset, connectTimeout, noopInterval, bufferSize,
@@ -244,5 +259,24 @@ public class SingletonConfiguration {
         );
 
         return new FtpHandlerImpl(scheduler, ftpConfig);
+    }
+
+    /**
+     * @since 2.0.0
+     */
+    @Bean
+    public FtpQosHandler ftpQosHandler() {
+        Map<String, FtpHandler> ftpHandlerMap = new HashMap<>();
+        ftpHandlerMap.put(BEAN_NAME_FTP_HANDLER, ftpHandler());
+        return new FtpQosHandlerImpl(ftpHandlerMap);
+    }
+
+    /**
+     * @since 2.0.0
+     */
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Bean
+    public FtpQosService ftpQosService(ServiceExceptionMapper serviceExceptionMapper) {
+        return new FtpQosServiceImpl(ftpQosHandler(), serviceExceptionMapper);
     }
 }

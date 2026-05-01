@@ -4,6 +4,9 @@
 
 ### 功能构建
 
+- 新增 QoS 服务。
+  - com.dwarfeng.ftp.stack.service.FtpQosService。
+
 - 重构项目模块。
   - 新增 `dwarfeng-ftp-core` 子模块，并迁移原有代码至该模块。
   - 新增 `dwarfeng-ftp-api` 子模块。

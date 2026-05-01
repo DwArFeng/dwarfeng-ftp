@@ -40,6 +40,10 @@ public final class ServiceExceptionHelper {
         map.put(FtpFileNotExistsException.class, ServiceExceptionCodes.FTP_FILE_NOT_EXISTS);
         map.put(FtpStreamOpenException.class, ServiceExceptionCodes.FTP_STREAM_OPEN_FAILED);
         map.put(FtpHandlerStoppedException.class, ServiceExceptionCodes.FTP_HANDLER_STOPPED);
+        map.put(FtpQosException.class, ServiceExceptionCodes.FTP_QOS_FAILED);
+        map.put(AmbiguousFtpHandlerException.class, ServiceExceptionCodes.AMBIGUOUS_FTP_HANDLER);
+        map.put(NoFtpHandlerPresentException.class, ServiceExceptionCodes.NO_FTP_HANDLER_PRESENT);
+        map.put(FtpHandlerNotFoundException.class, ServiceExceptionCodes.FTP_QOS_HANDLER_NOT_FOUND);
 
         return map;
     }
