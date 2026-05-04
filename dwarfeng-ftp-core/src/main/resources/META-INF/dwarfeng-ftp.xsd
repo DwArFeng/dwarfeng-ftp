@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<xsd:schema
+        xmlns="http://dwarfeng.com/schema/dwarfeng-ftp"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:tool="http://www.springframework.org/schema/tool"
+        targetNamespace="http://dwarfeng.com/schema/dwarfeng-ftp"
+        elementFormDefault="qualified"
+>
+
+    <xsd:import
+            namespace="http://www.springframework.org/schema/tool"
+            schemaLocation="https://www.springframework.org/schema/tool/spring-tool.xsd"
+    />
+
+    <xsd:annotation>
+        <xsd:documentation>
+            <![CDATA[DwArFeng dwarfeng-ftp 项目的命名空间支持。]]></xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="config">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置 FTP 连接参数。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.ftp.stack.struct.FtpConfig"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                    name="config-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_FTP_CONFIG_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[配置的 bean 名称，默认为 ftpConfig。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="host" type="xsd:string" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FTP 服务器地址，支持域名或 IP。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="username" type="xsd:string" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[用于登录 FTP 服务器的用户名。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="password" type="xsd:string" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[用于登录 FTP 服务器的密码。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="port"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_PORT}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FTP 服务器端口，默认值通常为 21。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Integer"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="server-charset"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_SERVER_CHARSET}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FTP 服务器字符集，用于路径、文件名等文本内容编解码。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="connect-timeout"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_CONNECT_TIMEOUT}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[建立连接的超时时间，单位为毫秒。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Integer"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="noop-interval"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_NOOP_INTERVAL}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[NOOP 心跳间隔，单位为毫秒，用于保持控制连接活跃。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Long"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="buffer-size"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_BUFFER_SIZE}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FTP 客户端缓冲区大小，单位为字节。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Integer"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="temporary-file-directory-path"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_TEMPORARY_FILE_DIRECTORY_PATH}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[临时文件目录路径，用于上传或复制过程中的中间文件落盘。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="temporary-file-prefix"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_TEMPORARY_FILE_PREFIX}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[临时文件名前缀，用于区分业务文件与中间文件。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="temporary-file-suffix"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_TEMPORARY_FILE_SUFFIX}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[临时文件名后缀。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="file-copy-memory-buffer-size"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_FILE_COPY_MEMORY_BUFFER_SIZE}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[文件复制时的内存缓冲区大小，单位为字节。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Integer"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="data-connection-mode"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_DATA_CONNECTION_MODE}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[数据连接模式，通常为主动模式或被动模式。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Integer"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="data-timeout"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_DATA_TIMEOUT}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[数据连接超时时间，单位为毫秒。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Integer"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="active-remote-data-connection-mode-server-host"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_HOST}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[主动远端数据连接模式下，服务端向客户端回连时使用的主机地址。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="active-remote-data-connection-mode-server-port"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.stack.struct.FtpConfig$Builder).DEFAULT_ACTIVE_REMOTE_DATA_CONNECTION_MODE_SERVER_PORT}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[主动远端数据连接模式下，服务端向客户端回连时使用的端口。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Integer"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="handler">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置 FtpHandler。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.ftp.stack.handler.FtpHandler"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                    name="handler-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_FTP_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FtpHandler 的 bean 名称，默认为 ftpHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="scheduler-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_THREAD_POOL_TASK_SCHEDULER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ThreadPoolTaskScheduler bean 引用，默认为 scheduler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type
+                                    type="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler"
+                            />
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="config-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_FTP_CONFIG_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FtpConfig bean 引用，默认为 ftpConfig。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.ftp.stack.struct.FtpConfig"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="auto-start"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_FTP_HANDLER_AUTO_START_VALUE}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[是否在容器启动时自动启动 FtpHandler，默认为 true。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.Boolean"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="qos">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[通过该元素配置 FtpQosService。]]>
+            </xsd:documentation>
+            <xsd:appinfo>
+                <tool:annotation>
+                    <tool:exports type="com.dwarfeng.ftp.stack.service.FtpQosService"/>
+                </tool:annotation>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                    name="qos-handler-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_FTP_QOS_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FtpQosHandler 的 bean 名称，默认为 ftpQosHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="qos-service-name"
+                    type="xsd:token"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_FTP_QOS_SERVICE_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FtpQosService 的 bean 名称，默认为 ftpQosService。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation>
+                            <tool:expected-type type="java.lang.String"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="handler-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_FTP_HANDLER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[FtpHandler 的 bean 引用，默认为 ftpHandler。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.ftp.stack.handler.FtpHandler"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute
+                    name="sem-ref"
+                    type="xsd:string"
+                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_SERVICE_EXCEPTION_MAPPER_NAME}"
+            >
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[ServiceExceptionMapper bean 引用，默认为 mapServiceExceptionMapper。]]>
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="com.dwarfeng.subgrade.stack.exception.ServiceExceptionMapper"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

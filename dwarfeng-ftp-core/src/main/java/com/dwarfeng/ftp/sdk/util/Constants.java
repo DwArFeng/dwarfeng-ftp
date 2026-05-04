@@ -21,6 +21,8 @@ public final class Constants {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Constants.class);
 
+    // region FTP 文件类型
+
     @FtpFileType
     public static final int FTP_FILE_TYPE_FILE = 0;
     @FtpFileType
@@ -30,7 +32,50 @@ public final class Constants {
     @FtpFileType
     public static final int FTP_FILE_TYPE_UNKNOWN = 30;
 
+    // endregion
+
+    // region XSD 默认值
+
+    /**
+     * @since 2.0.0
+     */
+    public static final String XSD_DEFAULT_FTP_CONFIG_NAME = "ftpConfig";
+
+    /**
+     * @since 2.0.0
+     */
+    public static final String XSD_DEFAULT_FTP_HANDLER_NAME = "ftpHandler";
+
+    /**
+     * @since 2.0.0
+     */
+    public static final String XSD_DEFAULT_THREAD_POOL_TASK_SCHEDULER_NAME = "scheduler";
+
+    /**
+     * @since 2.0.0
+     */
+    public static final String XSD_DEFAULT_FTP_QOS_HANDLER_NAME = "ftpQosHandler";
+
+    /**
+     * @since 2.0.0
+     */
+    public static final String XSD_DEFAULT_FTP_QOS_SERVICE_NAME = "ftpQosService";
+
+    /**
+     * @since 2.0.0
+     */
+    public static final String XSD_DEFAULT_SERVICE_EXCEPTION_MAPPER_NAME = "mapServiceExceptionMapper";
+
+    /**
+     * @since 2.0.0
+     */
+    public static final String XSD_DEFAULT_FTP_HANDLER_AUTO_START_VALUE = "true";
+
+    // endregion
+
     private static final Lock LOCK = new ReentrantLock();
+
+    // region FTP 文件类型空间
 
     private static List<Integer> ftpFileTypeSpace = null;
 
@@ -75,6 +120,8 @@ public final class Constants {
 
         ftpFileTypeSpace = Collections.unmodifiableList(result);
     }
+
+    // endregion
 
     private Constants() {
         throw new IllegalStateException("禁止实例化");
