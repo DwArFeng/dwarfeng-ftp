@@ -60,6 +60,8 @@
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
+<!--suppress SpringXmlModelInspection -->
 <beans
         xmlns:context="http://www.springframework.org/schema/context"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -71,10 +73,10 @@
 >
 
     <!-- 扫描 dwarfeng-ftp 的配置类。 -->
-    <context:component-scan base-package="com.dwarfeng.ftp.configuration" use-default-filters="false">
+    <context:component-scan base-package="com.dwarfeng.ftp.node.configuration" use-default-filters="false">
         <context:include-filter
                 type="assignable"
-                expression="com.dwarfeng.ftp.configuration.SingletonConfiguration"
+                expression="com.dwarfeng.ftp.node.configuration.SingletonConfiguration"
         />
     </context:component-scan>
 </beans>
@@ -165,7 +167,7 @@ ftp.active_remote_data_connection_mode_server_port=20
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.nio.charset.StandardCharsets;
@@ -510,6 +512,8 @@ ftp.active_remote_data_connection_mode_server_port=20
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
+<!--suppress SpringXmlModelInspection -->
 <beans
         xmlns:context="http://www.springframework.org/schema/context"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -520,10 +524,10 @@ ftp.active_remote_data_connection_mode_server_port=20
         http://www.springframework.org/schema/context/spring-context.xsd"
 >
 
-    <context:component-scan base-package="com.dwarfeng.ftp.configuration" use-default-filters="false">
+    <context:component-scan base-package="com.dwarfeng.ftp.node.configuration" use-default-filters="false">
         <context:include-filter
                 type="assignable"
-                expression="com.dwarfeng.ftp.configuration.SingletonConfiguration"
+                expression="com.dwarfeng.ftp.node.configuration.SingletonConfiguration"
         />
     </context:component-scan>
 </beans>
@@ -551,7 +555,7 @@ ftp.active_remote_data_connection_mode_server_port=20
     <task:scheduler id="scheduler" pool-size="2"/>
 
     <!-- 第 1 个实例。 -->
-    <bean name="fooConfigBuilder" class="com.dwarfeng.ftp.struct.FtpConfig.Builder">
+    <bean name="fooConfigBuilder" class="com.dwarfeng.ftp.stack.struct.FtpConfig.Builder">
         <constructor-arg name="host" value="${ftp.host.1}"/>
         <constructor-arg name="username" value="${ftp.username.1}"/>
         <constructor-arg name="password" value="${ftp.password.1}"/>
@@ -578,7 +582,7 @@ ftp.active_remote_data_connection_mode_server_port=20
     <bean name="fooConfig" factory-bean="fooConfigBuilder" factory-method="build"/>
     <bean
             name="fooFtpHandler"
-            class="com.dwarfeng.ftp.handler.FtpHandlerImpl"
+            class="com.dwarfeng.ftp.impl.handler.FtpHandlerImpl"
             init-method="start"
             destroy-method="stop"
     >
@@ -587,7 +591,7 @@ ftp.active_remote_data_connection_mode_server_port=20
     </bean>
 
     <!-- 第 2 个实例。 -->
-    <bean name="barConfigBuilder" class="com.dwarfeng.ftp.struct.FtpConfig.Builder">
+    <bean name="barConfigBuilder" class="com.dwarfeng.ftp.stack.struct.FtpConfig.Builder">
         <constructor-arg name="host" value="${ftp.host.2}"/>
         <constructor-arg name="username" value="${ftp.username.2}"/>
         <constructor-arg name="password" value="${ftp.password.2}"/>
@@ -614,7 +618,7 @@ ftp.active_remote_data_connection_mode_server_port=20
     <bean name="barConfig" factory-bean="barConfigBuilder" factory-method="build"/>
     <bean
             name="barFtpHandler"
-            class="com.dwarfeng.ftp.handler.FtpHandlerImpl"
+            class="com.dwarfeng.ftp.impl.handler.FtpHandlerImpl"
             init-method="start"
             destroy-method="stop"
     >
@@ -631,9 +635,9 @@ ftp.active_remote_data_connection_mode_server_port=20
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
-import com.dwarfeng.ftp.handler.FtpHandlerImpl;
-import com.dwarfeng.ftp.struct.FtpConfig;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
+import com.dwarfeng.ftp.impl.handler.FtpHandlerImpl;
+import com.dwarfeng.ftp.stack.struct.FtpConfig;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.util.Map;
@@ -674,11 +678,54 @@ public class FooFtpHandlerFactory {
 }
 ```
 
+### XSD 配置
+
+从 `2.0.0.a` 版本开始，可以使用 `dwarfeng-ftp` 命名空间装配 `FtpConfig`、`FtpHandler` 与 `FtpQosService`。  
+在项目的 `application-context-ftp.xml` 中追加配置，示例如下:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
+<!--suppress SpringPlaceholdersInspection -->
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ftp="http://dwarfeng.com/schema/dwarfeng-ftp"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://dwarfeng.com/schema/dwarfeng-ftp
+        http://dwarfeng.com/schema/dwarfeng-ftp/dwarfeng-ftp.xsd"
+>
+
+    <ftp:config
+            host="${ftp.host}"
+            username="${ftp.username}"
+            password="${ftp.password}"
+            port="${ftp.port}"
+            server-charset="${ftp.server_charset}"
+            connect-timeout="${ftp.connect_timeout}"
+            noop-interval="${ftp.noop_interval}"
+            buffer-size="${ftp.buffer_size}"
+            temporary-file-directory-path="${ftp.temporary_file_directory_path}"
+            temporary-file-prefix="${ftp.temporary_file_prefix}"
+            temporary-file-suffix="${ftp.temporary_file_suffix}"
+            file-copy-memory-buffer-size="${ftp.file_copy_memory_buffer_size}"
+            data-connection-mode="${ftp.data_connection_mode}"
+            data-timeout="${ftp.data_timeout}"
+            active-remote-data-connection-mode-server-host="${ftp.active_remote_data_connection_mode_server_host}"
+            active-remote-data-connection-mode-server-port="${ftp.active_remote_data_connection_mode_server_port}"
+    />
+    <ftp:handler/>
+    <ftp:qos/>
+</beans>
+```
+
 ### 接入模式选择建议
 
 - 只有一个 FTP 目标或统一配置时，优先使用单例模式。
 - 固定多个 FTP 目标时，优先使用多实例模式。
 - 目标数量动态变化时，使用自定义工厂并显式管理 `start/stop`。
+- XSD 配置相比 XML bean 配置更简便，并可以享受 IDE 带来的自动补全，可作为其上位替代方案。
 
 ## API 使用详解
 
@@ -699,8 +746,8 @@ public class FooFtpHandlerFactory {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.struct.FtpFileLocation;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 import com.dwarfeng.subgrade.stack.handler.StartableHandler;
 
@@ -809,7 +856,7 @@ public class FtpHandlerSignatureReference {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class ExistsFileSnippet {
 
@@ -824,7 +871,7 @@ public class ExistsFileSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.nio.charset.StandardCharsets;
 
@@ -842,7 +889,7 @@ public class StoreFileSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class RetrieveFileSnippet {
 
@@ -857,7 +904,7 @@ public class RetrieveFileSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class DeleteFileSnippet {
 
@@ -872,7 +919,7 @@ public class DeleteFileSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -905,8 +952,8 @@ public class FoobarBinaryFileService {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class ListFilesSnippet {
 
@@ -924,7 +971,7 @@ public class ListFilesSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class ListFileNamesSnippet {
 
@@ -942,7 +989,7 @@ public class ListFileNamesSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class RemoveDirectorySnippet {
 
@@ -958,7 +1005,7 @@ public class RemoveDirectorySnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class ClearDirectorySnippet {
 
@@ -974,8 +1021,8 @@ public class ClearDirectorySnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class BarDirectoryService {
 
@@ -1001,7 +1048,7 @@ public class BarDirectoryService {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -1021,7 +1068,7 @@ public class UploadByInputStreamSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -1041,7 +1088,7 @@ public class DownloadToOutputStreamSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.io.InputStream;
 
@@ -1064,7 +1111,7 @@ public class OpenRemoteInputStreamSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -1086,7 +1133,7 @@ public class OpenRemoteOutputStreamSnippet {
 package com.example.foobar;
 
 import com.dwarfeng.dutil.basic.io.IOUtil;
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.io.*;
 
@@ -1125,7 +1172,7 @@ public class BazStreamService {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class RenameFileSnippet {
 
@@ -1143,7 +1190,7 @@ public class RenameFileSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class MoveFileSnippet {
 
@@ -1161,7 +1208,7 @@ public class MoveFileSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class CopyFileSnippet {
 
@@ -1181,8 +1228,8 @@ public class CopyFileSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 public class DescFileSnippet {
 
@@ -1210,7 +1257,7 @@ public class DescFileSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.util.Constants;
+import com.dwarfeng.ftp.sdk.util.Constants;
 
 public class FtpFileTypeSnippet {
 
@@ -1238,7 +1285,7 @@ public class FtpFileTypeSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.nio.charset.StandardCharsets;
 
@@ -1260,8 +1307,8 @@ public class ArrayPathSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
-import com.dwarfeng.ftp.struct.FtpFileLocation;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
 
 import java.nio.charset.StandardCharsets;
 
@@ -1305,7 +1352,7 @@ public class FooPathResolver {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 
 import java.nio.charset.StandardCharsets;
 
@@ -1380,7 +1427,7 @@ public class PathResolverUsageSnippet {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 
 public class FoobarFacade {
@@ -1452,7 +1499,7 @@ public class FoobarFacade {
 ```java
 package com.example.foobar;
 
-import com.dwarfeng.ftp.handler.FtpHandler;
+import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 
 import java.nio.charset.StandardCharsets;
