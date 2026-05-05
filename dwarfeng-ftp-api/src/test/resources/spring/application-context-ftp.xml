@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ftp="http://dwarfeng.com/schema/dwarfeng-ftp"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://dwarfeng.com/schema/dwarfeng-ftp
+        http://dwarfeng.com/schema/dwarfeng-ftp/dwarfeng-ftp.xsd"
+>
+
+    <ftp:config
+            host="${ftp.host}"
+            username="${ftp.username}"
+            password="${ftp.password}"
+            port="${ftp.port}"
+            server-charset="${ftp.server_charset}"
+            connect-timeout="${ftp.connect_timeout}"
+            noop-interval="${ftp.noop_interval}"
+            buffer-size="${ftp.buffer_size}"
+            temporary-file-directory-path="${ftp.temporary_file_directory_path}"
+            temporary-file-prefix="${ftp.temporary_file_prefix}"
+            temporary-file-suffix="${ftp.temporary_file_suffix}"
+            file-copy-memory-buffer-size="${ftp.file_copy_memory_buffer_size}"
+            data-connection-mode="${ftp.data_connection_mode}"
+            data-timeout="${ftp.data_timeout}"
+            active-remote-data-connection-mode-server-host="${ftp.active_remote_data_connection_mode_server_host}"
+            active-remote-data-connection-mode-server-port="${ftp.active_remote_data_connection_mode_server_port}"
+    />
+    <ftp:handler/>
+    <ftp:qos/>
+</beans>
