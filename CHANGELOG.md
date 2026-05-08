@@ -4,7 +4,8 @@
 
 ### 功能构建
 
-- (无)
+- 优化部分类中字段的注解。
+  - com.dwarfeng.ftp.api.integration.springtelqos.FtpCommand。
 
 ### Bug 修复
 

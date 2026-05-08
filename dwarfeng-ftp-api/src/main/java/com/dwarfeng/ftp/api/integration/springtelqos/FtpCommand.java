@@ -37,7 +37,7 @@ import java.util.List;
 @TelqosCommand
 public class FtpCommand extends CliCommand {
 
-    @SuppressWarnings({"SpellCheckingInspection", "RedundantSuppression"})
+    @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner", "RedundantSuppression"})
     private static final String IDENTITY = "ftp";
 
     // region 指令选项
@@ -91,22 +91,22 @@ public class FtpCommand extends CliCommand {
             COMMAND_OPTION_CLEAR_DIRECTORY
     };
 
-    @SuppressWarnings({"SpellCheckingInspection", "RedundantSuppression"})
+    @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner", "RedundantSuppression"})
     private static final String COMMAND_SUB_OPTION_HANDLER_NAME = "hn";
     private static final String COMMAND_SUB_OPTION_HANDLER_NAME_LONG_OPT = "handler-name";
-    @SuppressWarnings({"SpellCheckingInspection", "RedundantSuppression"})
+    @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner", "RedundantSuppression"})
     private static final String COMMAND_SUB_OPTION_LOCAL_PATH = "lp";
     private static final String COMMAND_SUB_OPTION_LOCAL_PATH_LONG_OPT = "local-path";
-    @SuppressWarnings({"SpellCheckingInspection", "RedundantSuppression"})
+    @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner", "RedundantSuppression"})
     private static final String COMMAND_SUB_OPTION_REMOTE_FILE_PATH = "rfp";
     private static final String COMMAND_SUB_OPTION_REMOTE_FILE_PATH_LONG_OPT = "remote-file-path";
-    @SuppressWarnings({"SpellCheckingInspection", "RedundantSuppression"})
+    @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner", "RedundantSuppression"})
     private static final String COMMAND_SUB_OPTION_REMOTE_DIRECTORY_PATH = "rdp";
     private static final String COMMAND_SUB_OPTION_REMOTE_DIRECTORY_PATH_LONG_OPT = "remote-directory-path";
-    @SuppressWarnings({"SpellCheckingInspection", "RedundantSuppression"})
+    @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner", "RedundantSuppression"})
     private static final String COMMAND_SUB_OPTION_OLD_REMOTE_FILE_PATH = "orfp";
     private static final String COMMAND_SUB_OPTION_OLD_REMOTE_FILE_PATH_LONG_OPT = "old-remote-file-path";
-    @SuppressWarnings({"SpellCheckingInspection", "RedundantSuppression"})
+    @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner", "RedundantSuppression"})
     private static final String COMMAND_SUB_OPTION_NEW_REMOTE_FILE_PATH = "nrfp";
     private static final String COMMAND_SUB_OPTION_NEW_REMOTE_FILE_PATH_LONG_OPT = "new-remote-file-path";
 
