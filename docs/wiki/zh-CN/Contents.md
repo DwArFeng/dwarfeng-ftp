@@ -33,3 +33,7 @@
 ## 项目功能
 
 - [Extra Features](./ExtraFeatures.md) - 额外功能详解，详细介绍了 dwarfeng-ftp 在标准 FTP 协议基础上提供的额外便利功能。
+
+## 运维与排障
+
+- [Troubleshooting](./Troubleshooting.md) - 故障排查，面向运维场景的连接、登录、传输、编码与目录删除问题定位指南。
