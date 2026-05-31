@@ -8,7 +8,8 @@
 
 ### Bug 修复
 
-- (无)
+- 修正 `dwarfeng-ftp-core` 子模块部分 `xsd` 文件中错误的内容。
+  - META-INF/dwarfeng-ftp.xsd。
 
 ### 功能移除
 

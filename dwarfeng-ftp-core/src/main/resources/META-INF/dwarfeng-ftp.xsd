@@ -419,22 +419,6 @@
                 </xsd:annotation>
             </xsd:attribute>
             <xsd:attribute
-                    name="handler-ref"
-                    type="xsd:string"
-                    default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_FTP_HANDLER_NAME}"
-            >
-                <xsd:annotation>
-                    <xsd:documentation>
-                        <![CDATA[FtpHandler 的 bean 引用，默认为 ftpHandler。]]>
-                    </xsd:documentation>
-                    <xsd:appinfo>
-                        <tool:annotation kind="ref">
-                            <tool:expected-type type="com.dwarfeng.ftp.stack.handler.FtpHandler"/>
-                        </tool:annotation>
-                    </xsd:appinfo>
-                </xsd:annotation>
-            </xsd:attribute>
-            <xsd:attribute
                     name="sem-ref"
                     type="xsd:string"
                     default="#{T(com.dwarfeng.ftp.sdk.util.Constants).XSD_DEFAULT_SERVICE_EXCEPTION_MAPPER_NAME}"
