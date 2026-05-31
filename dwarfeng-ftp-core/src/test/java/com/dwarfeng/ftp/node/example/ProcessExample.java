@@ -1,4 +1,4 @@
-package com.dwarfeng.ftp.example;
+package com.dwarfeng.ftp.node.example;
 
 import com.dwarfeng.ftp.sdk.util.Constants;
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;

@@ -5,6 +5,14 @@
 ### 功能构建
 
 - 项目结构优化。
+  - 将 `ClearDirectoryExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `CopyFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `DescFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `ListFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `MoveFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `ProcessExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `RenameFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `StreamExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
   - 将 `FtpConfigUtil` 移动至 `com.dwarfeng.ftp.stack.util` 包下。
 
 ### Bug 修复
