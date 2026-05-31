@@ -8,6 +8,9 @@
 
 ### Bug 修复
 
+- 修正 `dwarfeng-ftp-api` 子模块部分 `properties` 文件错误的字符集。
+  - telqos/connection.properties。
+
 - 修正 `dwarfeng-ftp-core` 子模块部分 `xsd` 文件中错误的内容。
   - META-INF/dwarfeng-ftp.xsd。
 
