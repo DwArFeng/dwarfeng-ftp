@@ -4,7 +4,8 @@
 
 ### 功能构建
 
-- (无)
+- 项目结构优化。
+  - 将 `FtpConfigUtil` 移动至 `com.dwarfeng.ftp.stack.util` 包下。
 
 ### Bug 修复
 

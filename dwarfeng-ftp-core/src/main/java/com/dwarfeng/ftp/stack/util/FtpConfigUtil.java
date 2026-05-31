@@ -1,4 +1,4 @@
-package com.dwarfeng.ftp.sdk.util;
+package com.dwarfeng.ftp.stack.util;
 
 import com.dwarfeng.ftp.stack.struct.FtpConfig;
 

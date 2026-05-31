@@ -1,7 +1,7 @@
 package com.dwarfeng.ftp.stack.struct;
 
 import com.dwarfeng.dutil.basic.prog.Buildable;
-import com.dwarfeng.ftp.sdk.util.FtpConfigUtil;
+import com.dwarfeng.ftp.stack.util.FtpConfigUtil;
 
 /**
  * FTP 配置。
