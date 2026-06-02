@@ -7,6 +7,7 @@
 - 更新 README.md。
 
 - Wiki 更新。
+  - docs/wiki/zh-CN/ConfigParameters.md。
   - docs/wiki/zh-CN/Introduction.md。
 
 - 项目异常机制优化。

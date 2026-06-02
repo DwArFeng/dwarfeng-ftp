@@ -1,7 +1,8 @@
 # Config Parameters - 配置参数详解
 
 本文档详细说明了 dwarfeng-ftp 的配置参数，包括各配置项的含义、默认值、校验规则以及配置示例。
-配置参数通过 properties 文件或 Spring 占位符注入，最终构建为 `FtpConfig` 对象供 `FtpHandlerImpl` 使用。
+配置参数通过 properties 文件、Spring 占位符或 dwarfeng-ftp 命名空间注入，
+最终构建为 `FtpConfig` 对象供 `FtpHandlerImpl` 使用。
 
 ## 配置加载方式
 
@@ -17,6 +18,12 @@
 
 使用 XML 或配置类手动创建多个 `FtpHandlerImpl` 实例时，通过占位符区分不同实例的配置。
 例如：`${ftp.host.1}`、`${ftp.port.1}` 对应第一个实例，`${ftp.host.2}`、`${ftp.port.2}` 对应第二个实例。
+
+### XSD 配置模式
+
+使用 `dwarfeng-ftp` 命名空间时，通过 `<ftp:config>` 元素配置 `FtpConfig`，
+并通过 `<ftp:handler>`、`<ftp:qos>` 元素创建处理器与服务。
+该模式适合在 Spring XML 中集中声明 FTP 配置、处理器和 QoS 服务。
 
 ## 基础连接参数
 
@@ -123,11 +130,15 @@ ftp.temporary_file_prefix=ftp-
 # FTP 临时文件的后缀。
 ftp.temporary_file_suffix=.tmp
 # FTP 文件复制功能的内存缓冲区大小。
-ftp.file_copy_memory_buffer_size=4096
+ftp.file_copy_memory_buffer_size=1048576
 # FTP 的数据连接模式。
 ftp.data_connection_mode=0
 # FTP 的数据超时时间。
 ftp.data_timeout=-1
+# FTP 远程主动数据连接模式下的服务主机地址。ftp.data_connection_mode=1 时，此设置生效。
+ftp.active_remote_data_connection_mode_server_host=your-host-here
+# FTP 远程主动数据连接模式下的服务端口。ftp.data_connection_mode=1 时，此设置生效。
+ftp.active_remote_data_connection_mode_server_port=20
 ```
 
 ### 多实例模式
@@ -145,7 +156,7 @@ ftp.data_timeout=-1
         http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
     <!-- 第 1 个实例。 -->
-    <bean name="configBuilder1" class="com.dwarfeng.ftp.struct.FtpConfig.Builder">
+    <bean name="configBuilder1" class="com.dwarfeng.ftp.stack.struct.FtpConfig.Builder">
         <constructor-arg name="host" value="${ftp.host.1}"/>
         <constructor-arg name="username" value="${ftp.username.1}"/>
         <constructor-arg name="password" value="${ftp.password.1}"/>
@@ -167,17 +178,21 @@ ftp.data_timeout=-1
         <property
                 name="activeRemoteDataConnectionModeServerPort"
                 value="${ftp.active_remote_data_connection_mode_server_port.1}"
-
         />
     </bean>
     <bean name="config1" factory-bean="configBuilder1" factory-method="build"/>
-    <bean name="instance1" class="com.dwarfeng.ftp.handler.FtpHandlerImpl" init-method="start" destroy-method="stop">
+    <bean
+            name="instance1"
+            class="com.dwarfeng.ftp.impl.handler.FtpHandlerImpl"
+            init-method="start"
+            destroy-method="stop"
+    >
         <constructor-arg name="scheduler" ref="scheduler"/>
         <constructor-arg name="config" ref="config1"/>
     </bean>
 
     <!-- 第 2 个实例。 -->
-    <bean name="configBuilder2" class="com.dwarfeng.ftp.struct.FtpConfig.Builder">
+    <bean name="configBuilder2" class="com.dwarfeng.ftp.stack.struct.FtpConfig.Builder">
         <constructor-arg name="host" value="${ftp.host.2}"/>
         <constructor-arg name="username" value="${ftp.username.2}"/>
         <constructor-arg name="password" value="${ftp.password.2}"/>
@@ -202,7 +217,12 @@ ftp.data_timeout=-1
         />
     </bean>
     <bean name="config2" factory-bean="configBuilder2" factory-method="build"/>
-    <bean name="instance2" class="com.dwarfeng.ftp.handler.FtpHandlerImpl" init-method="start" destroy-method="stop">
+    <bean
+            name="instance2"
+            class="com.dwarfeng.ftp.impl.handler.FtpHandlerImpl"
+            init-method="start"
+            destroy-method="stop"
+    >
         <constructor-arg name="scheduler" ref="scheduler"/>
         <constructor-arg name="config" ref="config2"/>
     </bean>
@@ -211,23 +231,75 @@ ftp.data_timeout=-1
 
 在 properties 中对应配置 `ftp.host.1`、`ftp.host.2` 等。
 
+### XSD 配置模式
+
+在 Spring XML 中使用 `dwarfeng-ftp` 命名空间：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
+<!--suppress SpringPlaceholdersInspection -->
+<beans
+        xmlns:ftp="http://dwarfeng.com/schema/dwarfeng-ftp"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://dwarfeng.com/schema/dwarfeng-ftp
+        http://dwarfeng.com/schema/dwarfeng-ftp/dwarfeng-ftp.xsd"
+>
+
+    <ftp:config
+            host="${ftp.host}"
+            username="${ftp.username}"
+            password="${ftp.password}"
+            port="${ftp.port}"
+            server-charset="${ftp.server_charset}"
+            connect-timeout="${ftp.connect_timeout}"
+            noop-interval="${ftp.noop_interval}"
+            buffer-size="${ftp.buffer_size}"
+            temporary-file-directory-path="${ftp.temporary_file_directory_path}"
+            temporary-file-prefix="${ftp.temporary_file_prefix}"
+            temporary-file-suffix="${ftp.temporary_file_suffix}"
+            file-copy-memory-buffer-size="${ftp.file_copy_memory_buffer_size}"
+            data-connection-mode="${ftp.data_connection_mode}"
+            data-timeout="${ftp.data_timeout}"
+            active-remote-data-connection-mode-server-host="${ftp.active_remote_data_connection_mode_server_host}"
+            active-remote-data-connection-mode-server-port="${ftp.active_remote_data_connection_mode_server_port}"
+    />
+    <ftp:handler/>
+    <ftp:qos/>
+</beans>
+```
+
+`config` 元素可通过 `config-name` 指定 `FtpConfig` 的 bean 名称。
+
+`handler` 元素可通过 `handler-name`、`scheduler-ref`、`config-ref`、`auto-start`
+指定处理器 bean 名称、调度器引用、配置引用和是否自动启动。
+
+`qos` 元素可通过 `qos-handler-name`、`qos-service-name`、`sem-ref`
+指定 QoS 处理器 bean 名称、QoS 服务 bean 名称和 `ServiceExceptionMapper` 引用。
+
 ## 参数校验规则
 
 配置在构建 `FtpConfig` 时会进行校验，校验逻辑由 `FtpConfigUtil` 实现。常见约束如下：
 
-- 主机、用户名不能为 null。
-- 端口、数据超时端口必须在 0 - 65535 之间。
+- 主机、用户名、服务器字符集、临时文件前缀、临时文件后缀不能为 null。
+- 密码可为 null。
+- 端口必须在 0 - 65535 之间。
 - 连接超时必须大于 1000 毫秒。
 - NOOP 间隔必须小于连接超时。
-- 临时文件目录必须存在或可创建，且为目录且有读写权限。
+- 缓冲区大小接受所有 int 值（负数表示使用系统默认值）。
+- 临时文件目录必须存在或可创建，且为目录并有读写权限。
 - 文件复制内存缓冲区大小必须大于 0。
 - 数据连接模式必须为 0、1、2、3 之一。
-- 当数据连接模式为 1（远程主动）时，远程服务主机地址和端口必填且有效。
+- 数据超时时间接受所有 int 值（小于等于 0 表示永不超时）。
+- 当数据连接模式为 1（远程主动）时，远程服务主机地址不能为 null，服务端口必须在 0 - 65535 之间。
 
 违反上述规则时，将抛出 `NullPointerException` 或 `IllegalArgumentException`。
 
 ## 参阅
 
-- [Data Connect Modes](./DataConnectModes.md) - 数据连接模式，详细介绍了 FTP 四种数据连接模式的区别以及使用场景。
 - [Quick Start](./QuickStart.md) - 快速开始，用最快的方式体验本项目。
-- [Extra Features](./ExtraFeatures.md) - 额外功能详解，详细介绍了 dwarfeng-ftp 在标准 FTP 协议基础上提供的额外便利功能。
+- [Introduction](./Introduction.md) - 项目介绍，详细介绍了 dwarfeng-ftp 的背景、功能和设计目标。
+- [Use With Maven](./UseWithMaven.md) - Maven 使用方式，介绍如何在项目中引入 dwarfeng-ftp。
