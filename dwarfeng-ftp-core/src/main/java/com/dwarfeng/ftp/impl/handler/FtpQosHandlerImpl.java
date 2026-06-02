@@ -1,5 +1,6 @@
 package com.dwarfeng.ftp.impl.handler;
 
+import com.dwarfeng.ftp.sdk.util.FtpQosExceptionHelper;
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 import com.dwarfeng.ftp.stack.exception.AmbiguousFtpHandlerException;
 import com.dwarfeng.ftp.stack.exception.FtpHandlerNotFoundException;
@@ -7,7 +8,6 @@ import com.dwarfeng.ftp.stack.exception.NoFtpHandlerPresentException;
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import com.dwarfeng.ftp.stack.handler.FtpQosHandler;
 import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.sdk.exception.HandlerExceptionHelper;
 import com.dwarfeng.subgrade.stack.exception.HandlerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
             List<String> handlerNames = ftpHandlerMap.keySet().stream().sorted().collect(Collectors.toList());
             return Collections.unmodifiableList(handlerNames);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -60,7 +60,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
                 }
             });
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -69,7 +69,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).isStarted();
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -78,7 +78,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).start();
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -87,7 +87,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).stop();
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -99,7 +99,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).existsFile(filePaths, fileName);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -111,7 +111,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).existsFile(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -123,7 +123,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).storeFile(filePaths, fileName, content);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -135,7 +135,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).storeFile(fileLocation, content);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -147,7 +147,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).retrieveFile(filePaths, fileName);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -159,7 +159,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).retrieveFile(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -171,7 +171,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).storeFileByStream(filePaths, fileName, in);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -183,7 +183,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).storeFileByStream(fileLocation, in);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -195,7 +195,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).retrieveFileByStream(filePaths, fileName, out);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -207,7 +207,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).retrieveFileByStream(fileLocation, out);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -219,7 +219,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).deleteFile(filePaths, fileName);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -231,7 +231,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).deleteFile(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -243,7 +243,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).removeDirectory(filePaths);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -255,7 +255,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).removeDirectory(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -267,7 +267,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).listFiles(filePaths);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -279,7 +279,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).listFiles(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -291,7 +291,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).listFileNames(filePaths);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -303,7 +303,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).listFileNames(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -315,7 +315,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).openInputStream(filePaths, fileName);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -327,7 +327,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).openInputStream(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -339,7 +339,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).openOutputStream(filePaths, fileName);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -351,7 +351,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).openOutputStream(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -364,7 +364,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).renameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -376,7 +376,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).renameFile(oldFileLocation, neoFileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -388,7 +388,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).clearDirectory(filePaths);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -400,7 +400,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).clearDirectory(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -413,7 +413,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).copyFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -425,7 +425,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             determineHandler(handlerName).copyFile(oldFileLocation, neoFileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -437,7 +437,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).descFile(filePaths, fileName);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 
@@ -449,7 +449,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
         try {
             return determineHandler(handlerName).descFile(fileLocation);
         } catch (Exception e) {
-            throw HandlerExceptionHelper.parse(e);
+            throw FtpQosExceptionHelper.parse(e);
         }
     }
 

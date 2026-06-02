@@ -4,6 +4,12 @@
 
 ### 功能构建
 
+- 项目异常机制优化。
+  - 新增 `com.dwarfeng.ftp.sdk.util.FtpExceptionHelper` 工具类。
+  - 新增 `com.dwarfeng.ftp.sdk.util.FtpQosExceptionHelper` 工具类。
+  - 优化 `com.dwarfeng.ftp.impl.handler.FtpHandlerImpl` 中的异常处理逻辑。
+  - 优化 `com.dwarfeng.ftp.impl.handler.FtpQosHandlerImpl` 中的异常处理逻辑。
+
 - 项目结构优化。
   - 将 `ClearDirectoryExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
   - 将 `CopyFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。

@@ -1,6 +1,7 @@
 package com.dwarfeng.ftp.impl.handler;
 
 import com.dwarfeng.ftp.sdk.util.Constants;
+import com.dwarfeng.ftp.sdk.util.FtpExceptionHelper;
 import com.dwarfeng.ftp.sdk.util.FtpFileLocationUtil;
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 import com.dwarfeng.ftp.stack.exception.*;
@@ -166,7 +167,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 设置状态。
             startedFlag = true;
         } catch (Exception e) {
-            throw new HandlerException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -205,7 +206,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 设置状态。
             startedFlag = false;
         } catch (Exception e) {
-            throw new HandlerException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -234,7 +235,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             return internalExistsFile(filePaths, fileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -255,7 +256,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作，并返回结果。
             return internalExistsFile(filePaths, fileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -290,7 +291,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             internalStoreFile(filePaths, fileName, content);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -312,7 +313,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作。
             internalStoreFile(filePaths, fileName, content);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -334,7 +335,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             return internalRetrieveFile(filePaths, fileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -356,7 +357,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作，并返回结果。
             return internalRetrieveFile(filePaths, fileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -381,7 +382,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             internalStoreFileByStream(filePaths, fileName, in);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -404,7 +405,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作。
             internalStoreFileByStream(filePaths, fileName, in);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -431,7 +432,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             internalRetrieveFileByStream(filePaths, fileName, out);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -454,7 +455,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作。
             internalRetrieveFileByStream(filePaths, fileName, out);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -479,7 +480,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             internalDeleteFile(filePaths, fileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -500,7 +501,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作。
             internalDeleteFile(filePaths, fileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -524,10 +525,8 @@ public class FtpHandlerImpl implements FtpHandler {
             // 确认处理器已经启动。
             makeSureHandlerStart();
             internalRemoveDirectory(filePaths);
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -544,10 +543,8 @@ public class FtpHandlerImpl implements FtpHandler {
             String[] filePaths = fileLocation.getFilePaths();
             // 执行操作。
             internalRemoveDirectory(filePaths);
-        } catch (HandlerException e) {
-            throw e;
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -585,7 +582,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             return internalListFile(filePaths);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -604,7 +601,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作，并返回结果。
             return internalListFile(filePaths);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -637,7 +634,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             return internalListFileNames(filePaths);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -656,7 +653,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作，并返回结果。
             return internalListFileNames(filePaths);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -831,7 +828,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -857,7 +854,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作。
             internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -896,7 +893,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             internalClearDirectory(filePaths);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -914,7 +911,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作。
             internalClearDirectory(filePaths);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -961,7 +958,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             internalCopyFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -986,7 +983,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作。
             internalCopyFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -1033,7 +1030,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             return internalDescFile(filePaths, fileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -1054,7 +1051,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作，并返回结果。
             return internalDescFile(filePaths, fileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -1082,7 +1079,7 @@ public class FtpHandlerImpl implements FtpHandler {
             makeSureHandlerStart();
             internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
@@ -1108,7 +1105,7 @@ public class FtpHandlerImpl implements FtpHandler {
             // 执行操作。
             internalRenameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
         } catch (Exception e) {
-            throw new FtpException(e);
+            throw FtpExceptionHelper.parse(e);
         } finally {
             lock.unlock();
         }
