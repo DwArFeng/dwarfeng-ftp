@@ -4,6 +4,11 @@
 
 ### 功能构建
 
+- 更新 README.md。
+
+- Wiki 更新。
+  - docs/wiki/zh-CN/Introduction.md。
+
 - 项目异常机制优化。
   - 新增 `com.dwarfeng.ftp.sdk.util.FtpExceptionHelper` 工具类。
   - 新增 `com.dwarfeng.ftp.sdk.util.FtpQosExceptionHelper` 工具类。

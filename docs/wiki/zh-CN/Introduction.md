@@ -1,32 +1,40 @@
 # dwarfeng-ftp
 
-Dwarfeng（赵扶风）的 FTP 服务，基于 `subgrade` 项目，在 `commons-io` 的基础上做了进一步封装，目前用于多个个人项目。
+Dwarfeng（赵扶风）的 JAVA 栈 FTP 服务，基于 `subgrade` 底座开发，在 Apache Commons Net 的 `FTPClient` 基础上做了进一步封装，
+目前用于多个个人项目。
 
 ---
 
 ## 特性
 
 1. Subgrade 架构支持。
-2. 保存文件时创建不存在的目录。
-3. 中文编码支持。
-4. 自动保持连接。
-5. 自动保持连接与断线重连。
-6. 打开文件的输入流/输出流。
-7. 文件重命名。
-8. 清空目录。
+2. 文件存在性判断、上传与下载、删除与目录删除。
+3. 文件列表、文件名列表与文件描述。
+4. 文件重命名、移动、复制与目录清空。
+5. 打开文件的输入流/输出流。
+6. 自动保持连接与断线重连。
+7. 支持通过 `FtpQosService` 在单处理器和多处理器场景中统一访问 FTP 能力。
+8. 支持 Spring XML XSD 命名空间配置。
+9. `dwarfeng-ftp-api` 模块提供 spring-telqos 运维指令示例。
 
-运行 `dwarfeng-ftp-core/src/test` 下的示例以观察全部特性。
+运行 `dwarfeng-ftp-core/src/test` 下的示例以观察核心特性。
 
-| 示例类名                                           | 说明      |
-|------------------------------------------------|---------|
-| com.dwarfeng.ftp.example.ProcessExample        | 流程示例    |
-| com.dwarfeng.ftp.example.StreamExample         | 流的使用示例  |
-| com.dwarfeng.ftp.example.ListFileExample       | 列出文件示例  |
-| com.dwarfeng.ftp.example.RenameFileExample     | 重命名文件示例 |
-| com.dwarfeng.ftp.example.MoveFileExample       | 移动文件示例  |
-| com.dwarfeng.ftp.example.ClearDirectoryExample | 清空目录示例  |
-| com.dwarfeng.ftp.example.CopyFileExample       | 复制文件示例  |
-| com.dwarfeng.ftp.example.DescFileExample       | 描述文件示例  |
+| 示例类名                                                | 说明      |
+|-----------------------------------------------------|---------|
+| com.dwarfeng.ftp.node.example.ProcessExample        | 流程示例    |
+| com.dwarfeng.ftp.node.example.StreamExample         | 流的使用示例  |
+| com.dwarfeng.ftp.node.example.ListFileExample       | 列出文件示例  |
+| com.dwarfeng.ftp.node.example.RenameFileExample     | 重命名文件示例 |
+| com.dwarfeng.ftp.node.example.MoveFileExample       | 移动文件示例  |
+| com.dwarfeng.ftp.node.example.ClearDirectoryExample | 清空目录示例  |
+| com.dwarfeng.ftp.node.example.CopyFileExample       | 复制文件示例  |
+| com.dwarfeng.ftp.node.example.DescFileExample       | 描述文件示例  |
+
+运行 `dwarfeng-ftp-api/src/test` 下的示例以观察 API 扩展特性。
+
+| 示例类名                                                   | 说明                                 |
+|--------------------------------------------------------|------------------------------------|
+| com.dwarfeng.ftp.api.integration.example.TelqosExample | Telqos 示例：通过 `ftp` 指令操作 FTP QoS 服务 |
 
 ## 文档
 
@@ -45,8 +53,8 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 | FTP 服务器类型             | 测试结果 |
 |-----------------------|------|
-| vsftpd                | 通过   |
-| Windows 10 内置 FTP 服务器 | 通过   |
+| vsftpd                | 测试通过 |
+| Windows 10 内置 FTP 服务器 | 测试通过 |
 
 ## 安装说明
 
@@ -74,12 +82,24 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 3. 项目引入。
 
-   在项目的 pom.xml 中添加如下依赖：
+   根工程坐标为 `com.dwarfeng:dwarfeng-ftp`。在业务项目中使用时，通常按需要引入具体模块。
+
+   如果只需要核心 FTP 能力，在项目的 `pom.xml` 中添加如下依赖：
 
    ```xml
    <dependency>
        <groupId>com.dwarfeng</groupId>
-       <artifactId>dwarfeng-ftp</artifactId>
+       <artifactId>dwarfeng-ftp-core</artifactId>
+       <version>${dwarfeng-ftp.version}</version>
+   </dependency>
+   ```
+
+   如果需要 spring-telqos 运维指令能力，在项目的 `pom.xml` 中添加如下依赖：
+
+   ```xml
+   <dependency>
+       <groupId>com.dwarfeng</groupId>
+       <artifactId>dwarfeng-ftp-api</artifactId>
        <version>${dwarfeng-ftp.version}</version>
    </dependency>
    ```
@@ -88,34 +108,15 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 ## 如何使用
 
-1. 运行 `dwarfeng-ftp-core/src/test/java/com/dwarfeng/ftp/example` 下的示例类以观察全部特性。
-2. 观察项目结构，将其中的配置运用到其它的 subgrade 项目中。
+1. 运行 `dwarfeng-ftp-core/src/test` 下的示例以观察核心特性。
+2. 运行 `dwarfeng-ftp-api/src/test` 下的示例以观察 spring-telqos 运维指令特性。
+3. 观察项目结构，将其中的配置运用到其它的 subgrade 项目中。
 
-### 单例模式
+### 单实例模式
 
-加载 `com.dwarfeng.ftp.node.configuration.SingletonConfiguration`，即可获得单例模式的 `FtpHandler`。  
-在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.ftp.node.configuration` 包中全部 bean 的扫描，示例如下:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
-<!--suppress SpringXmlModelInspection -->
-<beans
-        xmlns:context="http://www.springframework.org/schema/context"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://www.springframework.org/schema/beans"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd"
->
-
-    <!-- 扫描 configuration 包中的全部 bean。 -->
-    <context:component-scan base-package="com.dwarfeng.ftp.node.configuration"/>
-</beans>
-```
-
-或者只扫描 `com.dwarfeng.ftp.node.configuration` 包中的 `SingletonConfiguration`，示例如下:
+加载 `com.dwarfeng.ftp.node.configuration.SingletonConfiguration`，
+即可获得单实例模式的 `FtpHandler`、`FtpQosHandler` 与 `FtpQosService`。
+在项目的 `application-context-scan.xml` 中追加 `com.dwarfeng.ftp.node.configuration` 包中相应 bean 的扫描，示例如下:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -131,7 +132,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         http://www.springframework.org/schema/context/spring-context.xsd"
 >
 
-    <!-- 扫描 configuration 包中的 SingletonConfiguration -->
+    <!-- 扫描 node.configuration 包中的 SingletonConfiguration。 -->
     <context:component-scan base-package="com.dwarfeng.ftp.node.configuration" use-default-filters="false">
         <context:include-filter
                 type="assignable"
@@ -143,7 +144,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 ### 多实例模式
 
-不使用包扫描，使用 xml 或者配置类生成 `FtpHandlerImpl` 实例。  
+不使用包扫描，使用 xml 或者配置类生成 `FtpHandlerImpl` 实例。
 在项目的 `bean-definition.xml` 中追加配置，示例如下:
 
 ```xml
@@ -156,7 +157,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
-    <!-- 第 1 个实例。 -->
+    <!-- 第 1 个实例 -->
     <bean name="configBuilder1" class="com.dwarfeng.ftp.stack.struct.FtpConfig.Builder">
         <constructor-arg name="host" value="${ftp.host.1}"/>
         <constructor-arg name="username" value="${ftp.username.1}"/>
@@ -179,7 +180,6 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         <property
                 name="activeRemoteDataConnectionModeServerPort"
                 value="${ftp.active_remote_data_connection_mode_server_port.1}"
-
         />
     </bean>
     <bean name="config1" factory-bean="configBuilder1" factory-method="build"/>
@@ -189,7 +189,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
         <constructor-arg name="config" ref="config1"/>
     </bean>
 
-    <!-- 第 2 个实例。 -->
+    <!-- 第 2 个实例 -->
     <bean name="configBuilder2" class="com.dwarfeng.ftp.stack.struct.FtpConfig.Builder">
         <constructor-arg name="host" value="${ftp.host.2}"/>
         <constructor-arg name="username" value="${ftp.username.2}"/>
@@ -225,7 +225,7 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 
 ### XSD 配置
 
-从 `2.0.0.a` 版本开始，可以使用 `dwarfeng-ftp` 命名空间装配 `FtpConfig`、`FtpHandler` 与 `FtpQosService`。  
+可以使用 `dwarfeng-ftp` 命名空间装配 `FtpConfig`、`FtpHandler`、`FtpQosHandler` 与 `FtpQosService`。
 在项目的 `application-context-ftp.xml` 中追加配置，示例如下:
 
 ```xml
@@ -233,8 +233,8 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 <!-- 以下注释用于抑制 idea 中 .md 的警告，实际并无错误，在使用时可以连同本注释一起删除。 -->
 <!--suppress SpringPlaceholdersInspection -->
 <beans
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:ftp="http://dwarfeng.com/schema/dwarfeng-ftp"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.springframework.org/schema/beans"
         xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -265,8 +265,16 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 </beans>
 ```
 
+`config` 元素可通过 `config-name` 指定 `FtpConfig` 的 bean 名称。
+
+`handler` 元素可通过 `handler-name`、`scheduler-ref`、`config-ref`、`auto-start`
+指定处理器 bean 名称、调度器引用、配置引用和是否自动启动。
+
+`qos` 元素可通过 `qos-handler-name`、`qos-service-name`、`sem-ref`
+指定 QoS 处理器 bean 名称、QoS 服务 bean 名称和 `ServiceExceptionMapper` 引用。
+
 ### 任意数量的实例模式
 
 自行设计 `FtpHandler` 的工厂类，调用相关工厂方法生成 `FtpHandlerImpl` 实例。
-需要注意的是：生成的 `FtpHandlerImpl` 在使用之前需要调用 `FtpHandlerImpl#start()` 启动处理器；同时在使用完毕之后，
-需要调用 `FtpHandlerImpl#stop()` 关闭处理器。
+
+需要注意的是：使用者需要自行管理 `FtpHandlerImpl` 实例的生命周期，包括在适合的时机调用 `start` 和 `stop` 方法。
