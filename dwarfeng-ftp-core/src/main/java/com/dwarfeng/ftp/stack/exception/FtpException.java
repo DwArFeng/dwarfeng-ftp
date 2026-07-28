@@ -1,6 +1,8 @@
 package com.dwarfeng.ftp.stack.exception;
 
-import com.dwarfeng.subgrade.stack.exception.HandlerException;
+import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
+
+import java.io.Serial;
 
 /**
  * FTP 异常。
@@ -10,6 +12,7 @@ import com.dwarfeng.subgrade.stack.exception.HandlerException;
  */
 public class FtpException extends HandlerException {
 
+    @Serial
     private static final long serialVersionUID = -9056522962880850814L;
 
     public FtpException() {

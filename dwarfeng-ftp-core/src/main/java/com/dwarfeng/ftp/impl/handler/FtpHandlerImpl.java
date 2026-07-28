@@ -8,9 +8,11 @@ import com.dwarfeng.ftp.stack.exception.*;
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import com.dwarfeng.ftp.stack.struct.FtpConfig;
 import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.sdk.interceptor.analyse.BehaviorAnalyse;
-import com.dwarfeng.subgrade.sdk.interceptor.analyse.SkipRecord;
-import com.dwarfeng.subgrade.stack.exception.HandlerException;
+import com.dwarfeng.subgrade.aop.sdk.interceptor.analyse.BehaviorAnalyse;
+import com.dwarfeng.subgrade.aop.sdk.interceptor.analyse.SkipRecord;
+import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
@@ -18,13 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.*;
 import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
@@ -160,8 +161,8 @@ public class FtpHandlerImpl implements FtpHandler {
 
             // 添加 noop 周期发送计划。
             this.noopSendTaskFuture = scheduler.scheduleWithFixedDelay(
-                    new NoopSendTask(), new Date(System.currentTimeMillis() + config.getNoopInterval()),
-                    config.getNoopInterval()
+                    new NoopSendTask(), Instant.now().plusMillis(config.getNoopInterval()),
+                    Duration.ofMillis(config.getNoopInterval())
             );
 
             // 设置状态。
@@ -934,7 +935,7 @@ public class FtpHandlerImpl implements FtpHandler {
         // 定义帧栈，并初始化。
         Stack<DirectoryClearFrame> frameStack = new Stack<>();
         DirectoryClearFrame initialFrame = new DirectoryClearFrame(filePaths, new ArrayDeque<>());
-        initialFrame.getRemainingFiles().addAll(Arrays.asList(ftpFiles));
+        initialFrame.remainingFiles().addAll(Arrays.asList(ftpFiles));
         frameStack.push(initialFrame);
 
         // 只要帧栈不为空，就一直循环。
@@ -1114,8 +1115,8 @@ public class FtpHandlerImpl implements FtpHandler {
     private void clearSingleFrame(String[] filePaths, DirectoryClearFrame frame, Stack<DirectoryClearFrame> frameStack)
             throws Exception {
         // 展开参数。
-        String[] frameFilePaths = frame.getFilePaths();
-        Queue<FTPFile> frameRemainingFiles = frame.getRemainingFiles();
+        String[] frameFilePaths = frame.filePaths();
+        Queue<FTPFile> frameRemainingFiles = frame.remainingFiles();
         // 进入文件夹。
         enterDirection(frameFilePaths);
         checkPositiveCompletion();
@@ -1139,7 +1140,7 @@ public class FtpHandlerImpl implements FtpHandler {
                 String[] newFilePaths = Arrays.copyOf(frameFilePaths, frameFilePaths.length + 1);
                 newFilePaths[frameFilePaths.length] = ftpFile.getName();
                 DirectoryClearFrame neoFrame = new DirectoryClearFrame(newFilePaths, new ArrayDeque<>());
-                neoFrame.getRemainingFiles().addAll(Arrays.asList(neoFtpFiles));
+                neoFrame.remainingFiles().addAll(Arrays.asList(neoFtpFiles));
                 frameStack.push(frame);
                 frameStack.push(neoFrame);
                 return;
@@ -1336,23 +1337,7 @@ public class FtpHandlerImpl implements FtpHandler {
         }
     }
 
-    private static class DirectoryClearFrame {
-
-        private final String[] filePaths;
-        private final Queue<FTPFile> remainingFiles;
-
-        public DirectoryClearFrame(String[] filePaths, Queue<FTPFile> remainingFiles) {
-            this.filePaths = filePaths;
-            this.remainingFiles = remainingFiles;
-        }
-
-        public String[] getFilePaths() {
-            return filePaths;
-        }
-
-        public Queue<FTPFile> getRemainingFiles() {
-            return remainingFiles;
-        }
+    private record DirectoryClearFrame(String[] filePaths, Queue<FTPFile> remainingFiles) {
 
         @Override
         public String toString() {

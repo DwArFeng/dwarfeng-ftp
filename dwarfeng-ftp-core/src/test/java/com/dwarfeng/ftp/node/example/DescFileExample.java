@@ -1,9 +1,8 @@
 package com.dwarfeng.ftp.node.example;
 
-import com.dwarfeng.dutil.basic.io.CT;
+import com.dwarfeng.dutil.basic.sdk.io.CT;
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
-import com.dwarfeng.ftp.util.ResourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,9 +16,9 @@ import java.util.Scanner;
  */
 public class DescFileExample {
 
-    public static void main(String[] args) throws Exception {
+    static void main() throws Exception {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
-                "classpath:spring/application-context*.xml"
+                "classpath:com/dwarfeng/ftp/node/spring/application-context*.xml"
         );
         ctx.registerShutdownHook();
         ctx.start();
@@ -54,13 +53,13 @@ public class DescFileExample {
         CT.trace("2. 描述存在的文件及目录...");
         FtpFile ftpFile;
         ftpFile = ftpHandler.descFile(new String[]{rootPath}, "comic-girl");
-        System.out.printf("/%s/comic-girl: %s\n", rootPath, ftpFile);
+        CT.trace(String.format("/%s/comic-girl: %s\n", rootPath, ftpFile));
         ftpFile = ftpHandler.descFile(new String[]{rootPath, "comic-girl"}, "comic-girl.jpg");
-        System.out.printf("/%s/comic-girl/comic-girl.jpg: %s\n", rootPath, ftpFile);
+        CT.trace(String.format("/%s/comic-girl/comic-girl.jpg: %s\n", rootPath, ftpFile));
         ftpFile = ftpHandler.descFile(new String[]{rootPath}, "漫画女孩");
-        System.out.printf("/%s/漫画女孩: %s\n", rootPath, ftpFile);
+        CT.trace(String.format("/%s/漫画女孩: %s\n", rootPath, ftpFile));
         ftpFile = ftpHandler.descFile(new String[]{rootPath, "漫画女孩"}, "漫画女孩.jpg");
-        System.out.printf("/%s/漫画女孩/漫画女孩.jpg: %s\n", rootPath, ftpFile);
+        CT.trace(String.format("/%s/漫画女孩/漫画女孩.jpg: %s\n", rootPath, ftpFile));
         System.out.print("请按回车键继续...");
         scanner.nextLine();
 
@@ -68,9 +67,9 @@ public class DescFileExample {
         CT.trace("");
         CT.trace("3. 描述不存在的文件及目录...");
         ftpFile = ftpHandler.descFile(new String[]{rootPath}, "何もありません");
-        System.out.printf("/%s/何もありません: %s\n", rootPath, ftpFile);
+        CT.trace(String.format("/%s/何もありません: %s\n", rootPath, ftpFile));
         ftpFile = ftpHandler.descFile(new String[]{rootPath}, "何もありません.jpg");
-        System.out.printf("/%s/何もありません.jpg: %s\n", rootPath, ftpFile);
+        CT.trace(String.format("/%s/何もありません.jpg: %s\n", rootPath, ftpFile));
         System.out.print("请按回车键继续...");
         scanner.nextLine();
 

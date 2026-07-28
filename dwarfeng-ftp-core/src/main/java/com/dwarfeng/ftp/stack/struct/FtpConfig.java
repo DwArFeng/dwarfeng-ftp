@@ -1,6 +1,6 @@
 package com.dwarfeng.ftp.stack.struct;
 
-import com.dwarfeng.dutil.basic.prog.Buildable;
+import com.dwarfeng.dutil.basic.stack.builder.Buildable;
 import com.dwarfeng.ftp.stack.util.FtpConfigUtil;
 
 /**
@@ -9,6 +9,8 @@ import com.dwarfeng.ftp.stack.util.FtpConfigUtil;
  * @author DwArFeng
  * @since 1.1.8
  */
+// 该类为带有参数校验逻辑的配置类，不宜改写为 Record。
+@SuppressWarnings("ClassCanBeRecord")
 public final class FtpConfig {
 
     private final String host;
@@ -29,6 +31,7 @@ public final class FtpConfig {
      * @since 1.2.0
      */
     private final String temporaryFilePrefix;
+
     /**
      * @since 1.2.0
      */

@@ -2,7 +2,7 @@ package com.dwarfeng.ftp.sdk.util;
 
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.Objects;
 
 /**

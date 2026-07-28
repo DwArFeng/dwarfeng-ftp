@@ -1,5 +1,7 @@
 package com.dwarfeng.ftp.stack.exception;
 
+import java.io.Serial;
+
 /**
  * FTP 文件不存在异常。
  *
@@ -8,6 +10,7 @@ package com.dwarfeng.ftp.stack.exception;
  */
 public class FtpFileNotExistsException extends FtpFileException {
 
+    @Serial
     private static final long serialVersionUID = -7291511571587389158L;
 
     public FtpFileNotExistsException(String filePath) {

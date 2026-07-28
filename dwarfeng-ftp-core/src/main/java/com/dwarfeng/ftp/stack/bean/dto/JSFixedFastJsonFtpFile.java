@@ -1,9 +1,10 @@
 package com.dwarfeng.ftp.stack.bean.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.ToStringSerializer;
-import com.dwarfeng.subgrade.stack.bean.dto.Dto;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.alibaba.fastjson2.writer.ObjectWriterImplToString;
+import com.dwarfeng.subgrade.basic.stack.bean.dto.Dto;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,8 @@ import java.util.Objects;
  */
 public class JSFixedFastJsonFtpFile implements Dto {
 
-    private static final long serialVersionUID = -7456568361672248484L;
+    @Serial
+    private static final long serialVersionUID = 2714730118422740077L;
 
     public static JSFixedFastJsonFtpFile of(FtpFile ftpFile) {
         if (Objects.isNull(ftpFile)) {
@@ -32,7 +34,7 @@ public class JSFixedFastJsonFtpFile implements Dto {
     @JSONField(name = "type", ordinal = 2)
     private int type;
 
-    @JSONField(name = "size", ordinal = 3, serializeUsing = ToStringSerializer.class)
+    @JSONField(name = "size", ordinal = 3, serializeUsing = ObjectWriterImplToString.class)
     private long size;
 
     public JSFixedFastJsonFtpFile() {

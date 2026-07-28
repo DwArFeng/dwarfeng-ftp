@@ -1,7 +1,8 @@
 package com.dwarfeng.ftp.stack.struct;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -17,6 +18,8 @@ import java.util.Objects;
  * @author DwArFeng
  * @since 1.0.0
  */
+// 该类需要保持现有 JavaBean 风格访问器 API，不宜改写为 Record。
+@SuppressWarnings("ClassCanBeRecord")
 public final class FtpFileLocation {
 
     private final String[] filePaths;

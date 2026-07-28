@@ -2,7 +2,7 @@ package com.dwarfeng.ftp.sdk.util;
 
 import com.dwarfeng.ftp.stack.exception.FtpQosException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * FTP QoS 处理器异常帮助类。

@@ -1,9 +1,8 @@
 package com.dwarfeng.ftp.node.example;
 
-import com.dwarfeng.dutil.basic.io.CT;
+import com.dwarfeng.dutil.basic.sdk.io.CT;
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
-import com.dwarfeng.ftp.util.ResourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,9 +16,9 @@ import java.util.Scanner;
  */
 public class ListFileExample {
 
-    public static void main(String[] args) throws Exception {
+    static void main() throws Exception {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
-                "classpath:spring/application-context*.xml"
+                "classpath:com/dwarfeng/ftp/node/spring/application-context*.xml"
         );
         ctx.registerShutdownHook();
         ctx.start();

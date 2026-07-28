@@ -1,5 +1,7 @@
 package com.dwarfeng.ftp.stack.exception;
 
+import java.io.Serial;
+
 /**
  * 没有 FTP 处理器异常。
  *
@@ -8,6 +10,7 @@ package com.dwarfeng.ftp.stack.exception;
  */
 public class NoFtpHandlerPresentException extends FtpQosException {
 
+    @Serial
     private static final long serialVersionUID = -8127002829915487319L;
 
     public NoFtpHandlerPresentException() {

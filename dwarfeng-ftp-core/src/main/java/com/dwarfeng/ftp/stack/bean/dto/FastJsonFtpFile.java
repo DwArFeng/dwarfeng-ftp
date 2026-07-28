@@ -1,8 +1,9 @@
 package com.dwarfeng.ftp.stack.bean.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.dwarfeng.subgrade.stack.bean.dto.Dto;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.dwarfeng.subgrade.basic.stack.bean.dto.Dto;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -13,7 +14,8 @@ import java.util.Objects;
  */
 public class FastJsonFtpFile implements Dto {
 
-    private static final long serialVersionUID = -938103389619212155L;
+    @Serial
+    private static final long serialVersionUID = -7189747135992566226L;
 
     public static FastJsonFtpFile of(FtpFile ftpFile) {
         if (Objects.isNull(ftpFile)) {

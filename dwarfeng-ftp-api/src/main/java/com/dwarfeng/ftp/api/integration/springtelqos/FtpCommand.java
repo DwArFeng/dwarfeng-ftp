@@ -9,13 +9,13 @@ import com.dwarfeng.springtelqos.sdk.configuration.TelqosCommand;
 import com.dwarfeng.springtelqos.sdk.util.CliCommandUtil;
 import com.dwarfeng.springtelqos.stack.command.CommandDescriptor;
 import com.dwarfeng.springtelqos.stack.command.CommandExecutor;
+import jakarta.annotation.Nullable;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -204,88 +204,88 @@ public class FtpCommand extends CliCommand {
         List<Option> list = new ArrayList<>();
 
         list.add(Option.builder(COMMAND_OPTION_LIST_HANDLERS).longOpt(COMMAND_OPTION_LIST_HANDLERS_LONG_OPT)
-                .optionalArg(true).hasArg(false).desc("列出所有可用的 FTP 处理器").build());
+                .optionalArg(true).hasArg(false).desc("列出所有可用的 FTP 处理器").get());
         list.add(Option.builder(COMMAND_OPTION_IS_STARTED).longOpt(COMMAND_OPTION_IS_STARTED_LONG_OPT)
-                .optionalArg(true).hasArg(false).desc("查询 FTP 处理器是否已启动").build());
-        list.add(Option.builder(COMMAND_OPTION_START).optionalArg(true).hasArg(false).desc("启动 FTP 处理器").build());
-        list.add(Option.builder(COMMAND_OPTION_STOP).optionalArg(true).hasArg(false).desc("停止 FTP 处理器").build());
+                .optionalArg(true).hasArg(false).desc("查询 FTP 处理器是否已启动").get());
+        list.add(Option.builder(COMMAND_OPTION_START).optionalArg(true).hasArg(false).desc("启动 FTP 处理器").get());
+        list.add(Option.builder(COMMAND_OPTION_STOP).optionalArg(true).hasArg(false).desc("停止 FTP 处理器").get());
 
         list.add(
                 Option.builder(COMMAND_OPTION_EXISTS).optionalArg(true).hasArg(false).desc("检查 FTP 文件是否存在")
-                        .build()
+                        .get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_UPLOAD).longOpt(COMMAND_OPTION_UPLOAD_LONG_OPT).optionalArg(true)
-                        .hasArg(false).desc("上传本地文件到 FTP").build()
+                        .hasArg(false).desc("上传本地文件到 FTP").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_DOWNLOAD).longOpt(COMMAND_OPTION_DOWNLOAD_LONG_OPT).optionalArg(true)
-                        .hasArg(false).desc("下载 FTP 文件到本地").build()
+                        .hasArg(false).desc("下载 FTP 文件到本地").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_DELETE_FILE).longOpt(COMMAND_OPTION_DELETE_FILE_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("删除 FTP 文件").build()
+                        .optionalArg(true).hasArg(false).desc("删除 FTP 文件").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_REMOVE_DIRECTORY).longOpt(COMMAND_OPTION_REMOVE_DIRECTORY_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("删除 FTP 目录").build()
+                        .optionalArg(true).hasArg(false).desc("删除 FTP 目录").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_LIST_FILES).longOpt(COMMAND_OPTION_LIST_FILES_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("列出 FTP 目录文件").build()
+                        .optionalArg(true).hasArg(false).desc("列出 FTP 目录文件").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_LIST_FILE_NAMES).longOpt(COMMAND_OPTION_LIST_FILE_NAMES_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("列出 FTP 目录文件名").build()
+                        .optionalArg(true).hasArg(false).desc("列出 FTP 目录文件名").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_DESC_FILE).longOpt(COMMAND_OPTION_DESC_FILE_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("描述 FTP 文件").build()
+                        .optionalArg(true).hasArg(false).desc("描述 FTP 文件").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_RENAME_FILE).longOpt(COMMAND_OPTION_RENAME_FILE_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("重命名 FTP 文件").build()
+                        .optionalArg(true).hasArg(false).desc("重命名 FTP 文件").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_MOVE_FILE).longOpt(COMMAND_OPTION_MOVE_FILE_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("移动 FTP 文件").build()
+                        .optionalArg(true).hasArg(false).desc("移动 FTP 文件").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_COPY_FILE).longOpt(COMMAND_OPTION_COPY_FILE_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("复制 FTP 文件").build()
+                        .optionalArg(true).hasArg(false).desc("复制 FTP 文件").get()
         );
         list.add(
                 Option.builder(COMMAND_OPTION_CLEAR_DIRECTORY).longOpt(COMMAND_OPTION_CLEAR_DIRECTORY_LONG_OPT)
-                        .optionalArg(true).hasArg(false).desc("清空 FTP 目录").build()
+                        .optionalArg(true).hasArg(false).desc("清空 FTP 目录").get()
         );
 
         list.add(
                 Option.builder(COMMAND_SUB_OPTION_HANDLER_NAME).longOpt(COMMAND_SUB_OPTION_HANDLER_NAME_LONG_OPT)
-                        .hasArg(true).type(String.class).desc("FTP 处理器名称").build()
+                        .hasArg(true).type(String.class).desc("FTP 处理器名称").get()
         );
         list.add(
                 Option.builder(COMMAND_SUB_OPTION_LOCAL_PATH).longOpt(COMMAND_SUB_OPTION_LOCAL_PATH_LONG_OPT)
-                        .hasArg(true).type(String.class).desc("本地文件路径").build()
+                        .hasArg(true).type(String.class).desc("本地文件路径").get()
         );
         list.add(
                 Option.builder(COMMAND_SUB_OPTION_REMOTE_FILE_PATH)
                         .longOpt(COMMAND_SUB_OPTION_REMOTE_FILE_PATH_LONG_OPT).hasArg(true).type(String.class)
-                        .desc("远端文件路径").build()
+                        .desc("远端文件路径").get()
         );
         list.add(
                 Option.builder(COMMAND_SUB_OPTION_REMOTE_DIRECTORY_PATH)
                         .longOpt(COMMAND_SUB_OPTION_REMOTE_DIRECTORY_PATH_LONG_OPT).hasArg(true).type(String.class)
-                        .desc("远端目录路径").build()
+                        .desc("远端目录路径").get()
         );
         list.add(
                 Option.builder(COMMAND_SUB_OPTION_OLD_REMOTE_FILE_PATH)
                         .longOpt(COMMAND_SUB_OPTION_OLD_REMOTE_FILE_PATH_LONG_OPT).hasArg(true).type(String.class)
-                        .desc("旧远端文件路径").build()
+                        .desc("旧远端文件路径").get()
         );
         list.add(
                 Option.builder(COMMAND_SUB_OPTION_NEW_REMOTE_FILE_PATH)
                         .longOpt(COMMAND_SUB_OPTION_NEW_REMOTE_FILE_PATH_LONG_OPT).hasArg(true).type(String.class)
-                        .desc("新远端文件路径").build()
+                        .desc("新远端文件路径").get()
         );
 
         return list;

@@ -1,10 +1,9 @@
 package com.dwarfeng.ftp.node.example;
 
-import com.dwarfeng.dutil.basic.io.CT;
+import com.dwarfeng.dutil.basic.sdk.io.CT;
 import com.dwarfeng.ftp.sdk.util.Constants;
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
-import com.dwarfeng.ftp.util.ResourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +22,9 @@ public class ProcessExample {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessExample.class);
 
-    public static void main(String[] args) throws Exception {
+    static void main() throws Exception {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
-                "classpath:spring/application-context*.xml"
+                "classpath:com/dwarfeng/ftp/node/spring/application-context*.xml"
         );
         ctx.registerShutdownHook();
         ctx.start();
@@ -89,7 +88,7 @@ public class ProcessExample {
         CT.trace("");
         CT.trace("4. 列出文件...");
         FtpFile[] ftpFiles = ftpHandler.listFiles(new String[]{rootPath});
-        System.out.printf("测试文件夹下目前一共有 %d 个文件: %n", ftpFiles.length);
+        CT.trace(String.format("测试文件夹下目前一共有 %d 个文件: %n", ftpFiles.length));
         for (int i = 0; i < ftpFiles.length; i++) {
             FtpFile ftpFile = ftpFiles[i];
             String type;
@@ -107,7 +106,7 @@ public class ProcessExample {
                     type = "unknown";
                     break;
             }
-            System.out.printf("%d: name: %s, type: %s, size: %d%n", i + 1, ftpFile.getName(), type, ftpFile.getSize());
+            CT.trace(String.format("%d: name: %s, type: %s, size: %d%n", i + 1, ftpFile.getName(), type, ftpFile.getSize()));
         }
         System.out.print("请按回车键继续...");
         scanner.nextLine();

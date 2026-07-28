@@ -2,13 +2,12 @@ package com.dwarfeng.ftp.node.configuration;
 
 import com.dwarfeng.ftp.sdk.util.BeanDefinitionParserUtil;
 import com.dwarfeng.ftp.stack.struct.FtpConfig;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
-
-import javax.annotation.Nonnull;
 
 /**
  * FTP Config 元素的 BeanDefinitionParser。

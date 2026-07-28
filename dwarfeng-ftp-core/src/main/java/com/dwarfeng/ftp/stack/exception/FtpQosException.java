@@ -1,6 +1,8 @@
 package com.dwarfeng.ftp.stack.exception;
 
-import com.dwarfeng.subgrade.stack.exception.HandlerException;
+import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
+
+import java.io.Serial;
 
 /**
  * FTP QoS 异常。
@@ -10,6 +12,7 @@ import com.dwarfeng.subgrade.stack.exception.HandlerException;
  */
 public class FtpQosException extends HandlerException {
 
+    @Serial
     private static final long serialVersionUID = 1209204088884592170L;
 
     public FtpQosException() {

@@ -1,9 +1,8 @@
 package com.dwarfeng.ftp.node.example;
 
-import com.dwarfeng.dutil.basic.io.CT;
-import com.dwarfeng.dutil.basic.io.IOUtil;
+import com.dwarfeng.dutil.basic.sdk.io.CT;
+import com.dwarfeng.dutil.basic.sdk.io.IOUtil;
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
-import com.dwarfeng.ftp.util.ResourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +25,9 @@ public class StreamExample {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StreamExample.class);
 
-    public static void main(String[] args) throws Exception {
+    static void main() throws Exception {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
-                "classpath:spring/application-context*.xml"
+                "classpath:com/dwarfeng/ftp/node/spring/application-context*.xml"
         );
         ctx.registerShutdownHook();
         ctx.start();

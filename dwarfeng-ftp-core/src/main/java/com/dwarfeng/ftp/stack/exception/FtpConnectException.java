@@ -1,5 +1,7 @@
 package com.dwarfeng.ftp.stack.exception;
 
+import java.io.Serial;
+
 /**
  * FTP 连接异常。
  *
@@ -8,6 +10,7 @@ package com.dwarfeng.ftp.stack.exception;
  */
 public class FtpConnectException extends FtpException {
 
+    @Serial
     private static final long serialVersionUID = -4399560620149281321L;
 
     public FtpConnectException() {

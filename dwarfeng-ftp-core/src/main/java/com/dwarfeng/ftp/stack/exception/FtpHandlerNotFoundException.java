@@ -1,5 +1,7 @@
 package com.dwarfeng.ftp.stack.exception;
 
+import java.io.Serial;
+
 /**
  * FTP 处理器未找到异常。
  *
@@ -8,6 +10,7 @@ package com.dwarfeng.ftp.stack.exception;
  */
 public class FtpHandlerNotFoundException extends FtpQosException {
 
+    @Serial
     private static final long serialVersionUID = 8819328689031545721L;
 
     private final String handlerName;

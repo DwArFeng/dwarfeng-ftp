@@ -7,7 +7,7 @@ import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import com.dwarfeng.ftp.stack.handler.FtpQosHandler;
 import com.dwarfeng.ftp.stack.service.FtpQosService;
 import com.dwarfeng.ftp.stack.struct.FtpConfig;
-import com.dwarfeng.subgrade.stack.exception.ServiceExceptionMapper;
+import com.dwarfeng.subgrade.basic.stack.exception.ServiceExceptionMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

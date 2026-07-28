@@ -1,6 +1,8 @@
 package com.dwarfeng.ftp.stack.bean.dto;
 
-import com.dwarfeng.subgrade.stack.bean.dto.Dto;
+import com.dwarfeng.subgrade.basic.stack.bean.dto.Dto;
+
+import java.io.Serial;
 
 /**
  * FTP 文件。
@@ -10,7 +12,8 @@ import com.dwarfeng.subgrade.stack.bean.dto.Dto;
  */
 public class FtpFile implements Dto {
 
-    private static final long serialVersionUID = -9087482894640213392L;
+    @Serial
+    private static final long serialVersionUID = -5813882146613882357L;
 
     private String name;
     private int type;

@@ -3,6 +3,7 @@ package com.dwarfeng.ftp.node.configuration;
 import com.dwarfeng.ftp.impl.handler.FtpQosHandlerImpl;
 import com.dwarfeng.ftp.impl.service.FtpQosServiceImpl;
 import com.dwarfeng.ftp.sdk.util.BeanDefinitionParserUtil;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
-
-import javax.annotation.Nonnull;
 
 /**
  * FTP Qos 元素的 BeanDefinitionParser。
