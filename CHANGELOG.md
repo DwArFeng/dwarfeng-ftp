@@ -4,6 +4,17 @@
 
 ### 功能构建
 
+- 优化部分示例的控制台输出方法。
+  - com/dwarfeng/ftp/node/example/ClearDirectoryExample。
+  - com/dwarfeng/ftp/node/example/CopyFileExample。
+  - com/dwarfeng/ftp/node/example/DescFileExample。
+  - com/dwarfeng/ftp/node/example/ListFileExample。
+  - com/dwarfeng/ftp/node/example/MoveFileExample。
+  - com/dwarfeng/ftp/node/example/ProcessExample。
+  - com/dwarfeng/ftp/node/example/RenameFileExample。
+  - com/dwarfeng/ftp/node/example/StreamExample。
+  - com/dwarfeng/ftp/api/integration/example/TelqosExample。
+
 - 修复部分示例中应用上下文重复关闭的 bug。
   - com/dwarfeng/ftp/node/example/ClearDirectoryExample。
   - com/dwarfeng/ftp/node/example/CopyFileExample。
