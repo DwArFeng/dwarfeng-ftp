@@ -9,8 +9,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>dwarfeng-ftp</artifactId>
         <groupId>com.dwarfeng</groupId>
+        <artifactId>dwarfeng-ftp</artifactId>
         <version>2.1.1.a-SNAPSHOT</version>
     </parent>
 
