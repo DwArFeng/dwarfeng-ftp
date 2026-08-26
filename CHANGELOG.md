@@ -4,6 +4,17 @@
 
 ### 功能构建
 
+- 修复部分示例中应用上下文重复关闭的 bug。
+  - com/dwarfeng/ftp/node/example/ClearDirectoryExample。
+  - com/dwarfeng/ftp/node/example/CopyFileExample。
+  - com/dwarfeng/ftp/node/example/DescFileExample。
+  - com/dwarfeng/ftp/node/example/ListFileExample。
+  - com/dwarfeng/ftp/node/example/MoveFileExample。
+  - com/dwarfeng/ftp/node/example/ProcessExample。
+  - com/dwarfeng/ftp/node/example/RenameFileExample。
+  - com/dwarfeng/ftp/node/example/StreamExample。
+  - com/dwarfeng/ftp/api/integration/example/TelqosExample。
+
 - 依赖升级。
   - 升级 `fastjson` 依赖版本为 `1.2.84` 以规避漏洞。
   - 升级 `subgrade` 依赖版本为 `1.8.4.a` 以规避漏洞。

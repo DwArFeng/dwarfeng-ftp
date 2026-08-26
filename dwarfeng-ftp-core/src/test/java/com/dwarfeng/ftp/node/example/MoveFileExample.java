@@ -99,8 +99,6 @@ public class MoveFileExample {
         ftpHandler.removeDirectory(new String[]{rootPath, "漫画女孩"});
         System.out.println("示例演示完毕, 感谢您测试与使用!");
 
-        ctx.stop();
-        ctx.close();
         System.exit(0);
     }
 }
