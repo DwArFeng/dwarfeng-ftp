@@ -4,6 +4,15 @@
 
 ### 功能构建
 
+- 更新 README.md。
+
+- 项目文档升级。
+  - docs/wiki/zh-CN/DataConnectModes.md。
+  - docs/wiki/zh-CN/Introduction.md。
+  - docs/wiki/zh-CN/QuickStart.md。
+  - docs/wiki/zh-CN/Troubleshooting.md。
+  - docs/wiki/zh-CN/VersionBlacklist.md。
+
 - 优化部分示例的控制台输出方法。
   - com/dwarfeng/ftp/node/example/ClearDirectoryExample。
   - com/dwarfeng/ftp/node/example/CopyFileExample。

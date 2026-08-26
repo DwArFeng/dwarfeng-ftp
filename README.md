@@ -19,21 +19,21 @@ Dwarfeng（赵扶风）的 JAVA 栈 FTP 服务，基于 `subgrade` 底座开发�
 
 运行 `dwarfeng-ftp-core/src/test` 下的示例以观察核心特性。
 
-| 示例类名                                                | 说明      |
-|-----------------------------------------------------|---------|
-| com.dwarfeng.ftp.node.example.ProcessExample        | 流程示例    |
-| com.dwarfeng.ftp.node.example.StreamExample         | 流的使用示例  |
-| com.dwarfeng.ftp.node.example.ListFileExample       | 列出文件示例  |
+| 示例类名                                            | 说明           |
+|-----------------------------------------------------|----------------|
+| com.dwarfeng.ftp.node.example.ProcessExample        | 流程示例       |
+| com.dwarfeng.ftp.node.example.StreamExample         | 流的使用示例   |
+| com.dwarfeng.ftp.node.example.ListFileExample       | 列出文件示例   |
 | com.dwarfeng.ftp.node.example.RenameFileExample     | 重命名文件示例 |
-| com.dwarfeng.ftp.node.example.MoveFileExample       | 移动文件示例  |
-| com.dwarfeng.ftp.node.example.ClearDirectoryExample | 清空目录示例  |
-| com.dwarfeng.ftp.node.example.CopyFileExample       | 复制文件示例  |
-| com.dwarfeng.ftp.node.example.DescFileExample       | 描述文件示例  |
+| com.dwarfeng.ftp.node.example.MoveFileExample       | 移动文件示例   |
+| com.dwarfeng.ftp.node.example.ClearDirectoryExample | 清空目录示例   |
+| com.dwarfeng.ftp.node.example.CopyFileExample       | 复制文件示例   |
+| com.dwarfeng.ftp.node.example.DescFileExample       | 描述文件示例   |
 
 运行 `dwarfeng-ftp-api/src/test` 下的示例以观察 API 扩展特性。
 
-| 示例类名                                                   | 说明                                 |
-|--------------------------------------------------------|------------------------------------|
+| 示例类名                                               | 说明                                          |
+|--------------------------------------------------------|-----------------------------------------------|
 | com.dwarfeng.ftp.api.integration.example.TelqosExample | Telqos 示例：通过 `ftp` 指令操作 FTP QoS 服务 |
 
 ## 文档
@@ -52,8 +52,8 @@ wiki 为项目的开发人员为本项目编写的详细文档，包含不同语
 该项目针对多个 FTP 服务端进行了测试，测试结果如下：
 
 | FTP 服务器类型             | 测试结果 |
-|-----------------------|------|
-| vsftpd                | 测试通过 |
+|----------------------------|----------|
+| vsftpd                     | 测试通过 |
 | Windows 10 内置 FTP 服务器 | 测试通过 |
 
 ## 安装说明

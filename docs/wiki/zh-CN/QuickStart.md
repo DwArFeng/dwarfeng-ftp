@@ -53,15 +53,16 @@ ftp.password=your-password-here
 
 运行 `src/test` 下的示例以观察全部特性。
 
-| 示例类名                                           | 说明     |
-|------------------------------------------------|--------|
-| com.dwarfeng.ftp.example.ProcessExample        | 流程示例   |
-| com.dwarfeng.ftp.example.StreamExample         | 流的使用示例 |
-| com.dwarfeng.ftp.example.ListFileExample       | 列出文件示例 |
-| com.dwarfeng.ftp.example.RenameFileExample     | 列出文件示例 |
-| com.dwarfeng.ftp.example.ClearDirectoryExample | 清空目录示例 |
-| com.dwarfeng.ftp.example.CopyFileExample       | 复制文件示例 |
-| com.dwarfeng.ftp.example.DescFileExample       | 描述文件示例 |
+| 示例类名                                            | 说明           |
+|-----------------------------------------------------|----------------|
+| com.dwarfeng.ftp.node.example.ProcessExample        | 流程示例       |
+| com.dwarfeng.ftp.node.example.StreamExample         | 流的使用示例   |
+| com.dwarfeng.ftp.node.example.ListFileExample       | 列出文件示例   |
+| com.dwarfeng.ftp.node.example.RenameFileExample     | 重命名文件示例 |
+| com.dwarfeng.ftp.node.example.MoveFileExample       | 移动文件示例   |
+| com.dwarfeng.ftp.node.example.ClearDirectoryExample | 清空目录示例   |
+| com.dwarfeng.ftp.node.example.CopyFileExample       | 复制文件示例   |
+| com.dwarfeng.ftp.node.example.DescFileExample       | 描述文件示例   |
 
 需要注意的是，示例类会让您指定一个 FTP 的根目录，默认为 `foobar`，如果您使用 vsftpd 作为 FTP 服务器，
 您需要提前创建好这个目录，这是因为在部分配置下，vsftpd 不允许用户直接在 FTP 服务对应的根目录下进行操作。
