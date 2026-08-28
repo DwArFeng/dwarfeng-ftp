@@ -20,7 +20,7 @@ dwarfeng-ftp 实现了自动连接保持机制，通过定期发送 `NOOP` 指�
 
 连接保持机制通过 `NoopSendTask` 类实现，该类作为定时任务运行：
 
-- 使用 `ScheduledExecutorService` 定期执行 `NOOP` 指令。
+- 使用 `ThreadPoolTaskScheduler` 定期执行 `NOOP` 指令。
 - 当 NOOP 指令失败时，自动尝试重新连接。
 - 所有连接操作都通过 `ReentrantLock` 确保线程安全。
 
@@ -51,10 +51,10 @@ dwarfeng-ftp 提供了流式的文件读取功能，支持大文件的高效处�
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 
@@ -128,10 +128,10 @@ public void processFile() throws Exception {
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 
@@ -201,10 +201,10 @@ public void writeFile(byte[] data) throws Exception {
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 
@@ -289,10 +289,10 @@ public interface FtpHandler extends StartableHandler {
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 
@@ -362,10 +362,10 @@ public interface FtpHandler extends StartableHandler {
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 
@@ -419,11 +419,11 @@ public interface FtpHandler extends StartableHandler {
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 
@@ -494,11 +494,11 @@ public interface FtpHandler extends StartableHandler {
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 
@@ -561,11 +561,11 @@ public interface FtpHandler extends StartableHandler {
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 
@@ -630,11 +630,11 @@ public interface FtpHandler extends StartableHandler {
 接口方法：
 
 ```java
-import com.dwarfeng.ftp.bean.dto.FtpFile;
-import com.dwarfeng.ftp.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
+import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface FtpHandler extends StartableHandler {
 

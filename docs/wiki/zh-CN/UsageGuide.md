@@ -39,7 +39,7 @@
         <!-- 省略其他配置 -->
         <dependency>
             <groupId>com.dwarfeng</groupId>
-            <artifactId>dwarfeng-ftp</artifactId>
+            <artifactId>dwarfeng-ftp-core</artifactId>
             <version>${dwarfeng-ftp.version}</version>
         </dependency>
         <!-- 省略其他配置 -->
@@ -748,8 +748,8 @@ package com.example.foobar;
 
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
-import com.dwarfeng.subgrade.stack.exception.HandlerException;
-import com.dwarfeng.subgrade.stack.handler.StartableHandler;
+import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
+import com.dwarfeng.subgrade.lifecycle.stack.handler.StartableHandler;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -1428,7 +1428,7 @@ public class PathResolverUsageSnippet {
 package com.example.foobar;
 
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
-import com.dwarfeng.subgrade.stack.exception.HandlerException;
+import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
 
 public class FoobarFacade {
 
@@ -1500,7 +1500,7 @@ public class FoobarFacade {
 package com.example.foobar;
 
 import com.dwarfeng.ftp.stack.handler.FtpHandler;
-import com.dwarfeng.subgrade.stack.exception.HandlerException;
+import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
 
 import java.nio.charset.StandardCharsets;
 

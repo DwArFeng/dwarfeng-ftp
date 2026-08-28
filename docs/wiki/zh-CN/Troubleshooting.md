@@ -28,7 +28,7 @@
 
 建议至少准备两份配置对照：
 
-1. 代码仓中的参考模板：`dwarfeng-ftp-core/src/test/resources/ftp/connection.properties`。
+1. 代码仓中的参考模板：`dwarfeng-ftp-core/src/test/resources/com/dwarfeng/ftp/node/ftp/connection.properties`。
 2. 当前环境的实际生效配置（例如 `conf/*.properties` 或容器注入参数）。
 
 ## 无法连接到 FTP 服务
@@ -149,7 +149,7 @@
 2. 核对路径是否正确，避免删除到错误层级。
 3. 检查账号是否具备目录删除权限。
 4. 检查目录中是否存在服务端拒删对象（权限、锁定、只读策略等，需实测）。
-5. 若批量清理，优先使用项目示例流程验证：`com.dwarfeng.ftp.example.ClearDirectoryExample`。
+5. 若批量清理，优先使用项目示例流程验证：`com.dwarfeng.ftp.node.example.ClearDirectoryExample`。
 
 ### 实现行为提示
 

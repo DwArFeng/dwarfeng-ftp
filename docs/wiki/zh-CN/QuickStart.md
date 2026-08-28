@@ -34,7 +34,8 @@ git clone git@gitee.com:dwarfeng/dwarfeng-ftp.git
 
 在下载的源码目录下，新建 `conf/test.ftp` 目录。
 
-随后，将 `src/test/resources/ftp/connection.properties` 文件复制到新建好的目录下。
+随后，将 `dwarfeng-ftp-core/src/test/resources/com/dwarfeng/ftp/node/ftp/connection.properties`
+文件复制到新建好的目录下。
 
 同时，需要将以下配置项更改为 ftp 服务器的实际值。
 
@@ -51,7 +52,7 @@ ftp.password=your-password-here
 
 ## 效果体验
 
-运行 `src/test` 下的示例以观察全部特性。
+运行 `dwarfeng-ftp-core/src/test` 下的示例以观察全部特性。
 
 | 示例类名                                            | 说明           |
 |-----------------------------------------------------|----------------|
