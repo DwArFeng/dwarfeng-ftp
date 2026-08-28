@@ -1,0 +1,178 @@
+# ChangeLog
+
+## Release_2.1.1_20260826_build_A
+
+### 功能构建
+
+- 更新 README.md。
+
+- 项目文档升级。
+  - docs/wiki/zh-CN/DataConnectModes.md。
+  - docs/wiki/zh-CN/Introduction.md。
+  - docs/wiki/zh-CN/QuickStart.md。
+  - docs/wiki/zh-CN/Troubleshooting.md。
+  - docs/wiki/zh-CN/VersionBlacklist.md。
+
+- 优化部分示例的控制台输出方法。
+  - com/dwarfeng/ftp/node/example/ClearDirectoryExample。
+  - com/dwarfeng/ftp/node/example/CopyFileExample。
+  - com/dwarfeng/ftp/node/example/DescFileExample。
+  - com/dwarfeng/ftp/node/example/ListFileExample。
+  - com/dwarfeng/ftp/node/example/MoveFileExample。
+  - com/dwarfeng/ftp/node/example/ProcessExample。
+  - com/dwarfeng/ftp/node/example/RenameFileExample。
+  - com/dwarfeng/ftp/node/example/StreamExample。
+  - com/dwarfeng/ftp/api/integration/example/TelqosExample。
+
+- 修复部分示例中应用上下文重复关闭的 bug。
+  - com/dwarfeng/ftp/node/example/ClearDirectoryExample。
+  - com/dwarfeng/ftp/node/example/CopyFileExample。
+  - com/dwarfeng/ftp/node/example/DescFileExample。
+  - com/dwarfeng/ftp/node/example/ListFileExample。
+  - com/dwarfeng/ftp/node/example/MoveFileExample。
+  - com/dwarfeng/ftp/node/example/ProcessExample。
+  - com/dwarfeng/ftp/node/example/RenameFileExample。
+  - com/dwarfeng/ftp/node/example/StreamExample。
+  - com/dwarfeng/ftp/api/integration/example/TelqosExample。
+
+- 依赖升级。
+  - 升级 `fastjson` 依赖版本为 `1.2.84` 以规避漏洞。
+  - 升级 `subgrade` 依赖版本为 `1.8.4.a` 以规避漏洞。
+  - 升级 `spring-telqos` 依赖版本为 `2.0.3.a` 以规避漏洞。
+
+- 优化文件格式。
+  - 优化 `pom.xml` 文件的格式。
+
+### Bug 修复
+
+- (无)
+
+### 功能移除
+
+- (无)
+
+---
+
+## Release_2.1.0_20260602_build_A
+
+### 功能构建
+
+- 更新 README.md。
+
+- Wiki 更新。
+  - docs/wiki/zh-CN/ConfigParameters.md。
+  - docs/wiki/zh-CN/Introduction.md。
+
+- 项目异常机制优化。
+  - 新增 `com.dwarfeng.ftp.sdk.util.FtpExceptionHelper` 工具类。
+  - 新增 `com.dwarfeng.ftp.sdk.util.FtpQosExceptionHelper` 工具类。
+  - 优化 `com.dwarfeng.ftp.impl.handler.FtpHandlerImpl` 中的异常处理逻辑。
+  - 优化 `com.dwarfeng.ftp.impl.handler.FtpQosHandlerImpl` 中的异常处理逻辑。
+
+- 项目结构优化。
+  - 将 `ClearDirectoryExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `CopyFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `DescFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `ListFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `MoveFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `ProcessExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `RenameFileExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `StreamExample` 移动至 `com.dwarfeng.ftp.node.example` 包下。
+  - 将 `FtpConfigUtil` 移动至 `com.dwarfeng.ftp.stack.util` 包下。
+
+### Bug 修复
+
+- 修正 `dwarfeng-ftp-api` 子模块部分 `properties` 文件错误的字符集。
+  - telqos/connection.properties。
+
+- 修正 `dwarfeng-ftp-core` 子模块部分 `xsd` 文件中错误的内容。
+  - META-INF/dwarfeng-ftp.xsd。
+
+### 功能移除
+
+- (无)
+
+---
+
+## Release_2.0.2_20260527_build_A
+
+### 功能构建
+
+- Wiki 更新。
+  - docs/wiki/zh-CN/UseWithMaven.md。
+
+- `dwarfeng-ftp-api` 子模块配置文件优化。
+  - telqos/connection.properties。
+
+- 依赖升级。
+  - 升级 `subgrade` 依赖版本为 `1.8.3.a` 以规避漏洞。
+  - 升级 `spring-telqos` 依赖版本为 `2.0.2.a` 以规避漏洞。
+
+### Bug 修复
+
+- (无)
+
+### 功能移除
+
+- (无)
+
+---
+
+## Release_2.0.1_20260510_build_A
+
+### 功能构建
+
+- Wiki 编写。
+  - docs/wiki/zh-CN/Troubleshooting.md。
+
+- 优化部分类中字段的注解。
+  - com.dwarfeng.ftp.api.integration.springtelqos.FtpCommand。
+
+### Bug 修复
+
+- (无)
+
+### 功能移除
+
+- (无)
+
+---
+
+## Release_2.0.0_20260506_build_A
+
+### 功能构建
+
+- 更新 README.md。
+
+- Wiki 更新。
+  - docs/wiki/zh-CN/UsageGuide.md。
+  - docs/wiki/zh-CN/Introduction.md。
+
+- 新增 spring-telqos 框架集成指令。
+  - com.dwarfeng.ftp.api.integration.springtelqos.FtpCommand。
+
+- 增加依赖。
+  - 增加依赖 `spring-telqos` 以应用其新功能，版本为 `2.0.0.a`。
+
+- 为项目增加 xsd 配置机制。
+  - 增加 `META-INF/dwarfeng-ftp.xsd` 文件。
+  - 增加 `com.dwarfeng.ftp.node.configuration.FtpNamespaceHandlerSupport` 及对应的定义解析器。
+  - 调整测试目录的相关配置文件，以使用新的 xsd 配置机制。
+
+- 新增 QoS 服务。
+  - com.dwarfeng.ftp.stack.service.FtpQosService。
+
+- 重构项目模块。
+  - 新增 `dwarfeng-ftp-core` 子模块，并迁移原有代码至该模块。
+  - 新增 `dwarfeng-ftp-api` 子模块。
+
+- 重构项目结构。
+  - 将项目构型更改为 subgrade 稳健式标准构型。
+
+### Bug 修复
+
+- (无)
+
+### 功能移除
+
+- (无)
