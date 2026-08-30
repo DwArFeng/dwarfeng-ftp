@@ -10,7 +10,7 @@
 
     <groupId>com.dwarfeng</groupId>
     <artifactId>dwarfeng-ftp</artifactId>
-    <version>3.0.0.a</version>
+    <version>3.0.1.a-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>dwarfeng-ftp</name>
