@@ -5,8 +5,8 @@ import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
 import com.dwarfeng.subgrade.basic.stack.exception.ServiceException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
@@ -67,7 +67,7 @@ public interface FtpQosService {
      */
     boolean existsFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException;
 
     /**
@@ -78,7 +78,7 @@ public interface FtpQosService {
      */
     boolean existsFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -89,7 +89,7 @@ public interface FtpQosService {
      */
     void storeFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull byte[] content
+            @NotNull String[] filePaths, @NotNull String fileName, byte @NotNull [] content
     ) throws ServiceException;
 
     /**
@@ -100,7 +100,7 @@ public interface FtpQosService {
      */
     void storeFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull byte[] content
+            @NotNull FtpFileLocation fileLocation, byte @NotNull [] content
     ) throws ServiceException;
 
     /**
@@ -111,7 +111,7 @@ public interface FtpQosService {
      */
     byte[] retrieveFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException;
 
     /**
@@ -122,7 +122,7 @@ public interface FtpQosService {
      */
     byte[] retrieveFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -133,7 +133,7 @@ public interface FtpQosService {
      */
     void storeFileByStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull InputStream in
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull InputStream in
     ) throws ServiceException;
 
     /**
@@ -144,7 +144,7 @@ public interface FtpQosService {
      */
     void storeFileByStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull InputStream in
+            @NotNull FtpFileLocation fileLocation, @NotNull InputStream in
     ) throws ServiceException;
 
     /**
@@ -155,7 +155,7 @@ public interface FtpQosService {
      */
     void retrieveFileByStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull OutputStream out
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull OutputStream out
     ) throws ServiceException;
 
     /**
@@ -166,7 +166,7 @@ public interface FtpQosService {
      */
     void retrieveFileByStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull OutputStream out
+            @NotNull FtpFileLocation fileLocation, @NotNull OutputStream out
     ) throws ServiceException;
 
     /**
@@ -177,7 +177,7 @@ public interface FtpQosService {
      */
     void deleteFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException;
 
     /**
@@ -188,7 +188,7 @@ public interface FtpQosService {
      */
     void deleteFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -199,7 +199,7 @@ public interface FtpQosService {
      */
     void removeDirectory(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws ServiceException;
 
     /**
@@ -210,7 +210,7 @@ public interface FtpQosService {
      */
     void removeDirectory(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -221,7 +221,7 @@ public interface FtpQosService {
      */
     FtpFile[] listFiles(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws ServiceException;
 
     /**
@@ -232,7 +232,7 @@ public interface FtpQosService {
      */
     FtpFile[] listFiles(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -243,7 +243,7 @@ public interface FtpQosService {
      */
     String[] listFileNames(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws ServiceException;
 
     /**
@@ -254,7 +254,7 @@ public interface FtpQosService {
      */
     String[] listFileNames(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -265,7 +265,7 @@ public interface FtpQosService {
      */
     InputStream openInputStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException;
 
     /**
@@ -276,7 +276,7 @@ public interface FtpQosService {
      */
     InputStream openInputStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -287,7 +287,7 @@ public interface FtpQosService {
      */
     OutputStream openOutputStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException;
 
     /**
@@ -298,7 +298,7 @@ public interface FtpQosService {
      */
     OutputStream openOutputStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -309,8 +309,8 @@ public interface FtpQosService {
      */
     void renameFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws ServiceException;
 
     /**
@@ -321,7 +321,7 @@ public interface FtpQosService {
      */
     void renameFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws ServiceException;
 
     /**
@@ -332,7 +332,7 @@ public interface FtpQosService {
      */
     void clearDirectory(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws ServiceException;
 
     /**
@@ -343,7 +343,7 @@ public interface FtpQosService {
      */
     void clearDirectory(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -354,8 +354,8 @@ public interface FtpQosService {
      */
     void copyFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws ServiceException;
 
     /**
@@ -366,7 +366,7 @@ public interface FtpQosService {
      */
     void copyFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws ServiceException;
 
     /**
@@ -377,7 +377,7 @@ public interface FtpQosService {
      */
     FtpFile descFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException;
 
     /**
@@ -388,7 +388,7 @@ public interface FtpQosService {
      */
     FtpFile descFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException;
 
     /**
@@ -404,8 +404,8 @@ public interface FtpQosService {
      */
     default void moveFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws ServiceException {
         renameFile(handlerName, oldFilePaths, oldFileName, neoFilePaths, neoFileName);
     }
@@ -421,7 +421,7 @@ public interface FtpQosService {
      */
     default void moveFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws ServiceException {
         renameFile(handlerName, oldFileLocation, neoFileLocation);
     }

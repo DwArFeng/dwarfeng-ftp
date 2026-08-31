@@ -2,7 +2,7 @@ package com.dwarfeng.ftp.sdk.util;
 
 import com.dwarfeng.ftp.stack.exception.FtpQosException;
 
-import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * FTP QoS 处理器异常帮助类。
@@ -18,7 +18,7 @@ public final class FtpQosExceptionHelper {
      * @param e 指定的异常。
      * @return 解析后得到的 FTP QoS 处理器异常。
      */
-    public static FtpQosException parse(@Nonnull Exception e) {
+    public static FtpQosException parse(@NotNull Exception e) {
         if (e instanceof FtpQosException) {
             return (FtpQosException) e;
         }

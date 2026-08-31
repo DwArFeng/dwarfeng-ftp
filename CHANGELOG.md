@@ -8,7 +8,21 @@
 
 ### Bug 修复
 
-- (无)
+- 修复部分类中静态注解不正确的 bug。
+  - com.dwarfeng.ftp.api.integration.springtelqos.FtpCommand。
+  - com.dwarfeng.ftp.impl.handler.FtpHandlerImpl。
+  - com.dwarfeng.ftp.impl.handler.FtpQosHandlerImpl。
+  - com.dwarfeng.ftp.impl.service.FtpQosServiceImpl。
+  - com.dwarfeng.ftp.node.configuration.FtpConfigDefinitionParser。
+  - com.dwarfeng.ftp.node.configuration.FtpHandlerDefinitionParser。
+  - com.dwarfeng.ftp.node.configuration.FtpQosDefinitionParser。
+  - com.dwarfeng.ftp.sdk.util.FtpExceptionHelper。
+  - com.dwarfeng.ftp.sdk.util.FtpFileUtil。
+  - com.dwarfeng.ftp.sdk.util.FtpQosExceptionHelper。
+  - com.dwarfeng.ftp.stack.handler.FtpHandler。
+  - com.dwarfeng.ftp.stack.handler.FtpQosHandler。
+  - com.dwarfeng.ftp.stack.service.FtpQosService。
+  - com.dwarfeng.ftp.stack.struct.FtpFileLocation。
 
 ### 功能移除
 

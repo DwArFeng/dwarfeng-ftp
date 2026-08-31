@@ -9,8 +9,8 @@ import com.dwarfeng.ftp.stack.handler.FtpHandler;
 import com.dwarfeng.ftp.stack.handler.FtpQosHandler;
 import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
 import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +94,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public boolean existsFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).existsFile(filePaths, fileName);
@@ -106,7 +106,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public boolean existsFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).existsFile(fileLocation);
@@ -118,7 +118,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void storeFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull byte[] content
+            @NotNull String[] filePaths, @NotNull String fileName, byte @NotNull [] content
     ) throws HandlerException {
         try {
             determineHandler(handlerName).storeFile(filePaths, fileName, content);
@@ -130,7 +130,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void storeFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull byte[] content
+            @NotNull FtpFileLocation fileLocation, byte @NotNull [] content
     ) throws HandlerException {
         try {
             determineHandler(handlerName).storeFile(fileLocation, content);
@@ -142,7 +142,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public byte[] retrieveFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).retrieveFile(filePaths, fileName);
@@ -154,7 +154,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public byte[] retrieveFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).retrieveFile(fileLocation);
@@ -166,7 +166,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void storeFileByStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull InputStream in
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull InputStream in
     ) throws HandlerException {
         try {
             determineHandler(handlerName).storeFileByStream(filePaths, fileName, in);
@@ -178,7 +178,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void storeFileByStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull InputStream in
+            @NotNull FtpFileLocation fileLocation, @NotNull InputStream in
     ) throws HandlerException {
         try {
             determineHandler(handlerName).storeFileByStream(fileLocation, in);
@@ -190,7 +190,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void retrieveFileByStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull OutputStream out
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull OutputStream out
     ) throws HandlerException {
         try {
             determineHandler(handlerName).retrieveFileByStream(filePaths, fileName, out);
@@ -202,7 +202,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void retrieveFileByStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull OutputStream out
+            @NotNull FtpFileLocation fileLocation, @NotNull OutputStream out
     ) throws HandlerException {
         try {
             determineHandler(handlerName).retrieveFileByStream(fileLocation, out);
@@ -214,7 +214,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void deleteFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException {
         try {
             determineHandler(handlerName).deleteFile(filePaths, fileName);
@@ -226,7 +226,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void deleteFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             determineHandler(handlerName).deleteFile(fileLocation);
@@ -238,7 +238,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void removeDirectory(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws HandlerException {
         try {
             determineHandler(handlerName).removeDirectory(filePaths);
@@ -250,7 +250,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void removeDirectory(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             determineHandler(handlerName).removeDirectory(fileLocation);
@@ -262,7 +262,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public FtpFile[] listFiles(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).listFiles(filePaths);
@@ -274,7 +274,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public FtpFile[] listFiles(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).listFiles(fileLocation);
@@ -286,7 +286,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public String[] listFileNames(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).listFileNames(filePaths);
@@ -298,7 +298,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public String[] listFileNames(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).listFileNames(fileLocation);
@@ -310,7 +310,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public InputStream openInputStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).openInputStream(filePaths, fileName);
@@ -322,7 +322,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public InputStream openInputStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).openInputStream(fileLocation);
@@ -334,7 +334,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public OutputStream openOutputStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).openOutputStream(filePaths, fileName);
@@ -346,7 +346,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public OutputStream openOutputStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).openOutputStream(fileLocation);
@@ -358,8 +358,8 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void renameFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws HandlerException {
         try {
             determineHandler(handlerName).renameFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
@@ -371,7 +371,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void renameFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws HandlerException {
         try {
             determineHandler(handlerName).renameFile(oldFileLocation, neoFileLocation);
@@ -383,7 +383,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void clearDirectory(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws HandlerException {
         try {
             determineHandler(handlerName).clearDirectory(filePaths);
@@ -395,7 +395,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void clearDirectory(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             determineHandler(handlerName).clearDirectory(fileLocation);
@@ -407,8 +407,8 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void copyFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws HandlerException {
         try {
             determineHandler(handlerName).copyFile(oldFilePaths, oldFileName, neoFilePaths, neoFileName);
@@ -420,7 +420,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public void copyFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws HandlerException {
         try {
             determineHandler(handlerName).copyFile(oldFileLocation, neoFileLocation);
@@ -432,7 +432,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public FtpFile descFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).descFile(filePaths, fileName);
@@ -444,7 +444,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public FtpFile descFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException {
         try {
             return determineHandler(handlerName).descFile(fileLocation);

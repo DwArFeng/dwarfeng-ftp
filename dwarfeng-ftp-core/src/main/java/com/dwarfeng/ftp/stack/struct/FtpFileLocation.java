@@ -1,7 +1,7 @@
 package com.dwarfeng.ftp.stack.struct;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -25,12 +25,12 @@ public final class FtpFileLocation {
     private final String[] filePaths;
     private final String fileName;
 
-    public FtpFileLocation(@Nonnull String[] filePaths, @Nullable String fileName) {
+    public FtpFileLocation(@NotNull String[] filePaths, @Nullable String fileName) {
         this.filePaths = filePaths;
         this.fileName = fileName;
     }
 
-    @Nonnull
+    @NotNull
     public String[] getFilePaths() {
         return filePaths;
     }

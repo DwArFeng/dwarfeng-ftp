@@ -27,6 +27,11 @@
     </properties>
 
     <dependencies>
+        <!-- JetBrains 静态注解 -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
         <!-- Jakarta Annotation -->
         <dependency>
             <groupId>jakarta.annotation</groupId>

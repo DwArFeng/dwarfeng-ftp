@@ -2,7 +2,7 @@ package com.dwarfeng.ftp.sdk.util;
 
 import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 
-import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
@@ -19,7 +19,7 @@ public final class FtpFileUtil {
      * @param ftpFile 指定的 FTP 文件。
      * @return FTP 文件是否为文件。
      */
-    public static boolean isFile(@Nonnull FtpFile ftpFile) {
+    public static boolean isFile(@NotNull FtpFile ftpFile) {
         return ftpFileTypeEquals(ftpFile, Constants.FTP_FILE_TYPE_FILE);
     }
 
@@ -29,7 +29,7 @@ public final class FtpFileUtil {
      * @param ftpFile 指定的 FTP 文件。
      * @return FTP 文件是否为文件夹。
      */
-    public static boolean isDirectory(@Nonnull FtpFile ftpFile) {
+    public static boolean isDirectory(@NotNull FtpFile ftpFile) {
         return ftpFileTypeEquals(ftpFile, Constants.FTP_FILE_TYPE_DIRECTORY);
     }
 
@@ -39,7 +39,7 @@ public final class FtpFileUtil {
      * @param ftpFile 指定的 FTP 文件。
      * @return FTP 文件是否为符号链接。
      */
-    public static boolean isSymbolicLink(@Nonnull FtpFile ftpFile) {
+    public static boolean isSymbolicLink(@NotNull FtpFile ftpFile) {
         return ftpFileTypeEquals(ftpFile, Constants.FTP_FILE_TYPE_SYMBOLIC_LINK);
     }
 
@@ -49,7 +49,7 @@ public final class FtpFileUtil {
      * @param ftpFile 指定的 FTP 文件。
      * @return FTP 文件是否为未知类型。
      */
-    public static boolean isUnknown(@Nonnull FtpFile ftpFile) {
+    public static boolean isUnknown(@NotNull FtpFile ftpFile) {
         return ftpFileTypeEquals(ftpFile, Constants.FTP_FILE_TYPE_UNKNOWN);
     }
 

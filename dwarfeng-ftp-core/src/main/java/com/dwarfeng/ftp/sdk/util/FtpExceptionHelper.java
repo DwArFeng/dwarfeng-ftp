@@ -2,7 +2,7 @@ package com.dwarfeng.ftp.sdk.util;
 
 import com.dwarfeng.ftp.stack.exception.FtpException;
 
-import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * FTP 处理器异常帮助类。
@@ -18,7 +18,7 @@ public final class FtpExceptionHelper {
      * @param e 指定的异常。
      * @return 解析后得到的 FTP 处理器异常。
      */
-    public static FtpException parse(@Nonnull Exception e) {
+    public static FtpException parse(@NotNull Exception e) {
         if (e instanceof FtpException) {
             return (FtpException) e;
         }

@@ -3,7 +3,7 @@ package com.dwarfeng.ftp.node.configuration;
 import com.dwarfeng.ftp.impl.handler.FtpQosHandlerImpl;
 import com.dwarfeng.ftp.impl.service.FtpQosServiceImpl;
 import com.dwarfeng.ftp.sdk.util.BeanDefinitionParserUtil;
-import jakarta.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -22,7 +22,7 @@ import org.w3c.dom.Element;
 public class FtpQosDefinitionParser implements BeanDefinitionParser {
 
     @Override
-    public BeanDefinition parse(Element element, @Nonnull ParserContext parserContext) {
+    public BeanDefinition parse(Element element, @NotNull ParserContext parserContext) {
         String qosHandlerName = (String) BeanDefinitionParserUtil.mayResolveSpel(
                 parserContext, element.getAttribute("qos-handler-name")
         );

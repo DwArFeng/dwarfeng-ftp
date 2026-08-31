@@ -8,9 +8,9 @@ import com.dwarfeng.subgrade.basic.sdk.exception.ServiceExceptionHelper;
 import com.dwarfeng.subgrade.basic.stack.exception.ServiceException;
 import com.dwarfeng.subgrade.basic.stack.exception.ServiceExceptionMapper;
 import com.dwarfeng.subgrade.basic.stack.log.LogLevel;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.annotation.PreDestroy;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,7 +84,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public boolean existsFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException {
         try {
             return ftpQosHandler.existsFile(handlerName, filePaths, fileName);
@@ -96,7 +96,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public boolean existsFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             return ftpQosHandler.existsFile(handlerName, fileLocation);
@@ -108,7 +108,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void storeFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull byte[] content
+            @NotNull String[] filePaths, @NotNull String fileName, byte @NotNull [] content
     ) throws ServiceException {
         try {
             ftpQosHandler.storeFile(handlerName, filePaths, fileName, content);
@@ -120,7 +120,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void storeFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull byte[] content
+            @NotNull FtpFileLocation fileLocation, byte @NotNull [] content
     ) throws ServiceException {
         try {
             ftpQosHandler.storeFile(handlerName, fileLocation, content);
@@ -132,7 +132,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public byte[] retrieveFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException {
         try {
             return ftpQosHandler.retrieveFile(handlerName, filePaths, fileName);
@@ -144,7 +144,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public byte[] retrieveFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             return ftpQosHandler.retrieveFile(handlerName, fileLocation);
@@ -156,7 +156,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void storeFileByStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull InputStream in
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull InputStream in
     ) throws ServiceException {
         try {
             ftpQosHandler.storeFileByStream(handlerName, filePaths, fileName, in);
@@ -168,7 +168,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void storeFileByStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull InputStream in
+            @NotNull FtpFileLocation fileLocation, @NotNull InputStream in
     ) throws ServiceException {
         try {
             ftpQosHandler.storeFileByStream(handlerName, fileLocation, in);
@@ -180,7 +180,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void retrieveFileByStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull OutputStream out
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull OutputStream out
     ) throws ServiceException {
         try {
             ftpQosHandler.retrieveFileByStream(handlerName, filePaths, fileName, out);
@@ -192,7 +192,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void retrieveFileByStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull OutputStream out
+            @NotNull FtpFileLocation fileLocation, @NotNull OutputStream out
     ) throws ServiceException {
         try {
             ftpQosHandler.retrieveFileByStream(handlerName, fileLocation, out);
@@ -204,7 +204,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void deleteFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException {
         try {
             ftpQosHandler.deleteFile(handlerName, filePaths, fileName);
@@ -216,7 +216,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void deleteFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             ftpQosHandler.deleteFile(handlerName, fileLocation);
@@ -228,7 +228,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void removeDirectory(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws ServiceException {
         try {
             ftpQosHandler.removeDirectory(handlerName, filePaths);
@@ -240,7 +240,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void removeDirectory(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             ftpQosHandler.removeDirectory(handlerName, fileLocation);
@@ -252,7 +252,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public FtpFile[] listFiles(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws ServiceException {
         try {
             return ftpQosHandler.listFiles(handlerName, filePaths);
@@ -264,7 +264,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public FtpFile[] listFiles(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             return ftpQosHandler.listFiles(handlerName, fileLocation);
@@ -276,7 +276,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public String[] listFileNames(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws ServiceException {
         try {
             return ftpQosHandler.listFileNames(handlerName, filePaths);
@@ -288,7 +288,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public String[] listFileNames(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             return ftpQosHandler.listFileNames(handlerName, fileLocation);
@@ -300,7 +300,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public InputStream openInputStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException {
         try {
             return ftpQosHandler.openInputStream(handlerName, filePaths, fileName);
@@ -312,7 +312,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public InputStream openInputStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             return ftpQosHandler.openInputStream(handlerName, fileLocation);
@@ -324,7 +324,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public OutputStream openOutputStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException {
         try {
             return ftpQosHandler.openOutputStream(handlerName, filePaths, fileName);
@@ -336,7 +336,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public OutputStream openOutputStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             return ftpQosHandler.openOutputStream(handlerName, fileLocation);
@@ -348,8 +348,8 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void renameFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws ServiceException {
         try {
             ftpQosHandler.renameFile(handlerName, oldFilePaths, oldFileName, neoFilePaths, neoFileName);
@@ -361,7 +361,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void renameFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws ServiceException {
         try {
             ftpQosHandler.renameFile(handlerName, oldFileLocation, neoFileLocation);
@@ -373,7 +373,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void clearDirectory(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws ServiceException {
         try {
             ftpQosHandler.clearDirectory(handlerName, filePaths);
@@ -385,7 +385,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void clearDirectory(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             ftpQosHandler.clearDirectory(handlerName, fileLocation);
@@ -397,8 +397,8 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void copyFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws ServiceException {
         try {
             ftpQosHandler.copyFile(handlerName, oldFilePaths, oldFileName, neoFilePaths, neoFileName);
@@ -410,7 +410,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public void copyFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws ServiceException {
         try {
             ftpQosHandler.copyFile(handlerName, oldFileLocation, neoFileLocation);
@@ -422,7 +422,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public FtpFile descFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws ServiceException {
         try {
             return ftpQosHandler.descFile(handlerName, filePaths, fileName);
@@ -434,7 +434,7 @@ public class FtpQosServiceImpl implements FtpQosService {
     @Override
     public FtpFile descFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws ServiceException {
         try {
             return ftpQosHandler.descFile(handlerName, fileLocation);

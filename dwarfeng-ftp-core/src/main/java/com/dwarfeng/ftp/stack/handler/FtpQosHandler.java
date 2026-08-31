@@ -4,8 +4,8 @@ import com.dwarfeng.ftp.stack.bean.dto.FtpFile;
 import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
 import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
@@ -78,7 +78,7 @@ public interface FtpQosHandler {
      */
     boolean existsFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException;
 
     /**
@@ -89,7 +89,7 @@ public interface FtpQosHandler {
      */
     boolean existsFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -100,7 +100,7 @@ public interface FtpQosHandler {
      */
     void storeFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull byte[] content
+            @NotNull String[] filePaths, @NotNull String fileName, byte @NotNull [] content
     ) throws HandlerException;
 
     /**
@@ -111,7 +111,7 @@ public interface FtpQosHandler {
      */
     void storeFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull byte[] content
+            @NotNull FtpFileLocation fileLocation, byte @NotNull [] content
     ) throws HandlerException;
 
     /**
@@ -122,7 +122,7 @@ public interface FtpQosHandler {
      */
     byte[] retrieveFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException;
 
     /**
@@ -133,7 +133,7 @@ public interface FtpQosHandler {
      */
     byte[] retrieveFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -144,7 +144,7 @@ public interface FtpQosHandler {
      */
     void storeFileByStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull InputStream in
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull InputStream in
     ) throws HandlerException;
 
     /**
@@ -155,7 +155,7 @@ public interface FtpQosHandler {
      */
     void storeFileByStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull InputStream in
+            @NotNull FtpFileLocation fileLocation, @NotNull InputStream in
     ) throws HandlerException;
 
     /**
@@ -166,7 +166,7 @@ public interface FtpQosHandler {
      */
     void retrieveFileByStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull OutputStream out
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull OutputStream out
     ) throws HandlerException;
 
     /**
@@ -177,7 +177,7 @@ public interface FtpQosHandler {
      */
     void retrieveFileByStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation, @Nonnull OutputStream out
+            @NotNull FtpFileLocation fileLocation, @NotNull OutputStream out
     ) throws HandlerException;
 
     /**
@@ -188,7 +188,7 @@ public interface FtpQosHandler {
      */
     void deleteFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException;
 
     /**
@@ -199,7 +199,7 @@ public interface FtpQosHandler {
      */
     void deleteFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -210,7 +210,7 @@ public interface FtpQosHandler {
      */
     void removeDirectory(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws HandlerException;
 
     /**
@@ -221,7 +221,7 @@ public interface FtpQosHandler {
      */
     void removeDirectory(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -232,7 +232,7 @@ public interface FtpQosHandler {
      */
     FtpFile[] listFiles(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws HandlerException;
 
     /**
@@ -243,7 +243,7 @@ public interface FtpQosHandler {
      */
     FtpFile[] listFiles(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -254,7 +254,7 @@ public interface FtpQosHandler {
      */
     String[] listFileNames(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws HandlerException;
 
     /**
@@ -265,7 +265,7 @@ public interface FtpQosHandler {
      */
     String[] listFileNames(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -276,7 +276,7 @@ public interface FtpQosHandler {
      */
     InputStream openInputStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException;
 
     /**
@@ -287,7 +287,7 @@ public interface FtpQosHandler {
      */
     InputStream openInputStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -298,7 +298,7 @@ public interface FtpQosHandler {
      */
     OutputStream openOutputStream(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException;
 
     /**
@@ -309,7 +309,7 @@ public interface FtpQosHandler {
      */
     OutputStream openOutputStream(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -320,8 +320,8 @@ public interface FtpQosHandler {
      */
     void renameFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws HandlerException;
 
     /**
@@ -332,7 +332,7 @@ public interface FtpQosHandler {
      */
     void renameFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws HandlerException;
 
     /**
@@ -343,7 +343,7 @@ public interface FtpQosHandler {
      */
     void clearDirectory(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths
+            @NotNull String[] filePaths
     ) throws HandlerException;
 
     /**
@@ -354,7 +354,7 @@ public interface FtpQosHandler {
      */
     void clearDirectory(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -365,8 +365,8 @@ public interface FtpQosHandler {
      */
     void copyFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws HandlerException;
 
     /**
@@ -377,7 +377,7 @@ public interface FtpQosHandler {
      */
     void copyFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws HandlerException;
 
     /**
@@ -388,7 +388,7 @@ public interface FtpQosHandler {
      */
     FtpFile descFile(
             @Nullable String handlerName,
-            @Nonnull String[] filePaths, @Nonnull String fileName
+            @NotNull String[] filePaths, @NotNull String fileName
     ) throws HandlerException;
 
     /**
@@ -399,7 +399,7 @@ public interface FtpQosHandler {
      */
     FtpFile descFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation fileLocation
+            @NotNull FtpFileLocation fileLocation
     ) throws HandlerException;
 
     /**
@@ -415,8 +415,8 @@ public interface FtpQosHandler {
      */
     default void moveFile(
             @Nullable String handlerName,
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws HandlerException {
         renameFile(handlerName, oldFilePaths, oldFileName, neoFilePaths, neoFileName);
     }
@@ -432,7 +432,7 @@ public interface FtpQosHandler {
      */
     default void moveFile(
             @Nullable String handlerName,
-            @Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation
+            @NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation
     ) throws HandlerException {
         renameFile(handlerName, oldFileLocation, neoFileLocation);
     }

@@ -11,11 +11,11 @@ import com.dwarfeng.ftp.stack.struct.FtpFileLocation;
 import com.dwarfeng.subgrade.aop.sdk.interceptor.analyse.BehaviorAnalyse;
 import com.dwarfeng.subgrade.aop.sdk.interceptor.analyse.SkipRecord;
 import com.dwarfeng.subgrade.basic.stack.exception.HandlerException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -113,7 +113,7 @@ public class FtpHandlerImpl implements FtpHandler {
         );
     }
 
-    public FtpHandlerImpl(@Nonnull ThreadPoolTaskScheduler scheduler, @Nonnull FtpConfig config) {
+    public FtpHandlerImpl(@NotNull ThreadPoolTaskScheduler scheduler, @NotNull FtpConfig config) {
         this.scheduler = scheduler;
         this.config = config;
     }
@@ -229,7 +229,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public boolean existsFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
+    public boolean existsFile(@NotNull String[] filePaths, @NotNull String fileName) throws FtpException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -244,7 +244,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public boolean existsFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public boolean existsFile(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -284,7 +284,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @Override
     public void storeFile(
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull @SkipRecord byte[] content
+            @NotNull String[] filePaths, @NotNull String fileName, @SkipRecord byte @NotNull [] content
     ) throws FtpException {
         lock.lock();
         try {
@@ -300,7 +300,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void storeFile(@Nonnull FtpFileLocation fileLocation, @Nonnull @SkipRecord byte[] content)
+    public void storeFile(@NotNull FtpFileLocation fileLocation, @SkipRecord byte @NotNull [] content)
             throws HandlerException {
         lock.lock();
         try {
@@ -329,7 +329,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @SkipRecord
     @Override
-    public byte[] retrieveFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
+    public byte[] retrieveFile(@NotNull String[] filePaths, @NotNull String fileName) throws FtpException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -345,7 +345,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @SkipRecord
     @Override
-    public byte[] retrieveFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public byte[] retrieveFile(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -375,7 +375,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @Override
     public void storeFileByStream(
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull @SkipRecord InputStream in
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull @SkipRecord InputStream in
     ) throws HandlerException {
         lock.lock();
         try {
@@ -392,7 +392,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @Override
     public void storeFileByStream(
-            @Nonnull FtpFileLocation fileLocation, @Nonnull @SkipRecord InputStream in
+            @NotNull FtpFileLocation fileLocation, @NotNull @SkipRecord InputStream in
     ) throws HandlerException {
         lock.lock();
         try {
@@ -425,7 +425,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @Override
     public void retrieveFileByStream(
-            @Nonnull String[] filePaths, @Nonnull String fileName, @Nonnull @SkipRecord OutputStream out
+            @NotNull String[] filePaths, @NotNull String fileName, @NotNull @SkipRecord OutputStream out
     ) throws HandlerException {
         lock.lock();
         try {
@@ -442,7 +442,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @BehaviorAnalyse
     @Override
     public void retrieveFileByStream(
-            @Nonnull FtpFileLocation fileLocation, @Nonnull @SkipRecord OutputStream out
+            @NotNull FtpFileLocation fileLocation, @NotNull @SkipRecord OutputStream out
     ) throws HandlerException {
         lock.lock();
         try {
@@ -474,7 +474,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void deleteFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws FtpException {
+    public void deleteFile(@NotNull String[] filePaths, @NotNull String fileName) throws FtpException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -489,7 +489,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void deleteFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public void deleteFile(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -520,7 +520,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void removeDirectory(@Nonnull String[] filePaths) throws HandlerException {
+    public void removeDirectory(@NotNull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -535,7 +535,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @BehaviorAnalyse
     @Override
-    public void removeDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public void removeDirectory(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -576,7 +576,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public FtpFile[] listFiles(@Nonnull String[] filePaths) throws HandlerException {
+    public FtpFile[] listFiles(@NotNull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -592,7 +592,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public FtpFile[] listFiles(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public FtpFile[] listFiles(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -628,7 +628,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public String[] listFileNames(@Nonnull String[] filePaths) throws HandlerException {
+    public String[] listFileNames(@NotNull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -644,7 +644,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public String[] listFileNames(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public String[] listFileNames(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -697,7 +697,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public InputStream openInputStream(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException {
+    public InputStream openInputStream(@NotNull String[] filePaths, @NotNull String fileName) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -715,7 +715,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public InputStream openInputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public InputStream openInputStream(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -767,7 +767,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     @SkipRecord
-    public OutputStream openOutputStream(@Nonnull String[] filePaths, @Nonnull String fileName)
+    public OutputStream openOutputStream(@NotNull String[] filePaths, @NotNull String fileName)
             throws HandlerException {
         lock.lock();
         try {
@@ -784,7 +784,7 @@ public class FtpHandlerImpl implements FtpHandler {
      * @see #openOutputStream(String[], String)
      */
     @Override
-    public OutputStream openOutputStream(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public OutputStream openOutputStream(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -820,8 +820,8 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     public void renameFile(
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName, @Nonnull String[] neoFilePaths,
-            @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName, @NotNull String[] neoFilePaths,
+            @NotNull String neoFileName
     ) throws HandlerException {
         lock.lock();
         try {
@@ -838,7 +838,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @SuppressWarnings("DuplicatedCode")
     @Override
     @BehaviorAnalyse
-    public void renameFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+    public void renameFile(@NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation)
             throws HandlerException {
         lock.lock();
         try {
@@ -887,7 +887,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @Override
     @BehaviorAnalyse
-    public void clearDirectory(@Nonnull String[] filePaths) throws HandlerException {
+    public void clearDirectory(@NotNull String[] filePaths) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -902,7 +902,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @Override
     @BehaviorAnalyse
-    public void clearDirectory(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public void clearDirectory(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -950,8 +950,8 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     public void copyFile(
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName,
-            @Nonnull String[] neoFilePaths, @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName,
+            @NotNull String[] neoFilePaths, @NotNull String neoFileName
     ) throws HandlerException {
         lock.lock();
         try {
@@ -967,7 +967,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @Override
     @BehaviorAnalyse
-    public void copyFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+    public void copyFile(@NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation)
             throws HandlerException {
         lock.lock();
         try {
@@ -1024,7 +1024,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @Override
     @BehaviorAnalyse
-    public FtpFile descFile(@Nonnull String[] filePaths, @Nonnull String fileName) throws HandlerException {
+    public FtpFile descFile(@NotNull String[] filePaths, @NotNull String fileName) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -1039,7 +1039,7 @@ public class FtpHandlerImpl implements FtpHandler {
 
     @Override
     @BehaviorAnalyse
-    public FtpFile descFile(@Nonnull FtpFileLocation fileLocation) throws HandlerException {
+    public FtpFile descFile(@NotNull FtpFileLocation fileLocation) throws HandlerException {
         lock.lock();
         try {
             // 确认处理器已经启动。
@@ -1071,8 +1071,8 @@ public class FtpHandlerImpl implements FtpHandler {
     @Override
     @BehaviorAnalyse
     public void moveFile(
-            @Nonnull String[] oldFilePaths, @Nonnull String oldFileName, @Nonnull String[] neoFilePaths,
-            @Nonnull String neoFileName
+            @NotNull String[] oldFilePaths, @NotNull String oldFileName, @NotNull String[] neoFilePaths,
+            @NotNull String neoFileName
     ) throws HandlerException {
         lock.lock();
         try {
@@ -1089,7 +1089,7 @@ public class FtpHandlerImpl implements FtpHandler {
     @SuppressWarnings("DuplicatedCode")
     @Override
     @BehaviorAnalyse
-    public void moveFile(@Nonnull FtpFileLocation oldFileLocation, @Nonnull FtpFileLocation neoFileLocation)
+    public void moveFile(@NotNull FtpFileLocation oldFileLocation, @NotNull FtpFileLocation neoFileLocation)
             throws HandlerException {
         lock.lock();
         try {
@@ -1173,7 +1173,7 @@ public class FtpHandlerImpl implements FtpHandler {
         checkPositiveCompletion();
     }
 
-    private String resolveAbsolutePath(@Nonnull String[] filePaths, @Nullable String fileName) {
+    private String resolveAbsolutePath(@NotNull String[] filePaths, @Nullable String fileName) {
         StringBuilder builder = new StringBuilder();
         builder.append(ROOT_PATH);
         for (String filePath : filePaths) {
@@ -1340,7 +1340,7 @@ public class FtpHandlerImpl implements FtpHandler {
     private record DirectoryClearFrame(String[] filePaths, Queue<FTPFile> remainingFiles) {
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return "DirectoryClearFrame{" +
                     "filePaths=" + Arrays.toString(filePaths) +
                     ", remainingFiles=" + remainingFiles +
@@ -1426,12 +1426,12 @@ public class FtpHandlerImpl implements FtpHandler {
         }
 
         @Override
-        public int read(@Nonnull byte[] b, int off, int len) throws IOException {
+        public int read(byte @NotNull [] b, int off, int len) throws IOException {
             return internalRead(b, off, len);
         }
 
         @Override
-        public int read(@Nonnull byte[] b) throws IOException {
+        public int read(byte @NotNull [] b) throws IOException {
             return internalRead(b, 0, b.length);
         }
 
@@ -1565,12 +1565,12 @@ public class FtpHandlerImpl implements FtpHandler {
         }
 
         @Override
-        public void write(@Nonnull byte[] b, int off, int len) throws IOException {
+        public void write(byte @NotNull [] b, int off, int len) throws IOException {
             internalWrite(b, off, len);
         }
 
         @Override
-        public void write(@Nonnull byte[] b) throws IOException {
+        public void write(byte @NotNull [] b) throws IOException {
             internalWrite(b, 0, b.length);
         }
 
@@ -1709,13 +1709,13 @@ public class FtpHandlerImpl implements FtpHandler {
         }
 
         @Override
-        public int read(@Nonnull byte[] b) throws IOException {
+        public int read(byte @NotNull [] b) throws IOException {
             makeSureOpen("流已经关闭");
             return in.read(b);
         }
 
         @Override
-        public int read(@Nonnull byte[] b, int off, int len) throws IOException {
+        public int read(byte @NotNull [] b, int off, int len) throws IOException {
             makeSureOpen("流已经关闭");
             return in.read(b, off, len);
         }
@@ -1824,13 +1824,13 @@ public class FtpHandlerImpl implements FtpHandler {
         }
 
         @Override
-        public void write(@Nonnull byte[] b) throws IOException {
+        public void write(byte @NotNull [] b) throws IOException {
             makeSureOpen("流已经关闭");
             out.write(b);
         }
 
         @Override
-        public void write(@Nonnull byte[] b, int off, int len) throws IOException {
+        public void write(byte @NotNull [] b, int off, int len) throws IOException {
             makeSureOpen("流已经关闭");
             out.write(b, off, len);
         }
