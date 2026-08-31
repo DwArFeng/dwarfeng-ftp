@@ -91,21 +91,12 @@ public class ProcessExample {
         CT.trace(String.format("测试文件夹下目前一共有 %d 个文件: %n", ftpFiles.length));
         for (int i = 0; i < ftpFiles.length; i++) {
             FtpFile ftpFile = ftpFiles[i];
-            String type;
-            switch (ftpFile.getType()) {
-                case Constants.FTP_FILE_TYPE_FILE:
-                    type = "file";
-                    break;
-                case Constants.FTP_FILE_TYPE_DIRECTORY:
-                    type = "directory";
-                    break;
-                case Constants.FTP_FILE_TYPE_SYMBOLIC_LINK:
-                    type = "symbolic link";
-                    break;
-                default:
-                    type = "unknown";
-                    break;
-            }
+            String type = switch (ftpFile.getType()) {
+                case Constants.FTP_FILE_TYPE_FILE -> "file";
+                case Constants.FTP_FILE_TYPE_DIRECTORY -> "directory";
+                case Constants.FTP_FILE_TYPE_SYMBOLIC_LINK -> "symbolic link";
+                default -> "unknown";
+            };
             CT.trace(String.format("%d: name: %s, type: %s, size: %d%n", i + 1, ftpFile.getName(), type, ftpFile.getSize()));
         }
         System.out.print("请按回车键继续...");

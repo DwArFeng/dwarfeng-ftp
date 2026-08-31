@@ -708,18 +708,13 @@ public class FtpCommand extends CliCommand {
     }
 
     private String formatFileType(int ftpFileType) {
-        switch (ftpFileType) {
-            case Constants.FTP_FILE_TYPE_FILE:
-                return "file";
-            case Constants.FTP_FILE_TYPE_DIRECTORY:
-                return "directory";
-            case Constants.FTP_FILE_TYPE_SYMBOLIC_LINK:
-                return "symbolic-link";
-            case Constants.FTP_FILE_TYPE_UNKNOWN:
-                return "unknown";
-            default:
-                return "undefined(" + ftpFileType + ")";
-        }
+        return switch (ftpFileType) {
+            case Constants.FTP_FILE_TYPE_FILE -> "file";
+            case Constants.FTP_FILE_TYPE_DIRECTORY -> "directory";
+            case Constants.FTP_FILE_TYPE_SYMBOLIC_LINK -> "symbolic-link";
+            case Constants.FTP_FILE_TYPE_UNKNOWN -> "unknown";
+            default -> "undefined(" + ftpFileType + ")";
+        };
     }
 
     private String normalizeHandlerNameForOutput(@Nullable String handlerName) {

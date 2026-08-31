@@ -3,8 +3,6 @@ package com.dwarfeng.ftp.stack.util;
 import com.dwarfeng.ftp.stack.struct.FtpConfig;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,12 +27,12 @@ public final class FtpConfigUtil {
     private static final Set<Integer> DATA_CONNECTION_MODE_SPACE;
 
     static {
-        Set<Integer> DATA_CONNECTION_MODE_SPACE_DEJA_VU = new HashSet<>();
-        DATA_CONNECTION_MODE_SPACE_DEJA_VU.add(FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_LOCAL);
-        DATA_CONNECTION_MODE_SPACE_DEJA_VU.add(FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_REMOTE);
-        DATA_CONNECTION_MODE_SPACE_DEJA_VU.add(FtpConfig.Builder.DATA_CONNECTION_MODE_PASSIVE_LOCALE);
-        DATA_CONNECTION_MODE_SPACE_DEJA_VU.add(FtpConfig.Builder.DATA_CONNECTION_MODE_PASSIVE_REMOTE);
-        DATA_CONNECTION_MODE_SPACE = Collections.unmodifiableSet(DATA_CONNECTION_MODE_SPACE_DEJA_VU);
+        DATA_CONNECTION_MODE_SPACE = Set.of(
+                FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_LOCAL,
+                FtpConfig.Builder.DATA_CONNECTION_MODE_ACTIVE_REMOTE,
+                FtpConfig.Builder.DATA_CONNECTION_MODE_PASSIVE_LOCALE,
+                FtpConfig.Builder.DATA_CONNECTION_MODE_PASSIVE_REMOTE
+        );
     }
 
     /**

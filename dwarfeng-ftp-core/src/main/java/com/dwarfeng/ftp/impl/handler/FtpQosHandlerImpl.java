@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * FTP QoS 处理器实现。
@@ -41,8 +40,7 @@ public class FtpQosHandlerImpl implements FtpQosHandler {
     @Override
     public List<String> listHandlerNames() throws HandlerException {
         try {
-            List<String> handlerNames = ftpHandlerMap.keySet().stream().sorted().collect(Collectors.toList());
-            return Collections.unmodifiableList(handlerNames);
+            return ftpHandlerMap.keySet().stream().sorted().toList();
         } catch (Exception e) {
             throw FtpQosExceptionHelper.parse(e);
         }

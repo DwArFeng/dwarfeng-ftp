@@ -1196,20 +1196,12 @@ public class FtpHandlerImpl implements FtpHandler {
         long size;
         // 映射变量。
         name = ftpFile.getName();
-        switch (ftpFile.getType()) {
-            case FTPFile.FILE_TYPE:
-                type = Constants.FTP_FILE_TYPE_FILE;
-                break;
-            case FTPFile.DIRECTORY_TYPE:
-                type = Constants.FTP_FILE_TYPE_DIRECTORY;
-                break;
-            case FTPFile.SYMBOLIC_LINK_TYPE:
-                type = Constants.FTP_FILE_TYPE_SYMBOLIC_LINK;
-                break;
-            default:
-                type = Constants.FTP_FILE_TYPE_UNKNOWN;
-                break;
-        }
+        type = switch (ftpFile.getType()) {
+            case FTPFile.FILE_TYPE -> Constants.FTP_FILE_TYPE_FILE;
+            case FTPFile.DIRECTORY_TYPE -> Constants.FTP_FILE_TYPE_DIRECTORY;
+            case FTPFile.SYMBOLIC_LINK_TYPE -> Constants.FTP_FILE_TYPE_SYMBOLIC_LINK;
+            default -> Constants.FTP_FILE_TYPE_UNKNOWN;
+        };
         size = ftpFile.getSize();
         // 设置结果。
         return new FtpFile(name, type, size);

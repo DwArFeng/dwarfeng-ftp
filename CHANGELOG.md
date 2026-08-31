@@ -4,7 +4,12 @@
 
 ### 功能构建
 
-- (无)
+- 优化部分类的代码语法。
+  - com.dwarfeng.ftp.api.integration.springtelqos.FtpCommand。
+  - com.dwarfeng.ftp.impl.handler.FtpHandlerImpl。
+  - com.dwarfeng.ftp.impl.handler.FtpQosHandlerImpl。
+  - com.dwarfeng.ftp.stack.util.FtpConfigUtil。
+  - com.dwarfeng.ftp.node.example.ProcessExample。
 
 ### Bug 修复
 
