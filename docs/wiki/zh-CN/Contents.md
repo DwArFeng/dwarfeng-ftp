@@ -32,6 +32,7 @@
 
 ## 项目功能
 
+- [API Reference](./ApiReference.md) - API 参考，说明本项目的接口职责、调用方式、路径模型与生命周期约束。
 - [Extra Features](./ExtraFeatures.md) - 额外功能详解，详细介绍了 dwarfeng-ftp 在标准 FTP 协议基础上提供的额外便利功能。
 
 ## 运维与排障
