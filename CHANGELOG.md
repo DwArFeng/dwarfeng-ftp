@@ -31,7 +31,8 @@
 
 ### 功能移除
 
-- (无)
+- 移除 `dwarfeng-ftp-core` 模块中不需要的 JPMS 依赖。
+  - `requires spring.core;`。
 
 ---
 

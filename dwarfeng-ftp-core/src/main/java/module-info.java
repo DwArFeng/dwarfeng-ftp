@@ -12,7 +12,6 @@ module com.dwarfeng.ftp.core {
     requires org.slf4j;
     requires spring.beans;
     requires spring.context;
-    requires spring.core;
     requires spring.expression;
     requires static org.jetbrains.annotations;
     requires transitive java.xml;
