@@ -11,7 +11,7 @@
     <parent>
         <groupId>com.dwarfeng</groupId>
         <artifactId>dwarfeng-ftp</artifactId>
-        <version>3.0.1.a-SNAPSHOT</version>
+        <version>3.0.1.a</version>
     </parent>
 
     <artifactId>dwarfeng-ftp-core</artifactId>
