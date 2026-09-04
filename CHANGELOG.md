@@ -4,6 +4,9 @@
 
 ### 功能构建
 
+- `dwarfeng-ftp-api` 子模块类优化注释、文档注释格式、代码换行格式。
+  - com.dwarfeng.ftp.api.integration.configuration.ServiceExceptionMapperConfiguration。
+
 - `dwarfeng-ftp-core` 子模块类优化注释、文档注释格式、代码换行格式。
   - com.dwarfeng.ftp.stack.handler.FtpHandler。
   - com.dwarfeng.ftp.node.configuration.ServiceExceptionMapperConfiguration。
