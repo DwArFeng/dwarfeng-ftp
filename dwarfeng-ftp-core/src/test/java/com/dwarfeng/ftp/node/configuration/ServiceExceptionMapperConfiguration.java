@@ -14,11 +14,11 @@ public class ServiceExceptionMapperConfiguration {
 
     @Bean
     public MapServiceExceptionMapper mapServiceExceptionMapper() {
-        Map<Class<? extends Exception>, Supplier<ServiceException.Code>> destination =
+        Map<Class<? extends Exception>, Supplier<ServiceException.Code>> des =
                 ServiceExceptionHelper.putDefaultDestination(null);
-        destination = com.dwarfeng.ftp.sdk.exception.ServiceExceptionHelper.putDefaultDestination(destination);
+        des = com.dwarfeng.ftp.sdk.exception.ServiceExceptionHelper.putDefaultDestination(des);
         return new MapServiceExceptionMapper(
-                destination, com.dwarfeng.subgrade.basic.sdk.exception.ServiceExceptionCodeSuppliers.UNDEFINED
+                des, com.dwarfeng.subgrade.basic.sdk.exception.ServiceExceptionCodeSuppliers.UNDEFINED
         );
     }
 }

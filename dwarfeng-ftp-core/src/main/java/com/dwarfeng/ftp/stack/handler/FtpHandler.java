@@ -259,8 +259,8 @@ public interface FtpHandler extends StartableHandler {
      * 删除目录。
      *
      * <p>
-     * 执行该方法时，只使用 {@link FtpFileLocation#filePaths()} 方法返回的路径，
-     * 忽略 {@link FtpFileLocation#fileName()} 方法返回的文件名。
+     * 执行该方法时，只使用 {@link FtpFileLocation#getFilePaths()} 方法返回的路径，
+     * 忽略 {@link FtpFileLocation#getFileName()} 方法返回的文件名。
      *
      * <p>
      * 在 FTP 协议中，删除一个目录，需要保证该目录下没有文件，否则会抛出异常。
@@ -291,8 +291,8 @@ public interface FtpHandler extends StartableHandler {
      * 列出指定路径下的所有文件。
      *
      * <p>
-     * 执行该方法时，只使用 {@link FtpFileLocation#filePaths()} 方法返回的路径，
-     * 忽略 {@link FtpFileLocation#fileName()} 方法返回的文件名。
+     * 执行该方法时，只使用 {@link FtpFileLocation#getFilePaths()} 方法返回的路径，
+     * 忽略 {@link FtpFileLocation#getFileName()} 方法返回的文件名。
      *
      * @param fileLocation 文件位置。
      * @return 指定目录下所有文件组成的数组。
@@ -319,8 +319,8 @@ public interface FtpHandler extends StartableHandler {
      * 列出指定路径下的所有文件。
      *
      * <p>
-     * 执行该方法时，只使用 {@link FtpFileLocation#filePaths()} 方法返回的路径，
-     * 忽略 {@link FtpFileLocation#fileName()} 方法返回的文件名。
+     * 执行该方法时，只使用 {@link FtpFileLocation#getFilePaths()} 方法返回的路径，
+     * 忽略 {@link FtpFileLocation#getFileName()} 方法返回的文件名。
      *
      * @param fileLocation 文件位置。
      * @return 指定目录下所有文件的名称（不带路径前缀）组成的数组。
@@ -460,8 +460,8 @@ public interface FtpHandler extends StartableHandler {
      * 递归地清空目录下的所有文件以及子目录。清空目录不会删除目录本身。
      *
      * <p>
-     * 执行该方法时，只使用 {@link FtpFileLocation#filePaths()} 方法返回的路径，
-     * 忽略 {@link FtpFileLocation#fileName()} 方法返回的文件名。
+     * 执行该方法时，只使用 {@link FtpFileLocation#getFilePaths()} 方法返回的路径，
+     * 忽略 {@link FtpFileLocation#getFileName()} 方法返回的文件名。
      *
      * <p>
      * 该功能不是 FTP 协议的标准功能，其实现需要按照递归逻辑多次列出目录下的文件并分别多次调用删除文件以及删除目录的方法，

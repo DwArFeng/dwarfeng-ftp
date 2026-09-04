@@ -4,6 +4,10 @@
 
 ### 功能构建
 
+- `dwarfeng-ftp-core` 子模块类优化注释、文档注释格式、代码换行格式。
+  - com.dwarfeng.ftp.stack.handler.FtpHandler。
+  - com.dwarfeng.ftp.node.configuration.ServiceExceptionMapperConfiguration。
+
 - 优化部分类的代码语法。
   - com.dwarfeng.ftp.api.integration.springtelqos.FtpCommand。
   - com.dwarfeng.ftp.impl.handler.FtpHandlerImpl。
